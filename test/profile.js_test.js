@@ -22,8 +22,10 @@
       raises(block, [expected], [message])
   */
 
-  test("PROFILE submodule defined", function () {
-    ok(typeof window.DECADE_CITY.PROFILE === 'object', "submodule defined." );
+  module('Profile');
+
+  test('PROFILE submodule defined', function () {
+    ok(typeof window.DECADE_CITY.PROFILE === 'object', 'submodule defined.');
   });
 
 }(window.jQuery));

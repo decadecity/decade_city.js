@@ -22,8 +22,15 @@
       raises(block, [expected], [message])
   */
 
-  test("DECADE_CITY module defined", function () {
-    ok(typeof window.DECADE_CITY === 'object', "module defined." );
+  module('Module');
+
+  test('DECADE_CITY module defined', function () {
+    strictEqual(typeof window.DECADE_CITY, 'object', 'module defined.');
+  });
+
+  test('Register runs immediately when initialised', function () {
+    window.DECADE_CITY.register(function() { window._register_test = 'registered'; });
+    equal(window._register_test, 'registered', 'Function immediately invoked');
   });
 
 }(window.jQuery));

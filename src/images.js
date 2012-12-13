@@ -2,7 +2,7 @@ window.DECADE_CITY = (function (module, $) {
   "use strict";
   module.IMAGES = (function (module, submodule, $) {
     submodule._svgSrc = function(src) {
-      return src.replace(/\.[^.]*$/, '.svg');
+      return src.replace(/\.[^.\?]*($|\?)/, '.svg$1');
     };
 
     var init = function () {

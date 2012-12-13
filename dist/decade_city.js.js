@@ -204,13 +204,13 @@ window.DECADE_CITY = (function (module, $){
   }(module, module.PROFILE || {}, $));
 
   return module;
-})(window.DECADE_CITY || {}, window.jQuery);
+}(window.DECADE_CITY || {}, window.jQuery));
 
 window.DECADE_CITY = (function (module, $) {
   "use strict";
   module.IMAGES = (function (module, submodule, $) {
     submodule._svgSrc = function(src) {
-      return src.replace(/\.[^.]*$/, '.svg');
+      return src.replace(/\.[^.\?]*($|\?)/, '.svg$1');
     };
 
     var init = function () {
@@ -239,7 +239,6 @@ window.DECADE_CITY = (function (module, $) {
    */
   module.FLICKR = (function (module, submodule, $) {
     var image_replace = /^http(s)?:\/\/(.*)\.staticflickr.com\/(.*?)(_.\.jpg|\.jpg)$/, // Regex to break up a flickr image URL.
-        flickr_suffix = '_m', // Default to suffix of smallest image.
         getInt,
         responsiveImages;
 
@@ -257,7 +256,12 @@ window.DECADE_CITY = (function (module, $) {
     };
 
     /**
-     * Has the flickr suffix been set?
+     * Suffix for Flckr images. {String}
+     */
+    submodule._flickr_suffix = '_m'; // Default to suffix of smallest image. Public for testing.
+
+    /**
+     * Has the flickr suffix been set? {Boolean}
      */
     submodule._flickr_suffix_set = false; //Public for testing.
 
@@ -277,7 +281,7 @@ window.DECADE_CITY = (function (module, $) {
         return src;
       }
       secure = match[1] || '';
-      return 'http' + secure + '://' + match[2] + '.staticflickr.com/' + match[3] + flickr_suffix + '.jpg';
+      return 'http' + secure + '://' + match[2] + '.staticflickr.com/' + match[3] + submodule._flickr_suffix + '.jpg';
     };
 
     /**
@@ -355,25 +359,25 @@ window.DECADE_CITY = (function (module, $) {
 
         // This sorts out the flickr naming convention based on image width.
         if (window_width < 280 || speed === 'slow') {
-          flickr_suffix = '_m';
+          submodule._flickr_suffix = '_m';
         } else if (window_width < 320) {
-          flickr_suffix = '_n';
+          submodule._flickr_suffix = '_n';
         } else if (window_width < 500) {
-          flickr_suffix = '';
+          submodule._flickr_suffix = '';
         } else if (window_width < 640) {
-          flickr_suffix = '_z';
+          submodule._flickr_suffix = '_z';
         } else if (window_width < 800) {
-          flickr_suffix = '_c';
+          submodule._flickr_suffix = '_c';
         } else {
-          flickr_suffix = '_b';
+          submodule._flickr_suffix = '_b';
         }
         if (typeof module.PROFILE.profile === 'object') {
           // Store this in the profile.
-          module.PROFILE.profile.flickr_suffix = flickr_suffix;
+          module.PROFILE.profile.flickr_suffix = submodule._flickr_suffix;
         }
         if (typeof module.COOKIES !== 'undefined') {
           // Set a cookie so we can do some of this work on the server.
-          module.COOKIES.setItem('flickr_suffix', flickr_suffix, null, '/');
+          module.COOKIES.setItem('flickr_suffix', submodule._flickr_suffix, null, '/');
         }
         submodule._flickr_suffix_set = true;
       }

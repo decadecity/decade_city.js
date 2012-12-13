@@ -85,4 +85,4 @@ window.DECADE_CITY = (function (module, $){
   }(module, module.PROFILE || {}, $));
 
   return module;
-})(window.DECADE_CITY || {}, window.jQuery);
+}(window.DECADE_CITY || {}, window.jQuery));

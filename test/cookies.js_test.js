@@ -22,9 +22,24 @@
       raises(block, [expected], [message])
   */
 
-  test("COOKIE submodule defined", function () {
-    ok(typeof window.DECADE_CITY.COOKIES === 'object', "submodule defined." );
+  module('Cookies');
+
+  test('COOKIE submodule defined', function () {
+    strictEqual(typeof window.DECADE_CITY.COOKIES, 'object', 'submodule defined.');
   });
+
+  test('Cookie functionality', function () {
+    window.DECADE_CITY.COOKIES.setItem('test', true);
+    ok(window.DECADE_CITY.COOKIES.hasItem('test'), 'Test cookie set and present');
+
+    window.DECADE_CITY.COOKIES.setItem('test', 13);
+    strictEqual(window.DECADE_CITY.COOKIES.getItem('test'), '13', 'Test cookie retrieved');
+
+    window.DECADE_CITY.COOKIES.setItem('test', 13);
+    window.DECADE_CITY.COOKIES.removeItem('test');
+    ok(!window.DECADE_CITY.COOKIES.hasItem('test'), 'Test cookie deleted');
+  });
+
 
 }(window.jQuery));
 

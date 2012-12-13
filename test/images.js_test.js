@@ -22,9 +22,18 @@
       raises(block, [expected], [message])
   */
 
-  test("IMAGES submodule defined", function () {
-    ok(typeof window.DECADE_CITY.IMAGES === 'object', "submodule defined." );
+  module('Images');
+
+  test('IMAGES submodule defined', function () {
+    strictEqual(typeof window.DECADE_CITY.IMAGES, 'object', 'submodule defined.');
+  });
+
+  test('SVG extension replacement', function() {
+    equal(window.DECADE_CITY.IMAGES._svgSrc('test.png'), 'test.svg', 'Extension replaced');
+    equal(window.DECADE_CITY.IMAGES._svgSrc('test.png?param=value'), 'test.svg?param=value', 'Extension replaced respecting query string');
+    equal(window.DECADE_CITY.IMAGES._svgSrc('test.1 % png'), 'test.svg', 'Extension with special chars replaced');
+    equal(window.DECADE_CITY.IMAGES._svgSrc('test.ext.png'), 'test.ext.svg', 'Extension replaced with multiple "."');
+    equal(window.DECADE_CITY.IMAGES._svgSrc('TEST.PNG'), 'TEST.svg', 'Uppercase extension replaced');
   });
 
 }(window.jQuery));
-
