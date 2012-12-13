@@ -1,19 +1,27 @@
-decade_city.js
-==============
+# decade_city.js
 
-Module system for functionality developed for use on http://decadecity.net
+Module system for functionality used on [decadecity.net][1]
 
-Very early release of code using a module pattern.
+[1]: http://decadecity.net/
 
-##Usage
+## Getting Started
+Download the [production version][min] or the [development version][max].
 
-Designed to be concatenated for deployment.
+[min]: https://raw.github.com/decadecity/decade_city.js/master/dist/decade_city.js.min.js
+[max]: https://raw.github.com/decadecity/decade_city.js/master/dist/decade_city.js.js
 
-module.js should be included first.
+In your web page:
 
-main.js should be included last.
+```html
+<script src="jquery.js"></script>
+<script src="dist/decade_city.js.min.js"></script>
+```
 
+## Documentation
+_(Coming soon)_
 
-##TODO:
- * Documentation
- * Tests
+## Examples
+_(Coming soon)_
+
+## Release History
+_(Nothing yet)_
