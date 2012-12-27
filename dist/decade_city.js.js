@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.1.0 - 2012-12-13
+/*! decade_city.js - v0.1.1 - 2012-12-27
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2012 Orde Saunders; Licensed MIT */
 
@@ -389,12 +389,5 @@ window.DECADE_CITY = (function (module, $) {
     return submodule;
   }(module, module.FLICKR || {}, $));
 
-  return module;
-}(window.DECADE_CITY || {}, window.jQuery));
-
-// This initialises all the registered items in the module.
-// This file should be included at the end of the concat chain.
-window.DECADE_CITY = (function (module, $) {
-  module.init();
   return module;
 }(window.DECADE_CITY || {}, window.jQuery));

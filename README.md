@@ -15,13 +15,5 @@ In your web page:
 ```html
 <script src="jquery.js"></script>
 <script src="dist/decade_city.js.min.js"></script>
+<script>window.DECADE_CITY.init()</script><!-- Manually initialise the library. -->
 ```
-
-## Documentation
-_(Coming soon)_
-
-## Examples
-_(Coming soon)_
-
-## Release History
-_(Nothing yet)_

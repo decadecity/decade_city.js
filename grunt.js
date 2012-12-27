@@ -19,8 +19,7 @@ module.exports = function(grunt) {
           'src/cookies.js',
           'src/profile.js',
           'src/images.js',
-          'src/flickr.js',
-          'src/main.js'
+          'src/flickr.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       }
