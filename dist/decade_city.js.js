@@ -1,6 +1,6 @@
-/*! decade_city.js - v0.1.1 - 2012-12-27
+/*! decade_city.js - v0.2.0 - 2013-02-06
 * https://github.com/decadecity/decade_city.js
-* Copyright (c) 2012 Orde Saunders; Licensed MIT */
+* Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
 // Loosely based on jQuery's DOM ready.
 window.DECADE_CITY = (function (module, $) {
