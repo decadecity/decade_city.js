@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.2.0 - 2013-02-06
+/*! decade_city.js - v0.2.0 - 2013-02-17
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
@@ -214,12 +214,14 @@ window.DECADE_CITY = (function (module, $) {
     };
 
     var init = function () {
-      $('.svg-replace').each(function() {
-        $(this).attr('src', function (i, src) {
-          return submodule._svgSrc(src);
+      if (module.PROFILE.svg) {
+        $('.svg-replace').each(function() {
+          $(this).attr('src', function (i, src) {
+            return submodule._svgSrc(src);
+          });
+          $(this).removeClass('svg-replace');
         });
-        $(this).removeClass('svg-replace');
-      });
+      }
     };
 
     module.register(init);
