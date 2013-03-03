@@ -19,7 +19,7 @@ window.DECADE_CITY = (function (module, $){
     };
 
     submodule.profile = submodule.profile || {};
-    submodule.profile = true; // We are profiling this environment.
+    submodule.profile.profile = true; // We are profiling this environment.
 
     // SVG support.
     submodule.profile.svg = false;
