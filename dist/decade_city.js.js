@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.2.0 - 2013-02-06
+/*! decade_city.js - v0.2.0 - 2013-03-03
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
@@ -138,6 +138,7 @@ window.DECADE_CITY = (function (module, $){
     };
 
     submodule.profile = submodule.profile || {};
+    submodule.profile = true; // We are profiling this environment.
 
     // SVG support.
     submodule.profile.svg = false;
@@ -189,6 +190,7 @@ window.DECADE_CITY = (function (module, $){
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       $(document).ready(function () {
         window.setTimeout(function () {
+          setProfile(); // Make sure it's been set.
           if (!module.COOKIES.getItem('profile_sent') || force) {
             $.get('/profile', submodule.profile); // TODO: Parameterise the profiler URL.
             module.COOKIES.setItem('profile_sent', 1, null, '/');

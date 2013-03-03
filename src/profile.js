@@ -19,6 +19,7 @@ window.DECADE_CITY = (function (module, $){
     };
 
     submodule.profile = submodule.profile || {};
+    submodule.profile = true; // We are profiling this environment.
 
     // SVG support.
     submodule.profile.svg = false;
@@ -70,6 +71,7 @@ window.DECADE_CITY = (function (module, $){
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       $(document).ready(function () {
         window.setTimeout(function () {
+          setProfile(); // Make sure it's been set.
           if (!module.COOKIES.getItem('profile_sent') || force) {
             $.get('/profile', submodule.profile); // TODO: Parameterise the profiler URL.
             module.COOKIES.setItem('profile_sent', 1, null, '/');
