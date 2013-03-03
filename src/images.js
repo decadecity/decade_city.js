@@ -6,12 +6,14 @@ window.DECADE_CITY = (function (module, $) {
     };
 
     var init = function () {
-      $('.svg-replace').each(function() {
-        $(this).attr('src', function (i, src) {
-          return submodule._svgSrc(src);
+      if (module.PROFILE.svg) {
+        $('.svg-replace').each(function() {
+          $(this).attr('src', function (i, src) {
+            return submodule._svgSrc(src);
+          });
+          $(this).removeClass('svg-replace');
         });
-        $(this).removeClass('svg-replace');
-      });
+      }
     };
 
     module.register(init);
