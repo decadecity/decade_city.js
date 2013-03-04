@@ -7,7 +7,8 @@ window.DECADE_CITY = (function (module, $){
   module.PROFILE = (function (module, submodule, $) {
     var image = new Image(),
         html = $('html'),
-        setProfile;
+        setProfile,
+        script;
 
     /**
      * Sets the serialised profile as a cookie.
@@ -58,6 +59,11 @@ window.DECADE_CITY = (function (module, $){
     if (typeof JSON !== 'undefined') {
       submodule.profile.json = true;
     }
+
+    // Asynchronous script support.
+    script = document.createElement('script');
+    script.setAttribute('async', true);
+    submodule.profile.async_scripts = !!script.async;
 
     /**
      * Sends the profile to the server with a ajax request.

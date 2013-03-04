@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.2.0 - 2013-03-03
+/*! decade_city.js - v0.2.0 - 2013-03-04
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
@@ -126,7 +126,8 @@ window.DECADE_CITY = (function (module, $){
   module.PROFILE = (function (module, submodule, $) {
     var image = new Image(),
         html = $('html'),
-        setProfile;
+        setProfile,
+        script;
 
     /**
      * Sets the serialised profile as a cookie.
@@ -138,7 +139,7 @@ window.DECADE_CITY = (function (module, $){
     };
 
     submodule.profile = submodule.profile || {};
-    submodule.profile = true; // We are profiling this environment.
+    submodule.profile.profile = true; // We are profiling this environment.
 
     // SVG support.
     submodule.profile.svg = false;
@@ -177,6 +178,11 @@ window.DECADE_CITY = (function (module, $){
     if (typeof JSON !== 'undefined') {
       submodule.profile.json = true;
     }
+
+    // Asynchronous script support.
+    script = document.createElement('script');
+    script.setAttribute('async', true);
+    submodule.profile.async_scripts = !!script.async;
 
     /**
      * Sends the profile to the server with a ajax request.
