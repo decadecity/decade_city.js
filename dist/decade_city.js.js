@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.2.0 - 2013-03-04
+/*! decade_city.js - v0.2.0 - 2013-03-13
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
@@ -24,7 +24,7 @@ window.DECADE_CITY = (function (module, $) {
   };
 
   /**
-   * Runs all functions in the registry.
+   * Runs all functions in the init registry.
    */
   module.init = function () {
     $.each(resistry, function(i, funct) {
@@ -32,6 +32,69 @@ window.DECADE_CITY = (function (module, $) {
     });
     is_initialised = true;
   };
+
+  var load_registry = [], // Functions to be run on resize.
+      is_loaded = false; // Has window.onload already run?
+  /**
+   * Registers a function to be run on load.
+   *
+   * @param funct {Function} Function to be run when the document is loaded.
+   */
+   module.registerLoad = function (funct) {
+    if (typeof funct === 'function') {
+      if (is_loaded) {
+        funct.call();
+      } else {
+        load_registry.push(funct);
+      }
+    }
+  };
+
+  /**
+   * Handles running registered functions on load.
+   */
+  $(window).load(function() {
+    $.each(load_registry, function(i, funct) {
+      funct.call();
+    });
+    is_loaded = true;
+  });
+
+
+  var resize_registry = []; // Functions to be run on resize.
+  /**
+   * Registers a function to be run on re-size.
+   *
+   * @param funct {Function} Function to be run when window is resized.
+   */
+   module.registerResize = function (funct) {
+    if (typeof funct === 'function') {
+      resize_registry.push(funct);
+    }
+  };
+
+
+  /**
+   * Handles running registered functions on the resize event.
+   *
+   * Adds a delay to prevent them constantly firing whilst being resized.
+   */
+  var resizeHander = function() {
+    var resize_timer; // Used to set a delay on the resize callback.
+    $(window).resize(function () {
+      var delay = 250;
+      if (resize_timer) {
+        resize_timer = window.clearTimeout(resize_timer);
+      }
+      resize_timer = window.setTimeout(function () {
+        $.each(resize_registry, function(i, funct) {
+          funct.call();
+        });
+      }, delay);
+    });
+  };
+
+  module.register(resizeHander);
 
   return module;
 }(window.DECADE_CITY || {}, window.jQuery));

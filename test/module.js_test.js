@@ -33,5 +33,21 @@
     equal(window._register_test, 'registered', 'Function immediately invoked');
   });
 
+  test('Register runs immediately when loaded', function () {
+    window.DECADE_CITY.registerLoad(function() { window._register_load_test = 'registered'; });
+    equal(window._register_load_test, 'registered', 'Function immediately invoked');
+  });
+
+
+  test('Resize function runs when resisze triggered', function () {
+    window._register_resize_test = 'unregistered';
+    window.DECADE_CITY.registerResize(function() { window._register_resize_test = 'registered'; });
+    $(window).trigger('resize');
+    equal(window._register_resize_test, 'unregistered', 'Function not immediately invoked');
+    window.setTimeout(function() {
+      //equal(window._register_resize_test, 'registered', 'Function invoked after delay');
+    }, 500);
+  });
+
 }(window.jQuery));
 
