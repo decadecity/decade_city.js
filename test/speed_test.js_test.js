@@ -28,19 +28,14 @@
     ok(typeof window.DECADE_CITY.SPEED_TEST === 'object', 'submodule defined.');
   });
 
-  test('SPEED_TEST sets a load speed', function () {
+  test('Load speed', function () {
     ok(typeof window.DECADE_CITY.load_speed === 'string', 'load speed set.');
-  });
-  test('SPEED_TEST load speed is an allowed value', function () {
-    ok(window.DECADE_CITY.load_speed === 'fast' || window.DECADE_CITY.load_speed === 'slow', 'load speed set.');
+    ok(window.DECADE_CITY.load_speed === 'fast' || window.DECADE_CITY.load_speed === 'slow', 'load speed is an allowed value.');
+    ok($('html').hasClass(window.DECADE_CITY.load_speed), 'class hook set.');
   });
 
-  test('SPEED_TEST sets a connection type', function () {
+  test('Connection type', function () {
     ok(typeof window.DECADE_CITY.connection_type === 'string', 'connection type set.');
-  });
-
-  test('SPEED_TEST sets a class hook', function () {
-    ok($('html').hasClass('slow') || $('html').hasClass('fast'), 'class hook set.');
   });
 
 }(window.jQuery));
