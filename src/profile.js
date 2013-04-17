@@ -65,6 +65,14 @@ window.DECADE_CITY = (function (module, $){
     script.setAttribute('async', true);
     submodule.profile.async_scripts = !!script.async;
 
+    // Connection information
+    if (typeof module.load_speed !== 'undefined') {
+      submodule.profile.load_speed = module.load_speed;
+    }
+    if (typeof module.connection_type !== 'undefined') {
+      submodule.profile.connection_type = module.connection_type;
+    }
+
     /**
      * Sends the profile to the server with a ajax request.
      *

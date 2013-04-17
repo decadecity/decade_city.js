@@ -1,0 +1,47 @@
+/*global QUnit:false, module:false, test:false, asyncTest:false, expect:false*/
+/*global start:false, stop:false ok:false, equal:false, notEqual:false, deepEqual:false*/
+/*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
+(function($) {
+
+  /*
+    ======== A Handy Little QUnit Reference ========
+    http://docs.jquery.com/QUnit
+
+    Test methods:
+      expect(numAssertions)
+      stop(increment)
+      start(decrement)
+    Test assertions:
+      ok(value, [message])
+      equal(actual, expected, [message])
+      notEqual(actual, expected, [message])
+      deepEqual(actual, expected, [message])
+      notDeepEqual(actual, expected, [message])
+      strictEqual(actual, expected, [message])
+      notStrictEqual(actual, expected, [message])
+      raises(block, [expected], [message])
+  */
+
+  module('Speed test');
+
+  test('SPEED_TEST submodule defined', function () {
+    ok(typeof window.DECADE_CITY.SPEED_TEST === 'object', 'submodule defined.');
+  });
+
+  test('SPEED_TEST sets a load speed', function () {
+    ok(typeof window.DECADE_CITY.load_speed === 'string', 'load speed set.');
+  });
+  test('SPEED_TEST load speed is an allowed value', function () {
+    ok(window.DECADE_CITY.load_speed === 'fast' || window.DECADE_CITY.load_speed === 'slow', 'load speed set.');
+  });
+
+  test('SPEED_TEST sets a connection type', function () {
+    ok(typeof window.DECADE_CITY.connection_type === 'string', 'connection type set.');
+  });
+
+  test('SPEED_TEST sets a class hook', function () {
+    ok($('html').hasClass('slow') || $('html').hasClass('fast'), 'class hook set.');
+  });
+
+}(window.jQuery));
+
