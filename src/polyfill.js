@@ -1,6 +1,5 @@
 window.DECADE_CITY = (function (module, $) {
-  "use strict";  module.POLYFILL = (function (module, $) {
-    var submodule = {};
+  "use strict";  module.POLYFILL = (function (module, submodule, $) {
 
     /**
     * Outer HTML polyfill for browsers that don't support it.
@@ -90,7 +89,7 @@ window.DECADE_CITY = (function (module, $) {
           try {
             return window.sessionStorage.setItem(key, value);
           } catch (error) {
-            if(error.name.toLowerCase() === 'quota_exceeded_err'){
+            if (error.name.toLowerCase() === 'quota_exceeded_err'){
               return;
             } else {
               throw error;
