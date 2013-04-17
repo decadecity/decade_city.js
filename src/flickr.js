@@ -108,7 +108,11 @@ window.DECADE_CITY = (function (module, $) {
     submodule.init = function (width, height, pixel_density, speed) {
       var window_width;
 
-      speed = 'fast'; // Hard coded override for now.
+      speed = speed || 'slow'; // Hard coded override for now.
+
+      if (typeof module.SPEED_TEST === 'object' && typeof module.SPEED_TEST.load_speed !== 'undefined') {
+        speed = module.SPEED_TEST.load_speed;
+      }
 
       if (!submodule._flickr_suffix_set) {
         // This has already been run so don't do it again.
