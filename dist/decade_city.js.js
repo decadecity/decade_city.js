@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.2.0 - 2013-03-13
+/*! decade_city.js - v0.2.0 - 2013-04-19
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
