@@ -628,14 +628,6 @@ window.DECADE_CITY = (function (module, $){
     script.setAttribute('async', true);
     submodule.profile.async_scripts = !!script.async;
 
-    // Connection information
-    if (typeof module.load_speed !== 'undefined') {
-      submodule.profile.load_speed = module.load_speed;
-    }
-    if (typeof module.connection_type !== 'undefined') {
-      submodule.profile.connection_type = module.connection_type;
-    }
-
     /**
      * Sends the profile to the server with a ajax request.
      *
@@ -648,6 +640,16 @@ window.DECADE_CITY = (function (module, $){
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       $(document).ready(function () {
         window.setTimeout(function () {
+          // Connection information
+          if (typeof module.load_speed !== 'undefined') {
+            submodule.profile.load_speed = module.load_speed;
+          }
+          if (typeof module.connection_type !== 'undefined') {
+            submodule.profile.connection_type = module.connection_type;
+          }
+          if (typeof module.POLYFILL.sessionStorage !== 'undefined') {
+            submodule.profile.session_storage = module.POLYFILL.sessionStorage.supported;
+          }
           setProfile(); // Make sure it's been set.
           if (!module.COOKIES.getItem('profile_sent') || force) {
             $.get('/profile', submodule.profile); // TODO: Parameterise the profiler URL.
