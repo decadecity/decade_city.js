@@ -440,7 +440,7 @@ window.DECADE_CITY = (function (module, $) {
           seperator = '?',
           key, img;
       if (vars && url) {
-        if (url.search('?') > -1) {
+        if (url.search(/\?/) > -1) {
           // There's already a '?' in the URL so we need to add params.
           seperator = '&';
         }
