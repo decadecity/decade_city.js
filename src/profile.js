@@ -80,7 +80,8 @@ window.DECADE_CITY = (function (module, $){
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       $(document).ready(function () {
         window.setTimeout(function () {
-          var sent = false;
+          var sent = false,
+              url = module.config.profiler_url || '/profile';
           // Connection information
           if (typeof module.load_speed !== 'undefined') {
             submodule.profile.load_speed = module.load_speed;
@@ -98,7 +99,7 @@ window.DECADE_CITY = (function (module, $){
             sent = !!(module.COOKIES.getItem('profile-sent'));
           }
           if (!sent || force) {
-            $.get('/profile', submodule.profile); // TODO: Parameterise the profiler URL.
+            $.get(url, submodule.profile);
             if (submodule.profile.session_storage) {
               module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
             } else {
