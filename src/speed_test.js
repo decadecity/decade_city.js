@@ -2,7 +2,9 @@ window.DECADE_CITY = (function (module, $) {
   "use strict";
   module.SPEED_TEST = (function (module, submodule, $) {
 
-    var init = function () {
+    var tested = false;
+
+    submodule.test = function () {
       var load_speed_timout = 2.5, // Number of seconds above which we count it as a slow load.
           load_speed_count =  4, // After this many loads with no fast load we assume a slow connection.
           timer = 0, // This is the number of ms we think it took the page to load.
@@ -10,6 +12,10 @@ window.DECADE_CITY = (function (module, $) {
           storage = !!(typeof module.POLYFILL !== 'undefined' && typeof module.POLYFILL.sessionStorage !== 'undefined'),
           connection = navigator.connection || { 'type': 0 },
           loads; // Number of times we have loaded.
+
+      if (tested) {
+        return;
+      }
 
       module.load_speed = 'slow'; // Default to slow.
 
@@ -19,6 +25,9 @@ window.DECADE_CITY = (function (module, $) {
 
       if (storage) {
         loads = parseInt(module.POLYFILL.sessionStorage.getItem('load-count'), 10);
+        if (isNaN(loads)) {
+          loads = 0;
+        }
         module.POLYFILL.sessionStorage.setItem('load-count', loads + 1);
       }
       if (isNaN(loads)) {
@@ -71,8 +80,9 @@ window.DECADE_CITY = (function (module, $) {
       if (storage) {
         module.POLYFILL.sessionStorage.setItem('load-speed', module.load_speed); // Store the speed for future use over multiple loads.
       }
+      tested = true;
     };
-    module.register(init);
+    module.register(submodule.test);
 
     return submodule;
 

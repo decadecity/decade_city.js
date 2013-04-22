@@ -69,7 +69,7 @@ window.DECADE_CITY = (function (module, $){
     submodule.profile.timing = !!(typeof window.performance !== 'undefined' && typeof window.performance.timing !== 'undefined');
 
     /**
-     * Sends the profile to the server with a ajax request.
+     * Sends the profile to the server with an ajax request.
      *
      * @param force {Boolean} Force sending even if the profile has already been sent.
      */
@@ -80,6 +80,7 @@ window.DECADE_CITY = (function (module, $){
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       $(document).ready(function () {
         window.setTimeout(function () {
+          var sent = false;
           // Connection information
           if (typeof module.load_speed !== 'undefined') {
             submodule.profile.load_speed = module.load_speed;
@@ -91,9 +92,18 @@ window.DECADE_CITY = (function (module, $){
             submodule.profile.session_storage = module.POLYFILL.sessionStorage.supported;
           }
           setProfile(); // Make sure it's been set.
-          if (!module.COOKIES.getItem('profile_sent') || force) {
+          if (submodule.profile.session_storage) {
+            sent = !!(module.POLYFILL.sessionStorage.getItem('profile-sent'));
+          } else {
+            sent = !!(module.COOKIES.getItem('profile-sent'));
+          }
+          if (!sent || force) {
             $.get('/profile', submodule.profile); // TODO: Parameterise the profiler URL.
-            module.COOKIES.setItem('profile_sent', 1, null, '/');
+            if (submodule.profile.session_storage) {
+              module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
+            } else {
+              module.COOKIES.setItem('profile-sent', 1, null, '/');
+            }
           }
         }, 100);
       });

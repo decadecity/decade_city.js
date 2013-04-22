@@ -100,7 +100,7 @@ window.DECADE_CITY = (function (module, $) {
     init = function (width, height, pixel_density, speed) {
       var window_width;
 
-
+      module.SPEED_TEST.test();
       if (typeof module.load_speed !== 'undefined' && typeof speed === 'undefined') {
         speed = module.load_speed;
       }

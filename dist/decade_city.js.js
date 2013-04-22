@@ -318,7 +318,9 @@ window.DECADE_CITY = (function (module, $) {
   "use strict";
   module.SPEED_TEST = (function (module, submodule, $) {
 
-    var init = function () {
+    var tested = false;
+
+    submodule.test = function () {
       var load_speed_timout = 2.5, // Number of seconds above which we count it as a slow load.
           load_speed_count =  4, // After this many loads with no fast load we assume a slow connection.
           timer = 0, // This is the number of ms we think it took the page to load.
@@ -326,6 +328,10 @@ window.DECADE_CITY = (function (module, $) {
           storage = !!(typeof module.POLYFILL !== 'undefined' && typeof module.POLYFILL.sessionStorage !== 'undefined'),
           connection = navigator.connection || { 'type': 0 },
           loads; // Number of times we have loaded.
+
+      if (tested) {
+        return;
+      }
 
       module.load_speed = 'slow'; // Default to slow.
 
@@ -335,6 +341,9 @@ window.DECADE_CITY = (function (module, $) {
 
       if (storage) {
         loads = parseInt(module.POLYFILL.sessionStorage.getItem('load-count'), 10);
+        if (isNaN(loads)) {
+          loads = 0;
+        }
         module.POLYFILL.sessionStorage.setItem('load-count', loads + 1);
       }
       if (isNaN(loads)) {
@@ -387,8 +396,9 @@ window.DECADE_CITY = (function (module, $) {
       if (storage) {
         module.POLYFILL.sessionStorage.setItem('load-speed', module.load_speed); // Store the speed for future use over multiple loads.
       }
+      tested = true;
     };
-    module.register(init);
+    module.register(submodule.test);
 
     return submodule;
 
@@ -633,7 +643,7 @@ window.DECADE_CITY = (function (module, $){
     submodule.profile.timing = !!(typeof window.performance !== 'undefined' && typeof window.performance.timing !== 'undefined');
 
     /**
-     * Sends the profile to the server with a ajax request.
+     * Sends the profile to the server with an ajax request.
      *
      * @param force {Boolean} Force sending even if the profile has already been sent.
      */
@@ -644,6 +654,7 @@ window.DECADE_CITY = (function (module, $){
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       $(document).ready(function () {
         window.setTimeout(function () {
+          var sent = false;
           // Connection information
           if (typeof module.load_speed !== 'undefined') {
             submodule.profile.load_speed = module.load_speed;
@@ -655,9 +666,18 @@ window.DECADE_CITY = (function (module, $){
             submodule.profile.session_storage = module.POLYFILL.sessionStorage.supported;
           }
           setProfile(); // Make sure it's been set.
-          if (!module.COOKIES.getItem('profile_sent') || force) {
+          if (submodule.profile.session_storage) {
+            sent = !!(module.POLYFILL.sessionStorage.getItem('profile-sent'));
+          } else {
+            sent = !!(module.COOKIES.getItem('profile-sent'));
+          }
+          if (!sent || force) {
             $.get('/profile', submodule.profile); // TODO: Parameterise the profiler URL.
-            module.COOKIES.setItem('profile_sent', 1, null, '/');
+            if (submodule.profile.session_storage) {
+              module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
+            } else {
+              module.COOKIES.setItem('profile-sent', 1, null, '/');
+            }
           }
         }, 100);
       });
@@ -801,7 +821,7 @@ window.DECADE_CITY = (function (module, $) {
     init = function (width, height, pixel_density, speed) {
       var window_width;
 
-
+      module.SPEED_TEST.test();
       if (typeof module.load_speed !== 'undefined' && typeof speed === 'undefined') {
         speed = module.load_speed;
       }

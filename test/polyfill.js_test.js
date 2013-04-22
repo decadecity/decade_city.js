@@ -32,8 +32,13 @@
     ok($('#outerHTML-test').outerHTML() === '<span id="outerHTML-test">test</span>', 'Returns complete element');
   });
 
+
   test('sessionStorage', function () {
     if (window.DECADE_CITY.POLYFILL.sessionStorage.supported) {
+      // These are known to be used by the framework - we want to preserve them.
+      var load_speed = window.DECADE_CITY.POLYFILL.sessionStorage.getItem('load-speed');
+      var load_count = window.DECADE_CITY.POLYFILL.sessionStorage.getItem('load-count');
+      var profile_sent = window.DECADE_CITY.POLYFILL.sessionStorage.getItem('profile-sent');
       window.sessionStorage.clear();
       ok(window.DECADE_CITY.POLYFILL.sessionStorage.getLength() === 0, 'No items in session storage');
       window.DECADE_CITY.POLYFILL.sessionStorage.setItem('test', 'test');
@@ -45,6 +50,16 @@
       ok(window.DECADE_CITY.POLYFILL.sessionStorage.key(0) === 'test', 'Item retrieved by key');
       window.DECADE_CITY.POLYFILL.sessionStorage.removeItem('test');
       ok(window.DECADE_CITY.POLYFILL.sessionStorage.getLength() === 0, 'Item removed');
+      // Restore any preserved items.
+      if (load_speed) {
+        window.DECADE_CITY.POLYFILL.sessionStorage.setItem('load-speed', load_speed);
+      }
+      if (load_count) {
+        window.DECADE_CITY.POLYFILL.sessionStorage.setItem('load-count', load_count);
+      }
+      if (profile_sent) {
+        window.DECADE_CITY.POLYFILL.sessionStorage.setItem('profile-sent', profile_sent);
+      }
     } else {
       ok(window.DECADE_CITY.POLYFILL.sessionStorage.getLength() === 0, 'No items in session storage');
       window.DECADE_CITY.POLYFILL.sessionStorage.setItem('test', 'test');
@@ -58,6 +73,7 @@
       ok(window.DECADE_CITY.POLYFILL.sessionStorage.getLength() === 0, 'Item removed does not error');
     }
   });
+
 
 
 }(window.jQuery));
