@@ -119,6 +119,7 @@ window.DECADE_CITY = (function (module, $) {
           return window.sessionStorage.clear();
         }
       };
+      that.supported = supported; // Publically expose support status.
       return that;
     }());
 

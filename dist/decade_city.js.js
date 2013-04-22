@@ -303,6 +303,7 @@ window.DECADE_CITY = (function (module, $) {
           return window.sessionStorage.clear();
         }
       };
+      that.supported = supported; // Publically expose support status.
       return that;
     }());
 
@@ -470,9 +471,11 @@ window.DECADE_CITY = (function (module, $) {
       }
       if (!timing) {
         // Need to use storage to get the navigation start time.
-        if (typeof module.COOKIES !== 'undefined') {
+        if (typeof module.POLYFILL.sessionStorage.supported) {
+          module.POLYFILL.sessionStorage.setItem('t_navigation_start', new Date().getTime());
+        } else if (typeof module.COOKIES !== 'undefined') {
           $(window).on('unload', function () {
-            module.COOKIES.setItem('t_navigation_start', (new Date()).getTime(), false, '/');
+            module.COOKIES.setItem('t_navigation_start', new Date().getTime(), false, '/');
           });
         }
       }
@@ -509,11 +512,14 @@ window.DECADE_CITY = (function (module, $) {
         onload = t_onload - window.t_pagestart;
       } else {
         // Pull the navigation start from storage if we have it.
-        if (typeof module.COOKIES !== 'undefined') {
+        if (typeof module.POLYFILL.sessionStorage.supported) {
+          t_navigation_start = module.POLYFILL.sessionStorage.getItem('t_navigation_start');
+        } else if (typeof module.COOKIES !== 'undefined') {
           t_navigation_start = module.COOKIES.getItem('t_navigation_start');
-          if (t_navigation_start) {
-            t_done = window.t_domready - t_navigation_start;
-          }
+        }
+        // Collect data if available.
+        if (t_navigation_start) {
+          t_done = window.t_domready - t_navigation_start;
         }
         if (window.t_pagestart) {
           onload = t_onload - window.t_pagestart;

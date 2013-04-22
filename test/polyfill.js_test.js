@@ -33,7 +33,7 @@
   });
 
   test('sessionStorage', function () {
-    if (typeof window.sessionStorage !== 'undefined') {
+    if (window.DECADE_CITY.POLYFILL.sessionStorage.supported) {
       window.sessionStorage.clear();
       ok(window.DECADE_CITY.POLYFILL.sessionStorage.getLength() === 0, 'No items in session storage');
       window.DECADE_CITY.POLYFILL.sessionStorage.setItem('test', 'test');
