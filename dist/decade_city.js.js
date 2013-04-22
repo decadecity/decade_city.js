@@ -327,10 +327,11 @@ window.DECADE_CITY = (function (module, $) {
           connection = navigator.connection || { 'type': 0 },
           loads; // Number of times we have loaded.
 
-
       module.load_speed = 'slow'; // Default to slow.
 
-      window.t_dom_ready = new Date(); // Set the DOM timer.
+      if (!window.t_domready) {
+        window.t_domready = new Date(); // Set the DOM timer.
+      }
 
       if (storage) {
         loads = parseInt(module.POLYFILL.sessionStorage.getItem('load-count'), 10);
@@ -345,9 +346,9 @@ window.DECADE_CITY = (function (module, $) {
       if (timing) {
         // We have the performance timing API so use it.
         timer = window.performance.timing.domInteractive - window.performance.timing.requestStart;
-      } else if (window.t_head && window.t_dom_ready) {
+      } else if (window.t_pagestart && window.t_domready) {
         // Fall back on the in page timers.
-        timer = window.t_dom_ready - window.t_head + 500;  // Measured average overhead of a request is 500ms (see ).
+        timer = window.t_domready - window.t_pagestart + 500;  // Measured average overhead of a request is 500ms (see http://decadecity.net/blog/2012/09/15/how-long-does-an-http-request-take).
       }
       if (storage && module.POLYFILL.sessionStorage.getLength()) {
         // If we have something in session storage then try and do this over a number of loads.
@@ -627,6 +628,9 @@ window.DECADE_CITY = (function (module, $){
     script = document.createElement('script');
     script.setAttribute('async', true);
     submodule.profile.async_scripts = !!script.async;
+
+    // Timing API
+    submodule.profile.timing = !!(typeof window.performance !== 'undefined' && typeof window.performance.timing !== 'undefined');
 
     /**
      * Sends the profile to the server with a ajax request.

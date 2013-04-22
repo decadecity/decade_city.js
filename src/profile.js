@@ -65,6 +65,9 @@ window.DECADE_CITY = (function (module, $){
     script.setAttribute('async', true);
     submodule.profile.async_scripts = !!script.async;
 
+    // Timing API
+    submodule.profile.timing = !!(typeof window.performance !== 'undefined' && typeof window.performance.timing !== 'undefined');
+
     /**
      * Sends the profile to the server with a ajax request.
      *
