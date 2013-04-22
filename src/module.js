@@ -19,10 +19,12 @@ window.DECADE_CITY = (function (module, $) {
     }
   };
 
+  module.config = {};
   /**
    * Runs all functions in the init registry.
    */
-  module.init = function () {
+  module.init = function (config) {
+    $.extend(module.config, config);
     $.each(resistry, function(i, funct) {
       funct.call();
     });
