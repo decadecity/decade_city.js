@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.2.0 - 2013-04-22
+/*! decade_city.js - v0.2.0 - 2013-04-26
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
@@ -314,9 +314,9 @@ window.DECADE_CITY = (function (module, $) {
   return module;
 }(window.DECADE_CITY || {}, window.jQuery));
 
-window.DECADE_CITY = (function (module, $) {
+window.DECADE_CITY = (function (module) {
   "use strict";
-  module.SPEED_TEST = (function (module, submodule, $) {
+  module.SPEED_TEST = (function (module, submodule) {
 
     var tested = false;
 
@@ -336,7 +336,7 @@ window.DECADE_CITY = (function (module, $) {
       module.load_speed = 'slow'; // Default to slow.
 
       if (!window.t_domready) {
-        window.t_domready = new Date(); // Set the DOM timer.
+        window.t_domready = new Date(); // Set the DOM timer - assume that DOM is ready if we're running this code.
       }
 
       if (storage) {
@@ -392,20 +392,25 @@ window.DECADE_CITY = (function (module, $) {
       if (module.load_speed !== 'fast') {
         module.load_speed = 'slow';
       }
-      $('html').addClass(module.load_speed); // Set a CSS hook - will be either 'slow' or 'fast'.
+      document.getElementsByTagName('html')[0].className += ' ' + module.load_speed; // Set a CSS hook - will be either 'slow' or 'fast'.
       if (storage) {
         module.POLYFILL.sessionStorage.setItem('load-speed', module.load_speed); // Store the speed for future use over multiple loads.
       }
       tested = true;
     };
-    module.register(submodule.test);
+
+    // If this is running as part of the framework then register it to run on DOM ready.
+    if (typeof module.register === 'function') {
+      module.register(submodule.test);
+    }
+    // If you're not running this as part of the framework then you'll need to run submodule.test() on DOM ready yourself.
 
     return submodule;
 
-  }(module, module.SPEED_TEST || {}, $));
+  }(module, module.SPEED_TEST || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));
 
 window.DECADE_CITY = (function (module, $) {
   "use strict";
@@ -654,7 +659,8 @@ window.DECADE_CITY = (function (module, $){
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       $(document).ready(function () {
         window.setTimeout(function () {
-          var sent = false;
+          var sent = false,
+              url = module.config.profiler_url || '/profile';
           // Connection information
           if (typeof module.load_speed !== 'undefined') {
             submodule.profile.load_speed = module.load_speed;
@@ -672,7 +678,7 @@ window.DECADE_CITY = (function (module, $){
             sent = !!(module.COOKIES.getItem('profile-sent'));
           }
           if (!sent || force) {
-            $.get('/profile', submodule.profile); // TODO: Parameterise the profiler URL.
+            $.get(url, submodule.profile);
             if (submodule.profile.session_storage) {
               module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
             } else {
