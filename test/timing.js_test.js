@@ -38,6 +38,7 @@
         ok(vars.hasOwnProperty('noscript'), '`noscript` set.');
         ok(vars.hasOwnProperty('r'), '`r` set.');
         ok(vars.hasOwnProperty('t_body'), '`t_body` set.');
+        ok(vars.hasOwnProperty('t_css'), '`t_css` set.');
         ok(vars.hasOwnProperty('t_domready'), '`t_domready` set.');
         ok(vars.hasOwnProperty('t_done'), '`t_done` set.');
         ok(vars.hasOwnProperty('t_head'), '`t_head` set.');

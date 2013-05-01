@@ -87,7 +87,7 @@ window.DECADE_CITY = (function (module) {
     if (typeof module.register === 'function') {
       module.register(submodule.test);
     }
-    // If you're not running this as part of the framework then you'll need to run submodule.test() on DOM ready yourself.
+    // If you're not running this as part of the framework then you'll need to run window.DECADE_CITY.SPEED_TEST.test() on DOM ready yourself.
 
     return submodule;
 

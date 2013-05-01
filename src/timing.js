@@ -28,12 +28,17 @@ window.DECADE_CITY = (function (module, $) {
 
     // Add some information we know at this stage.
     submodule.addVar({
-      'b_height': $(window).height(),
-      'b_width': $(window).width(),
       'noscript': 0,
       'r': document.referrer,
       'u': window.location.href
     });
+
+    if (typeof $ !== 'undefined') {
+      submodule.addVar({
+        'b_height': $(window).height(),
+        'b_width': $(window).width()
+      });
+    }
 
     /**
      * Sends the tracking data.
@@ -146,6 +151,9 @@ window.DECADE_CITY = (function (module, $) {
       }
       if (window.t_jsstart && window.t_jsend) {
         submodule.addVar('t_js', window.t_jsend - window.t_jsstart);
+      }
+      if (window.t_cssstart && window.t_cssend) {
+        submodule.addVar('t_css', window.t_cssend - window.t_cssstart);
       }
 
       // Finally, send the data after a delay.

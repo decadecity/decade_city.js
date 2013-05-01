@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.2.0 - 2013-04-26
+/*! decade_city.js - v0.2.0 - 2013-05-01
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
@@ -403,7 +403,7 @@ window.DECADE_CITY = (function (module) {
     if (typeof module.register === 'function') {
       module.register(submodule.test);
     }
-    // If you're not running this as part of the framework then you'll need to run submodule.test() on DOM ready yourself.
+    // If you're not running this as part of the framework then you'll need to run window.DECADE_CITY.SPEED_TEST.test() on DOM ready yourself.
 
     return submodule;
 
@@ -442,12 +442,17 @@ window.DECADE_CITY = (function (module, $) {
 
     // Add some information we know at this stage.
     submodule.addVar({
-      'b_height': $(window).height(),
-      'b_width': $(window).width(),
       'noscript': 0,
       'r': document.referrer,
       'u': window.location.href
     });
+
+    if (typeof $ !== 'undefined') {
+      submodule.addVar({
+        'b_height': $(window).height(),
+        'b_width': $(window).width()
+      });
+    }
 
     /**
      * Sends the tracking data.
@@ -560,6 +565,9 @@ window.DECADE_CITY = (function (module, $) {
       }
       if (window.t_jsstart && window.t_jsend) {
         submodule.addVar('t_js', window.t_jsend - window.t_jsstart);
+      }
+      if (window.t_cssstart && window.t_cssend) {
+        submodule.addVar('t_css', window.t_cssend - window.t_cssstart);
       }
 
       // Finally, send the data after a delay.

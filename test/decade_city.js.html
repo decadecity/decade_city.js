@@ -8,7 +8,9 @@
   <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
   <script src="../libs/jquery-loader.js"></script>
   <!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
+  <script>window.t_cssstart = new Date();</script>
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
+  <script>window.t_cssend = new Date();</script>
   <script src="../libs/qunit/qunit.js"></script>
   <!-- Load local lib and tests. -->
   <script src="../lib/jquery.js"></script>
