@@ -1,4 +1,4 @@
-/*! decade_city.js - v0.2.0 - 2013-05-01
+/*! decade_city.js - v0.2.0 - 2013-05-03
 * https://github.com/decadecity/decade_city.js
 * Copyright (c) 2013 Orde Saunders; Licensed MIT */
 
@@ -494,7 +494,7 @@ window.DECADE_CITY = (function (module, $) {
         // Need to use storage to get the navigation start time.
         if (typeof module.POLYFILL.sessionStorage.supported) {
           module.POLYFILL.sessionStorage.setItem('t_navigation_start', new Date().getTime());
-        } else if (typeof module.COOKIES !== 'undefined') {
+        } else if (typeof module.COOKIES !== 'undefined' && typeof $ !== 'undefined') {
           $(window).on('unload', function () {
             module.COOKIES.setItem('t_navigation_start', new Date().getTime(), false, '/');
           });
@@ -505,14 +505,11 @@ window.DECADE_CITY = (function (module, $) {
         window.t_pagestart = window.performance.timing.responseEnd;
       }
       if (!window.t_domready) {
-        // We need to set a DOMReady timer.
-        $(document).ready(function () {
-          if (timing) {
-            window.t_domready = window.performance.timing.domInteractive;
-          } else {
-            window.t_domready = new Date().getTime();
-          }
-        });
+        if (timing) {
+          window.t_domready = window.performance.timing.domInteractive;
+        } else {
+          window.t_domready = new Date().getTime(); // Hit and hope.
+        }
       }
     };
     module.register(init);
@@ -521,7 +518,7 @@ window.DECADE_CITY = (function (module, $) {
      * Final timing values and send beacon.
      */
     var main = function() {
-      var t_onload = window.t_onload || new Date(),
+      var t_onload = window.t_onload || new Date().getTime(), // Should have been set but if not then hit and hope.
           t_navigation_start,
           t_done,
           onload;
