@@ -24,13 +24,17 @@ module.exports = function(grunt) {
           'src/images.js',
           'src/flickr.js'
         ],
-        dest: 'dist/<%= pkg.name %>.js'
+        dest: 'dist/decade_city.js'
       }
     },
     uglify: {
+      options: {
+        banner: '<config:meta.banner>'
+      },
       dist: {
-        src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
-        dest: 'dist/<%= pkg.name %>.min.js'
+        files: {
+         'dist/decade_city.min.js': ['dist/decade_city.js']
+        }
       }
     },
     qunit: {
@@ -57,7 +61,7 @@ module.exports = function(grunt) {
       globals: {
         jQuery: true
       },
-      files: ['grunt.js', 'src/**/*.js', 'test/**/*.js']
+      files: ['grunt.js', 'src/**/*.js']
     },
     uglify: {}
   });

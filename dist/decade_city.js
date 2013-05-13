@@ -1,7 +1,3 @@
-/*! decade_city.js - v0.2.0 - 2013-05-13
-* https://github.com/decadecity/decade_city.js
-* Copyright (c) 2013 Orde Saunders; Licensed MIT */
-
 // Loosely based on jQuery's DOM ready.
 window.DECADE_CITY = (function (module, $) {
   var resistry = [], // List of functions to be run.
