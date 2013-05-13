@@ -1,13 +1,19 @@
 {
-  "name": "jquery-plugin",
+  "name": "decade_city.js",
   "version": "0.0.0-ignored",
   "engines": {
-    "node": ">= 0.6.0"
+    "node": ">= 0.10.0"
   },
   "scripts": {
     "test": "grunt qunit"
   },
   "devDependencies": {
-    "grunt": "~0.3.17"
+    "grunt": "~0.4.0",
+    "grunt-contrib-less": "~0.5.0",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-watch": "~0.4.3",
+    "grunt-contrib-qunit": "~0.2.1",
+    "grunt-contrib-concat": "~0.3.0"
   }
 }
