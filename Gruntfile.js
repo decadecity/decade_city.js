@@ -62,8 +62,7 @@ module.exports = function(grunt) {
         jQuery: true
       },
       files: ['grunt.js', 'src/**/*.js']
-    },
-    uglify: {}
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-concat');
