@@ -39,13 +39,14 @@
   });
 
 
-  test('Resize function runs when resisze triggered', function () {
+  asyncTest('Resize function runs when resisze triggered', function () {
     window._register_resize_test = 'unregistered';
     window.DECADE_CITY.registerResize(function() { window._register_resize_test = 'registered'; });
     $(window).trigger('resize');
     equal(window._register_resize_test, 'unregistered', 'Function not immediately invoked');
     window.setTimeout(function() {
-      //equal(window._register_resize_test, 'registered', 'Function invoked after delay');
+      equal(window._register_resize_test, 'registered', 'Function invoked after delay');
+      start();
     }, 500);
   });
 

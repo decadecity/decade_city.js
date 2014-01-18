@@ -31,7 +31,7 @@
   // This needs to be run in a browser - won't work with Phantom.
   $(window).on('load', function () {
     window.setTimeout(function () {
-      test('Timing functionality', function () {
+      asyncTest('Timing functionality', function () {
         var vars = window.DECADE_CITY.TIMING.getVars();
         ok(vars.hasOwnProperty('b_height'), '`b_height` set.');
         ok(vars.hasOwnProperty('b_width'), '`b_width` set.');
@@ -45,8 +45,9 @@
         ok(vars.hasOwnProperty('t_js'), '`t_js` set.');
         ok(vars.hasOwnProperty('t_onload'), '`t_onload` set.');
         ok(vars.hasOwnProperty('u'), '`u` set.');
+        start();
       });
-    }, 2000);
+    }, 200);
   });
 
 }(window.jQuery));
