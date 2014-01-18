@@ -1,5 +1,5 @@
 // Loosely based on jQuery's DOM ready.
-window.DECADE_CITY = (function (module, $) {
+window.DECADE_CITY = (function (module) {
   var resistry = [], // List of functions to be run.
       is_initialised = false; // Are we already initialised?
   /**
@@ -24,8 +24,12 @@ window.DECADE_CITY = (function (module, $) {
    * Runs all functions in the init registry.
    */
   module.init = function (config) {
-    $.extend(module.config, config);
-    $.each(resistry, function(i, funct) {
+    for (var prop in config) {
+      if(config.hasOwnProperty(prop)) {
+        module.config[prop] = config[prop];
+      }
+    }
+    resistry.forEach(function(funct) {
       funct.call();
     });
     is_initialised = true;
@@ -51,8 +55,8 @@ window.DECADE_CITY = (function (module, $) {
   /**
    * Handles running registered functions on load.
    */
-  $(window).load(function() {
-    $.each(load_registry, function(i, funct) {
+  window.addEventListener('load', function() {
+    load_registry.forEach(function(funct) {
       funct.call();
     });
     is_loaded = true;
@@ -79,20 +83,20 @@ window.DECADE_CITY = (function (module, $) {
    */
   var resizeHander = function() {
     var resize_timer; // Used to set a delay on the resize callback.
-    $(window).resize(function () {
+    window.addEventListener('resize', function () {
       var delay = 250;
       if (resize_timer) {
         resize_timer = window.clearTimeout(resize_timer);
       }
       resize_timer = window.setTimeout(function () {
-        $.each(resize_registry, function(i, funct) {
+        resize_registry.forEach(function(funct) {
           funct.call();
         });
       }, delay);
-    });
+    }, false);
   };
 
   module.register(resizeHander);
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));
