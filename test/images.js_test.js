@@ -38,7 +38,7 @@
 
   test('SVG extension replacement in the DOM', function () {
     window.DECADE_CITY.PROFILE.svg = true;
-    window.DECADE_CITY.IMAGES.test();
+    window.DECADE_CITY.IMAGES._test();
     equal($('#svg-replacement-test').attr('src'), 'file:///image.svg', 'Src replaced');
     equal($('#svg-replacement-test').hasClass('svg-replace'), false, 'Class removed');
   });
