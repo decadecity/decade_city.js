@@ -17,6 +17,7 @@ Cutting the mustard requirements:
     'classList' in document.documentElement
     'querySelectorAll' in document
     'addEventListner' in window
+    window.XMLHttpRequest
 
 ```html
 <script src="jquery.js"></script>
