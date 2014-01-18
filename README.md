@@ -12,6 +12,12 @@ Download the [production version][min] or the [development version][max].
 
 In your web page:
 
+Cutting the mustard requirements:
+
+    'classList' in document.documentElement
+    'querySelectorAll' in document
+    'addEventListner' in window
+
 ```html
 <script src="jquery.js"></script>
 <script src="dist/decade_city.js.min.js"></script>

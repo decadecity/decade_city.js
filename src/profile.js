@@ -1,12 +1,12 @@
-window.DECADE_CITY = (function (module, $){
+window.DECADE_CITY = (function (module){
   "use strict";
 
   /**
    * Profiles the runtime environment to check support.
    */
-  module.PROFILE = (function (module, submodule, $) {
+  module.PROFILE = (function (module, submodule) {
     var image = new Image(),
-        html = $('html'),
+        html = document.querySelectorAll('html')[0],
         setProfile,
         script;
 
@@ -44,15 +44,13 @@ window.DECADE_CITY = (function (module, $){
       submodule.profile.transform = true;
     }
     if (submodule.profile.transform) {
-      html.addClass('transform');
+      html.classList.add('transform');
     }
 
     // Touch support.
     if ('ontouchstart' in window || (typeof navigator.msMaxTouchPoints !== 'undefined' && navigator.msMaxTouchPoints > 0)) {
       submodule.profile.touch = true;
-      if ($(html).hasClass('pointer')) {
-        $(html).removeClass('pointer');
-      }
+      html.classList.remove('pointer');
     }
 
     // JSON parser support.
@@ -77,9 +75,20 @@ window.DECADE_CITY = (function (module, $){
       if (typeof module.COOKIES === 'undefined') {
         return false;
       }
+      // TODO: remove for testing.
+      function toQueryString(obj) {
+          var parts = [];
+          for (var i in obj) {
+              if (obj.hasOwnProperty(i)) {
+                  parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
+              }
+          }
+          return parts.join("&");
+      }
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
-      $(document).ready(function () {
+      document.addEventListener( 'DOMContentLoaded', function () {
         window.setTimeout(function () {
+          // TODO: remove for testing.
           var sent = false,
               url = module.config.profiler_url || '/profile';
           // Connection information
@@ -99,7 +108,9 @@ window.DECADE_CITY = (function (module, $){
             sent = !!(module.COOKIES.getItem('profile-sent'));
           }
           if (!sent || force) {
-            $.get(url, submodule.profile);
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open('GET', url + '?' + toQueryString(submodule.profile), true);
+            httpRequest.send(null);
             if (submodule.profile.session_storage) {
               module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
             } else {
@@ -114,7 +125,7 @@ window.DECADE_CITY = (function (module, $){
     module.register(setProfile);
 
     return submodule;
-  }(module, module.PROFILE || {}, $));
+  }(module, module.PROFILE || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));
