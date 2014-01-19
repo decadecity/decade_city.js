@@ -116,8 +116,8 @@ window.DECADE_CITY = (function (module) {
       if (!flickr_suffix_set) {
         // This has already been run so don't do it again.
 
-        width = width || window.document.documentElement[ "clientWidth" ];
-        height = height || window.document.documentElement[ "clientHeight" ];
+        width = width || window.document.documentElement['clientWidth'];
+        height = height || window.document.documentElement['clientHeight'];
         pixel_density = pixel_density || getInt(window.devicePixelRatio) || 1;
 
         window_width = Math.max(width, height); // Take max to allow for orientation change.
