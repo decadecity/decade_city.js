@@ -1,10 +1,10 @@
-window.DECADE_CITY = (function (module, $) {
+window.DECADE_CITY = (function (module) {
   "use strict";
 
   /**
    * Responsive flickr image replacement.
    */
-  module.FLICKR = (function (module, submodule, $) {
+  module.FLICKR = (function (module, submodule) {
     var image_replace = /^http(s)?:\/\/(.*)\.staticflickr.com\/(.*?)(_.\.jpg|\.jpg)$/, // Regex to break up a flickr image URL.
         getInt,
         responsiveImages,
@@ -47,42 +47,50 @@ window.DECADE_CITY = (function (module, $) {
      * Replaces any flickr image with a class of .responsive with the appropriate size image for the environment.
      */
     responsiveImages = function () {
-      var images = $('img.responsive');
+      var images = document.querySelectorAll('img.responsive');
 
       if (images.length) {
         var holder, clearHolder;
 
         // 'Invisible' holder into which the replacement images can be loaded.
-        holder= $('<div id="flickr-image-holder"/>').css({'height': '1px', 'width': '1px'}).fadeTo(1, 0.1).appendTo('body');
+        holder = document.createElement('div');
+        holder.innerHTML = '<div id="flickr-image-holder" style="height: 1px; width: 1px; display: block; opacity: 0;"/>';
+
         /**
          * Clears the cache image holder if it is empty.
          */
         clearHolder = function() {
-          if (holder.find('img').length === 0) {
-            holder.remove();
+          if (holder.querySelectorAll('img').length === 0) {
+            // TODO: remove events.
+            if (holder.parentElement) {
+              holder.parentElement.removeChild(holder);
+            }
           }
         };
 
         // Go through each responsive image and swap it out with the appropriate image.
-        images.each(function () {
-          var content_img = $(this), // Re-scope this.
-              src = content_img.attr('src'),
+        for (var i = 0; i < images.length; i += 1) {
+          var content_img = images[i],
+              src = content_img.src,
               new_src = imageSrc(src), // URL of the replacement image.
               cache_img; // Cache image we will use to load the new image.
           if (src === new_src) {
             // Nothing doing.
             return src;
           }
-          cache_img = $('<img src="' + new_src + '" alt="" height="1" width="1">');
-          holder.append(cache_img); // Inject the new image into the DOM and get the browser to load it.
+          cache_img = document.createElement('img');
+          cache_img.src = new_src;
+          holder.appendChild(cache_img); // Inject the new image into the DOM and get the browser to load it.
           // We need to load the image to prevent a big jump as the old src is switched out for a src that hasn't been loaded.
-          cache_img.on('load', function() {
+          cache_img.addEventListener('load', function() {
             // Once the image has loaded in the hidden version we replace the original image as it should be in the browser cache.
-            content_img.attr('src', new_src);
-            cache_img.remove(); // Don't need the cache image anymore.
+            content_img.src = new_src;
+            if (cache_img.parentElement) {
+              cache_img.parentElement.removeChild(cache_img); // Don't need the cache image anymore.
+            }
             clearHolder();
           });
-        });
+        }
         clearHolder(); // Clean up if there were no images to insert.
       }
     };
@@ -108,8 +116,8 @@ window.DECADE_CITY = (function (module, $) {
       if (!flickr_suffix_set) {
         // This has already been run so don't do it again.
 
-        width = width || $(window).width();
-        height = height || $(window).height();
+        width = width || window.innerWidth;
+        height = height || window.innerHeight;
         pixel_density = pixel_density || getInt(window.devicePixelRatio) || 1;
 
         window_width = Math.max(width, height); // Take max to allow for orientation change.
@@ -152,13 +160,14 @@ window.DECADE_CITY = (function (module, $) {
         // Open up some internal items for debugging.
         submodule.init = init;
         submodule.imageSrc = imageSrc;
+        submodule.responsiveImages = responsiveImages;
         submodule.flickr_suffix = function (value) { if (typeof value !== 'undefined') { flickr_suffix = value; } else { return flickr_suffix; }};
         submodule.flickr_suffix_set = function (value) { if (typeof value !== 'undefined') { flickr_suffix_set = !!(value); } else { return flickr_suffix_set; }};
       }
     });
 
     return submodule;
-  }(module, module.FLICKR || {}, $));
+  }(module, module.FLICKR || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));

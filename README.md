@@ -18,6 +18,8 @@ Cutting the mustard requirements:
     'querySelectorAll' in document
     'addEventListner' in window
     window.XMLHttpRequest
+    window.innerWidth
+    window.innerHeight
 
 ```html
 <script src="jquery.js"></script>
