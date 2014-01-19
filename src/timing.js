@@ -1,6 +1,6 @@
-window.DECADE_CITY = (function (module, $) {
+window.DECADE_CITY = (function (module) {
   "use strict";
-  module.TIMING = (function (module, submodule, $) {
+  module.TIMING = (function (module, submodule) {
     var vars = {},
         url,
         timing = !!(typeof window.performance !== "undefined" && typeof window.performance.timing !== "undefined");
@@ -33,12 +33,10 @@ window.DECADE_CITY = (function (module, $) {
       'u': window.location.href
     });
 
-    if (typeof $ !== 'undefined') {
-      submodule.addVar({
-        'b_height': $(window).height(),
-        'b_width': $(window).width()
-      });
-    }
+    submodule.addVar({
+      'b_height': window.document.documentElement['clientHeight'],
+      'b_width': window.document.documentElement['clientWidth']
+    });
 
     /**
      * Sends the tracking data.
@@ -80,8 +78,8 @@ window.DECADE_CITY = (function (module, $) {
         // Need to use storage to get the navigation start time.
         if (typeof module.POLYFILL.sessionStorage.supported) {
           module.POLYFILL.sessionStorage.setItem('t_navigation_start', new Date().getTime());
-        } else if (typeof module.COOKIES !== 'undefined' && typeof $ !== 'undefined') {
-          $(window).on('unload', function () {
+        } else if (typeof module.COOKIES !== 'undefined') {
+          window.addEventListener('beforeunload', function () {
             module.COOKIES.setItem('t_navigation_start', new Date().getTime(), false, '/');
           });
         }
@@ -163,7 +161,7 @@ window.DECADE_CITY = (function (module, $) {
     });
 
     return submodule;
-  }(module, module.TIMING || {}, $));
+  }(module, module.TIMING || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));
