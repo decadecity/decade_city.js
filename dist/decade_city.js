@@ -1,5 +1,5 @@
 // Loosely based on jQuery's DOM ready.
-window.DECADE_CITY = (function (module, $) {
+window.DECADE_CITY = (function (module) {
   var resistry = [], // List of functions to be run.
       is_initialised = false; // Are we already initialised?
   /**
@@ -24,8 +24,12 @@ window.DECADE_CITY = (function (module, $) {
    * Runs all functions in the init registry.
    */
   module.init = function (config) {
-    $.extend(module.config, config);
-    $.each(resistry, function(i, funct) {
+    for (var prop in config) {
+      if(config.hasOwnProperty(prop)) {
+        module.config[prop] = config[prop];
+      }
+    }
+    resistry.forEach(function(funct) {
       funct.call();
     });
     is_initialised = true;
@@ -51,8 +55,8 @@ window.DECADE_CITY = (function (module, $) {
   /**
    * Handles running registered functions on load.
    */
-  $(window).load(function() {
-    $.each(load_registry, function(i, funct) {
+  window.addEventListener('load', function() {
+    load_registry.forEach(function(funct) {
       funct.call();
     });
     is_loaded = true;
@@ -79,23 +83,23 @@ window.DECADE_CITY = (function (module, $) {
    */
   var resizeHander = function() {
     var resize_timer; // Used to set a delay on the resize callback.
-    $(window).resize(function () {
+    window.addEventListener('resize', function () {
       var delay = 250;
       if (resize_timer) {
         resize_timer = window.clearTimeout(resize_timer);
       }
       resize_timer = window.setTimeout(function () {
-        $.each(resize_registry, function(i, funct) {
+        resize_registry.forEach(function(funct) {
           funct.call();
         });
       }, delay);
-    });
+    }, false);
   };
 
   module.register(resizeHander);
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));
 
 window.DECADE_CITY = (function (module) {
   "use strict";
@@ -408,9 +412,9 @@ window.DECADE_CITY = (function (module) {
   return module;
 }(window.DECADE_CITY || {}));
 
-window.DECADE_CITY = (function (module, $) {
+window.DECADE_CITY = (function (module) {
   "use strict";
-  module.TIMING = (function (module, submodule, $) {
+  module.TIMING = (function (module, submodule) {
     var vars = {},
         url,
         timing = !!(typeof window.performance !== "undefined" && typeof window.performance.timing !== "undefined");
@@ -443,12 +447,10 @@ window.DECADE_CITY = (function (module, $) {
       'u': window.location.href
     });
 
-    if (typeof $ !== 'undefined') {
-      submodule.addVar({
-        'b_height': $(window).height(),
-        'b_width': $(window).width()
-      });
-    }
+    submodule.addVar({
+      'b_height': window.document.documentElement['clientHeight'],
+      'b_width': window.document.documentElement['clientWidth']
+    });
 
     /**
      * Sends the tracking data.
@@ -490,8 +492,8 @@ window.DECADE_CITY = (function (module, $) {
         // Need to use storage to get the navigation start time.
         if (typeof module.POLYFILL.sessionStorage.supported) {
           module.POLYFILL.sessionStorage.setItem('t_navigation_start', new Date().getTime());
-        } else if (typeof module.COOKIES !== 'undefined' && typeof $ !== 'undefined') {
-          $(window).on('unload', function () {
+        } else if (typeof module.COOKIES !== 'undefined') {
+          window.addEventListener('beforeunload', function () {
             module.COOKIES.setItem('t_navigation_start', new Date().getTime(), false, '/');
           });
         }
@@ -573,20 +575,20 @@ window.DECADE_CITY = (function (module, $) {
     });
 
     return submodule;
-  }(module, module.TIMING || {}, $));
+  }(module, module.TIMING || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));
 
-window.DECADE_CITY = (function (module, $){
+window.DECADE_CITY = (function (module){
   "use strict";
 
   /**
    * Profiles the runtime environment to check support.
    */
-  module.PROFILE = (function (module, submodule, $) {
+  module.PROFILE = (function (module, submodule) {
     var image = new Image(),
-        html = $('html'),
+        html = document.querySelectorAll('html')[0],
         setProfile,
         script;
 
@@ -624,15 +626,13 @@ window.DECADE_CITY = (function (module, $){
       submodule.profile.transform = true;
     }
     if (submodule.profile.transform) {
-      html.addClass('transform');
+      html.classList.add('transform');
     }
 
     // Touch support.
     if ('ontouchstart' in window || (typeof navigator.msMaxTouchPoints !== 'undefined' && navigator.msMaxTouchPoints > 0)) {
       submodule.profile.touch = true;
-      if ($(html).hasClass('pointer')) {
-        $(html).removeClass('pointer');
-      }
+      html.classList.remove('pointer');
     }
 
     // JSON parser support.
@@ -657,9 +657,20 @@ window.DECADE_CITY = (function (module, $){
       if (typeof module.COOKIES === 'undefined') {
         return false;
       }
+      // TODO: remove for testing.
+      function toQueryString(obj) {
+          var parts = [];
+          for (var i in obj) {
+              if (obj.hasOwnProperty(i)) {
+                  parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
+              }
+          }
+          return parts.join("&");
+      }
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
-      $(document).ready(function () {
+      document.addEventListener( 'DOMContentLoaded', function () {
         window.setTimeout(function () {
+          // TODO: remove for testing.
           var sent = false,
               url = module.config.profiler_url || '/profile';
           // Connection information
@@ -679,7 +690,9 @@ window.DECADE_CITY = (function (module, $){
             sent = !!(module.COOKIES.getItem('profile-sent'));
           }
           if (!sent || force) {
-            $.get(url, submodule.profile);
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open('GET', url + '?' + toQueryString(submodule.profile), true);
+            httpRequest.send(null);
             if (submodule.profile.session_storage) {
               module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
             } else {
@@ -694,45 +707,46 @@ window.DECADE_CITY = (function (module, $){
     module.register(setProfile);
 
     return submodule;
-  }(module, module.PROFILE || {}, $));
+  }(module, module.PROFILE || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));
 
-window.DECADE_CITY = (function (module, $) {
+window.DECADE_CITY = (function (module) {
   "use strict";
-  module.IMAGES = (function (module, submodule, $) {
+  module.IMAGES = (function (module, submodule) {
     submodule._svgSrc = function(src) {
       return src.replace(/\.[^.\?]*($|\?)/, '.svg$1');
     };
 
     var init = function () {
       if (module.PROFILE.svg) {
-        $('.svg-replace').each(function() {
-          $(this).attr('src', function (i, src) {
-            return submodule._svgSrc(src);
-          });
-          $(this).removeClass('svg-replace');
-        });
+        var images = document.querySelectorAll('.svg-replace');
+        for (var i = 0; i < images.length; i += 1) {
+          var image = images[i];
+          image.src = submodule._svgSrc(image.src);
+          image.classList.remove('svg-replace');
+        }
       }
     };
+    submodule._test = init; //TODO: add to debug method.
 
     module.register(init);
 
     return submodule;
 
-  }(module, module.IMAGES || {}, $));
+  }(module, module.IMAGES || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));
 
-window.DECADE_CITY = (function (module, $) {
+window.DECADE_CITY = (function (module) {
   "use strict";
 
   /**
    * Responsive flickr image replacement.
    */
-  module.FLICKR = (function (module, submodule, $) {
+  module.FLICKR = (function (module, submodule) {
     var image_replace = /^http(s)?:\/\/(.*)\.staticflickr.com\/(.*?)(_.\.jpg|\.jpg)$/, // Regex to break up a flickr image URL.
         getInt,
         responsiveImages,
@@ -775,42 +789,50 @@ window.DECADE_CITY = (function (module, $) {
      * Replaces any flickr image with a class of .responsive with the appropriate size image for the environment.
      */
     responsiveImages = function () {
-      var images = $('img.responsive');
+      var images = document.querySelectorAll('img.responsive');
 
       if (images.length) {
         var holder, clearHolder;
 
         // 'Invisible' holder into which the replacement images can be loaded.
-        holder= $('<div id="flickr-image-holder"/>').css({'height': '1px', 'width': '1px'}).fadeTo(1, 0.1).appendTo('body');
+        holder = document.createElement('div');
+        holder.innerHTML = '<div id="flickr-image-holder" style="height: 1px; width: 1px; display: block; opacity: 0;"/>';
+
         /**
          * Clears the cache image holder if it is empty.
          */
         clearHolder = function() {
-          if (holder.find('img').length === 0) {
-            holder.remove();
+          if (holder.querySelectorAll('img').length === 0) {
+            // TODO: remove events.
+            if (holder.parentElement) {
+              holder.parentElement.removeChild(holder);
+            }
           }
         };
 
         // Go through each responsive image and swap it out with the appropriate image.
-        images.each(function () {
-          var content_img = $(this), // Re-scope this.
-              src = content_img.attr('src'),
+        for (var i = 0; i < images.length; i += 1) {
+          var content_img = images[i],
+              src = content_img.src,
               new_src = imageSrc(src), // URL of the replacement image.
               cache_img; // Cache image we will use to load the new image.
           if (src === new_src) {
             // Nothing doing.
             return src;
           }
-          cache_img = $('<img src="' + new_src + '" alt="" height="1" width="1">');
-          holder.append(cache_img); // Inject the new image into the DOM and get the browser to load it.
+          cache_img = document.createElement('img');
+          cache_img.src = new_src;
+          holder.appendChild(cache_img); // Inject the new image into the DOM and get the browser to load it.
           // We need to load the image to prevent a big jump as the old src is switched out for a src that hasn't been loaded.
-          cache_img.on('load', function() {
+          cache_img.addEventListener('load', function() {
             // Once the image has loaded in the hidden version we replace the original image as it should be in the browser cache.
-            content_img.attr('src', new_src);
-            cache_img.remove(); // Don't need the cache image anymore.
+            content_img.src = new_src;
+            if (cache_img.parentElement) {
+              cache_img.parentElement.removeChild(cache_img); // Don't need the cache image anymore.
+            }
             clearHolder();
           });
-        });
+        }
         clearHolder(); // Clean up if there were no images to insert.
       }
     };
@@ -836,8 +858,8 @@ window.DECADE_CITY = (function (module, $) {
       if (!flickr_suffix_set) {
         // This has already been run so don't do it again.
 
-        width = width || $(window).width();
-        height = height || $(window).height();
+        width = width || window.document.documentElement['clientWidth'];
+        height = height || window.document.documentElement['clientHeight'];
         pixel_density = pixel_density || getInt(window.devicePixelRatio) || 1;
 
         window_width = Math.max(width, height); // Take max to allow for orientation change.
@@ -880,13 +902,14 @@ window.DECADE_CITY = (function (module, $) {
         // Open up some internal items for debugging.
         submodule.init = init;
         submodule.imageSrc = imageSrc;
+        submodule.responsiveImages = responsiveImages;
         submodule.flickr_suffix = function (value) { if (typeof value !== 'undefined') { flickr_suffix = value; } else { return flickr_suffix; }};
         submodule.flickr_suffix_set = function (value) { if (typeof value !== 'undefined') { flickr_suffix_set = !!(value); } else { return flickr_suffix_set; }};
       }
     });
 
     return submodule;
-  }(module, module.FLICKR || {}, $));
+  }(module, module.FLICKR || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));

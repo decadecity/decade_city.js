@@ -7,11 +7,11 @@ window.DECADE_CITY = (function (module) {
 
     var init = function () {
       if (module.PROFILE.svg) {
-        var images = document.querySelectorAll('.svg-replace')
+        var images = document.querySelectorAll('.svg-replace');
         for (var i = 0; i < images.length; i += 1) {
           var image = images[i];
           image.src = submodule._svgSrc(image.src);
-          image.classList.remove('svg-replace')
+          image.classList.remove('svg-replace');
         }
       }
     };
