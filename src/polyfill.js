@@ -1,25 +1,5 @@
-window.DECADE_CITY = (function (module, $) {
-  "use strict";  module.POLYFILL = (function (module, submodule, $) {
-
-    /**
-    * Outer HTML polyfill for browsers that don't support it.
-    * @extends jQuery
-    *
-    * @returns {String} Full HTML for element including the element itself.
-    */
-    $.fn.outerHTML = function () {
-      var content;
-      if (!$(this).length) {
-        return '';
-      }
-      if ('outerHTML' in $(this)[0]) {
-        return $(this)[0].outerHTML;
-      } else {
-        content = $(this).wrap('<div></div>').parent().html();
-        $(this).unwrap();
-        return content;
-      }
-    };
+window.DECADE_CITY = (function (module) {
+  "use strict";  module.POLYFILL = (function (module, submodule) {
 
     /**
      * Facade for sessionStorage API.
@@ -125,7 +105,7 @@ window.DECADE_CITY = (function (module, $) {
 
     return submodule;
 
-  }(module, module.POLYFILL || {}, $));
+  }(module, module.POLYFILL || {}));
 
   return module;
-}(window.DECADE_CITY || {}, window.jQuery));
+}(window.DECADE_CITY || {}));

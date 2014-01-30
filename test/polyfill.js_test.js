@@ -28,11 +28,6 @@
     strictEqual(typeof window.DECADE_CITY.POLYFILL, 'object', 'submodule defined.');
   });
 
-  test('outerHTML', function () {
-    ok($('#outerHTML-test').outerHTML() === '<span id="outerHTML-test">test</span>', 'Returns complete element');
-  });
-
-
   test('sessionStorage', function () {
     if (window.DECADE_CITY.POLYFILL.sessionStorage.supported) {
       // These are known to be used by the framework - we want to preserve them.

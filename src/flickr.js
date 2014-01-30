@@ -86,6 +86,8 @@ window.DECADE_CITY = (function (module) {
             // Once the image has loaded in the hidden version we replace the original image as it should be in the browser cache.
             content_img.src = new_src;
             if (cache_img.parentElement) {
+              //console.log('new: ' + content_img.src);
+              //cache_img.removeEventLister //TODO: fix this.
               cache_img.parentElement.removeChild(cache_img); // Don't need the cache image anymore.
             }
             clearHolder();
