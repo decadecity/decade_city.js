@@ -16,13 +16,12 @@ Cutting the mustard requirements:
 
     'classList' in document.documentElement
     'querySelectorAll' in document
-    'addEventListner' in window
+    'addEventListner' and 'removeEventListner' in window
     window.XMLHttpRequest
     window.innerWidth
     window.innerHeight
 
 ```html
-<script src="jquery.js"></script>
 <script src="dist/decade_city.js.min.js"></script>
 <script>window.DECADE_CITY.init()</script><!-- Manually initialise the library. -->
 ```

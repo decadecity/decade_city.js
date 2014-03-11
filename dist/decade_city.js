@@ -776,14 +776,11 @@ window.DECADE_CITY = (function (module) {
 
         // 'Invisible' holder into which the replacement images can be loaded.
         holder = document.createElement('div');
-        holder.innerHTML = '<div id="flickr-image-holder" style="height: 1px; width: 1px; display: block; opacity: 0;"/>';
-
         /**
          * Clears the cache image holder if it is empty.
          */
         clearHolder = function() {
           if (holder.querySelectorAll('img').length === 0) {
-            // TODO: remove events.
             if (holder.parentElement) {
               holder.parentElement.removeChild(holder);
             }
