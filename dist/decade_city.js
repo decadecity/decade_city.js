@@ -803,17 +803,19 @@ window.DECADE_CITY = (function (module) {
           cache_img = document.createElement('img');
           cache_img.src = new_src;
           holder.appendChild(cache_img); // Inject the new image into the DOM and get the browser to load it.
-          // We need to load the image to prevent a big jump as the old src is switched out for a src that hasn't been loaded.
-          cache_img.addEventListener('load', function() {
+
+          var imageLoadedHandler = function(e) {
             // Once the image has loaded in the hidden version we replace the original image as it should be in the browser cache.
             content_img.src = new_src;
             if (cache_img.parentElement) {
-              //console.log('new: ' + content_img.src);
-              //cache_img.removeEventLister //TODO: fix this.
+              cache_img.removeEventListener('load', imageLoadedHandler); // Not sure this is correct?
               cache_img.parentElement.removeChild(cache_img); // Don't need the cache image anymore.
             }
             clearHolder();
-          });
+          };
+
+          // We need to load the image to prevent a big jump as the old src is switched out for a src that hasn't been loaded.
+          cache_img.addEventListener('load', imageLoadedHandler);
         }
         clearHolder(); // Clean up if there were no images to insert.
       }

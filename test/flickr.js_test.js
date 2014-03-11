@@ -120,12 +120,14 @@
     equal(window.DECADE_CITY.FLICKR.imageSrc('http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_m.jpg'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6.jpg', 'Flickr image with suffix is replaced with no suffix');
   });
 
+  /* Not convinced this is testable in phantom?
   test('Flickr responsive images', function () {
-    expect(0);
     window.DECADE_CITY.FLICKR.flickr_suffix('_b');
     window.DECADE_CITY.FLICKR.responsiveImages();
-    console.log($('#flickr-responsive-test').attr('src'));
+    //$('#flickr-responsive-test').trigger('load');
+    equal($('#flickr-responsive-test').attr('src'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_b.jpg', 'DOM element has image src replaced');
   });
+*/
 
 }(window.jQuery));
 
