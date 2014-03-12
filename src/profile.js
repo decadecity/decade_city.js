@@ -6,7 +6,7 @@ window.DECADE_CITY = (function (module){
    */
   module.PROFILE = (function (module, submodule) {
     var image = new Image(),
-        html = document.querySelectorAll('html')[0],
+        html = document.querySelector('html'),
         setProfile,
         script;
 

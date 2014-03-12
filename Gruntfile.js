@@ -16,6 +16,7 @@ module.exports = function(grunt) {
         src: [
           '<banner:meta.banner>',
           'src/module.js',
+          'src/accessibility.js',
           'src/cookies.js',
           'src/polyfill.js',
           'src/speed_test.js',

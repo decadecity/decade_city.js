@@ -103,6 +103,29 @@ window.DECADE_CITY = (function (module) {
 
 window.DECADE_CITY = (function (module) {
   "use strict";
+  module.ACCESSIBILITY = (function (module, submodule) {
+    /**
+     * Adds the hook for focus highlight.
+     */
+    var addKeyboardHook = function () {
+      document.querySelector('html').classList.add('keyboard');
+      document.removeEventListener('keydown', addKeyboardHook);
+    };
+
+    var init = function () {
+      document.addEventListener('keydown', addKeyboardHook);
+    };
+
+    module.register(init);
+
+    return submodule;
+  }(module, module.ACCESSIBILITY || {}));
+
+  return module;
+}(window.DECADE_CITY || {}));
+
+window.DECADE_CITY = (function (module) {
+  "use strict";
 
   /**
    * Handler for Cookies.
@@ -372,7 +395,7 @@ window.DECADE_CITY = (function (module) {
       if (module.load_speed !== 'fast') {
         module.load_speed = 'slow';
       }
-      document.getElementsByTagName('html')[0].className += ' ' + module.load_speed; // Set a CSS hook - will be either 'slow' or 'fast'.
+      document.querySelector('html').classList.add(module.load_speed); // Set a CSS hook - will be either 'slow' or 'fast'.
       if (storage) {
         module.POLYFILL.sessionStorage.setItem('load-speed', module.load_speed); // Store the speed for future use over multiple loads.
       }
@@ -568,7 +591,7 @@ window.DECADE_CITY = (function (module){
    */
   module.PROFILE = (function (module, submodule) {
     var image = new Image(),
-        html = document.querySelectorAll('html')[0],
+        html = document.querySelector('html'),
         setProfile,
         script;
 

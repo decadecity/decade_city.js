@@ -76,7 +76,7 @@ window.DECADE_CITY = (function (module) {
       if (module.load_speed !== 'fast') {
         module.load_speed = 'slow';
       }
-      document.getElementsByTagName('html')[0].className += ' ' + module.load_speed; // Set a CSS hook - will be either 'slow' or 'fast'.
+      document.querySelector('html').classList.add(module.load_speed); // Set a CSS hook - will be either 'slow' or 'fast'.
       if (storage) {
         module.POLYFILL.sessionStorage.setItem('load-speed', module.load_speed); // Store the speed for future use over multiple loads.
       }
