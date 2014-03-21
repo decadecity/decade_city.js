@@ -787,10 +787,10 @@ window.DECADE_CITY = (function (module) {
           }
         };
 
+
         // Go through each responsive image and swap it out with the appropriate image.
-        for (var i = 0; i < images.length; i += 1) {
-          var content_img = images[i],
-              src = content_img.src,
+        Array.prototype.forEach.call(images, function(content_img) {
+          var src = content_img.src,
               new_src = imageSrc(src), // URL of the replacement image.
               cache_img; // Cache image we will use to load the new image.
           if (src === new_src) {
@@ -798,8 +798,6 @@ window.DECADE_CITY = (function (module) {
             return src;
           }
           cache_img = document.createElement('img');
-          cache_img.src = new_src;
-          holder.appendChild(cache_img); // Inject the new image into the DOM and get the browser to load it.
 
           var imageLoadedHandler = function(e) {
             // Once the image has loaded in the hidden version we replace the original image as it should be in the browser cache.
@@ -813,7 +811,9 @@ window.DECADE_CITY = (function (module) {
 
           // We need to load the image to prevent a big jump as the old src is switched out for a src that hasn't been loaded.
           cache_img.addEventListener('load', imageLoadedHandler);
-        }
+          cache_img.src = new_src;
+          holder.appendChild(cache_img); // Inject the new image into the DOM and get the browser to load it.
+        });
         clearHolder(); // Clean up if there were no images to insert.
       }
     };
