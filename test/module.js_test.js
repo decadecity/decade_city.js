@@ -42,10 +42,17 @@
   asyncTest('Resize function runs when resisze triggered', function () {
     window._register_resize_test = 'unregistered';
     window.DECADE_CITY.registerResize(function() { window._register_resize_test = 'registered'; });
-    // This isn't using new Event('resize') due to a webkit bug in phantom.
-    var evt = document.createEvent('CustomEvent');  // MUST be 'CustomEvent'
-    evt.initCustomEvent('resize', false, false, null);
-    window.dispatchEvent(evt);
+
+    // This isn't using new CustomEvent('resize') due to a webkit bug in phantom.
+    // https://github.com/ariya/phantomjs/issues/11289
+    if (window.CustomEvent) {
+      window.dispatchEvent(window.CustomEvent('resize'));
+    } else {
+      var evt = document.createEvent('CustomEvent');  // MUST be 'CustomEvent'
+      evt.initCustomEvent('resize', false, false, null);
+      window.dispatchEvent(evt);
+    }
+
     equal(window._register_resize_test, 'unregistered', 'Function not immediately invoked');
     window.setTimeout(function() {
       equal(window._register_resize_test, 'registered', 'Function invoked after delay');
