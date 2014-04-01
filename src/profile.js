@@ -86,39 +86,37 @@ window.DECADE_CITY = (function (module){
           return parts.join("&");
       }
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
-      document.addEventListener( 'DOMContentLoaded', function () {
-        window.setTimeout(function () {
-          // TODO: remove for testing.
-          var sent = false,
-              url = module.config.profiler_url || '/profile';
-          // Connection information
-          if (typeof module.load_speed !== 'undefined') {
-            submodule.profile.load_speed = module.load_speed;
-          }
-          if (typeof module.connection_type !== 'undefined') {
-            submodule.profile.connection_type = module.connection_type;
-          }
-          if (typeof module.POLYFILL.sessionStorage !== 'undefined') {
-            submodule.profile.session_storage = module.POLYFILL.sessionStorage.supported;
-          }
-          setProfile(); // Make sure it's been set.
+      window.setTimeout(function () {
+        // TODO: remove for testing.
+        var sent = false,
+            url = module.config.profiler_url || '/profile';
+        // Connection information
+        if (typeof module.load_speed !== 'undefined') {
+          submodule.profile.load_speed = module.load_speed;
+        }
+        if (typeof module.connection_type !== 'undefined') {
+          submodule.profile.connection_type = module.connection_type;
+        }
+        if (typeof module.POLYFILL.sessionStorage !== 'undefined') {
+          submodule.profile.session_storage = module.POLYFILL.sessionStorage.supported;
+        }
+        setProfile(); // Make sure it's been set.
+        if (submodule.profile.session_storage) {
+          sent = !!(module.POLYFILL.sessionStorage.getItem('profile-sent'));
+        } else {
+          sent = !!(module.COOKIES.getItem('profile-sent'));
+        }
+        if (!sent || force) {
+          var httpRequest = new XMLHttpRequest();
+          httpRequest.open('GET', url + '?' + toQueryString(submodule.profile), true);
+          httpRequest.send(null);
           if (submodule.profile.session_storage) {
-            sent = !!(module.POLYFILL.sessionStorage.getItem('profile-sent'));
+            module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
           } else {
-            sent = !!(module.COOKIES.getItem('profile-sent'));
+            module.COOKIES.setItem('profile-sent', 1, null, '/');
           }
-          if (!sent || force) {
-            var httpRequest = new XMLHttpRequest();
-            httpRequest.open('GET', url + '?' + toQueryString(submodule.profile), true);
-            httpRequest.send(null);
-            if (submodule.profile.session_storage) {
-              module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
-            } else {
-              module.COOKIES.setItem('profile-sent', 1, null, '/');
-            }
-          }
-        }, 100);
-      });
+        }
+      }, 100);
     };
 
     module.register(submodule.sendProfile);
