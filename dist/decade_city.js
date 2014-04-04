@@ -527,7 +527,7 @@ window.DECADE_CITY = (function (module) {
       // Collect the remaining timing data.
       if (timing) {
         t_onload = window.performance.timing.loadEventStart;
-        t_done = window.performance.timing.domInteractive - window.performance.timing.navigationStart;
+        t_done = window.performance.timing.responseEnd - window.performance.timing.navigationStart;
         onload = t_onload - window.t_pagestart;
       } else {
         // Pull the navigation start from storage if we have it.
@@ -537,10 +537,8 @@ window.DECADE_CITY = (function (module) {
           t_navigation_start = module.COOKIES.getItem('t_navigation_start');
         }
         // Collect data if available.
-        if (t_navigation_start) {
-          t_done = window.t_domready - t_navigation_start;
-        }
-        if (window.t_pagestart) {
+        if (t_navigation_start && window.t_pagestart) {
+          t_done = window.t_pagestart - t_navigation_start;
           onload = t_onload - window.t_pagestart;
         }
       }
