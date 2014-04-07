@@ -713,46 +713,20 @@ window.DECADE_CITY = (function (module){
 
 window.DECADE_CITY = (function (module) {
   "use strict";
-  module.IMAGES = (function (module, submodule) {
-    submodule._svgSrc = function(src) {
-      return src.replace(/\.[^.\?]*($|\?)/, '.svg$1');
-    };
-
-    var init = function () {
-      if (module.PROFILE.svg) {
-        var images = document.querySelectorAll('.svg-replace');
-        for (var i = 0; i < images.length; i += 1) {
-          var image = images[i];
-          image.src = submodule._svgSrc(image.src);
-          image.classList.remove('svg-replace');
-        }
-      }
-    };
-    submodule._test = init; //TODO: add to debug method.
-
-    module.register(init);
-
-    return submodule;
-
-  }(module, module.IMAGES || {}));
-
-  return module;
-}(window.DECADE_CITY || {}));
-
-window.DECADE_CITY = (function (module) {
-  "use strict";
 
   /**
-   * Responsive flickr image replacement.
+   * Responsive image replacement.
    */
-  module.FLICKR = (function (module, submodule) {
+  module.IMAGES = (function (module, submodule) {
     var image_replace = /^http(s)?:\/\/(.*)\.staticflickr.com\/(.*?)(_.\.jpg|\.jpg)$/, // Regex to break up a flickr image URL.
         getInt,
         responsiveImages,
         imageSrc,
+        svgReplace,
+        svgSrc,
         init,
-        flickr_suffix = '_m', // Default to suffix of smallest image.
-        flickr_suffix_set = false;  //Has the flickr suffix been set? {Boolean}
+        suffix = '_m', // Default to suffix of smallest image.
+        suffix_set = false;  //Has the suffix been set? {Boolean}
 
     /**
      * Sanitiser for parseInt that will cope with NaN.
@@ -768,11 +742,11 @@ window.DECADE_CITY = (function (module) {
     };
 
     /**
-     * Replaces a flickr image URL with the suffix set for the environment.
+     * Replaces an image URL with the suffix set for the environment.
      *
-     * @param src {String} Flickr image URL.
+     * @param src {String} image URL.
      *
-     * @return {String} Image with flickr suffix set.
+     * @return {String} Image with suffix set.
      */
     imageSrc = function (src) {
       var match, secure;
@@ -781,11 +755,29 @@ window.DECADE_CITY = (function (module) {
         return src;
       }
       secure = match[1] || '';
-      return 'http' + secure + '://' + match[2] + '.staticflickr.com/' + match[3] + flickr_suffix + '.jpg';
+      return 'http' + secure + '://' + match[2] + '.staticflickr.com/' + match[3] + suffix + '.jpg';
+    };
+
+    svgSrc = function(src) {
+      return src.replace(/\.[^.\?]*($|\?)/, '.svg$1');
     };
 
     /**
-     * Replaces any flickr image with a class of .responsive with the appropriate size image for the environment.
+     * Replaces the source of imges with a class of .svg-replace with an SVG.
+     */
+    svgReplace = function () {
+      if (module.PROFILE.svg) {
+        var images = document.querySelectorAll('.svg-replace');
+        for (var i = 0; i < images.length; i += 1) {
+          var image = images[i];
+          image.src = svgSrc(image.src);
+          image.classList.remove('svg-replace');
+        }
+      }
+    };
+
+    /**
+     * Replaces any image with a class of .responsive with the appropriate size image for the environment.
      */
     responsiveImages = function () {
       var images = document.querySelectorAll('img.responsive');
@@ -838,7 +830,7 @@ window.DECADE_CITY = (function (module) {
     };
 
     /**
-     * Work out the flickr suffix for this environment and run the replacement.
+     * Work out the suffix for this environment and run the replacement.
      *
      * Accepts arguments for testing.
      *
@@ -855,7 +847,7 @@ window.DECADE_CITY = (function (module) {
         speed = module.load_speed;
       }
 
-      if (!flickr_suffix_set) {
+      if (!suffix_set) {
         // This has already been run so don't do it again.
 
         width = width || window.document.documentElement['clientWidth'];
@@ -871,27 +863,27 @@ window.DECADE_CITY = (function (module) {
 
         // This sorts out the flickr naming convention based on image width.
         if (window_width < 280 || speed === 'slow') {
-          flickr_suffix = '_m';
+          suffix = '_m';
         } else if (window_width < 320) {
-          flickr_suffix = '_n';
+          suffix = '_n';
         } else if (window_width < 500) {
-          flickr_suffix = '';
+          suffix = '';
         } else if (window_width < 640) {
-          flickr_suffix = '_z';
+          suffix = '_z';
         } else if (window_width < 800) {
-          flickr_suffix = '_c';
+          suffix = '_c';
         } else {
-          flickr_suffix = '_b';
+          suffix = '_b';
         }
         if (typeof module.PROFILE.profile === 'object') {
           // Store this in the profile.
-          module.PROFILE.profile.flickr_suffix = flickr_suffix;
+          module.PROFILE.profile.image_suffix = suffix;
         }
         if (typeof module.COOKIES !== 'undefined') {
           // Set a cookie so we can do some of this work on the server.
-          module.COOKIES.setItem('flickr_suffix', flickr_suffix, null, '/');
+          module.COOKIES.setItem('image_suffix', suffix, null, '/');
         }
-        flickr_suffix_set = true;
+        suffix_set = true;
       }
       responsiveImages();
     };
@@ -903,13 +895,15 @@ window.DECADE_CITY = (function (module) {
         submodule.init = init;
         submodule.imageSrc = imageSrc;
         submodule.responsiveImages = responsiveImages;
-        submodule.flickr_suffix = function (value) { if (typeof value !== 'undefined') { flickr_suffix = value; } else { return flickr_suffix; }};
-        submodule.flickr_suffix_set = function (value) { if (typeof value !== 'undefined') { flickr_suffix_set = !!(value); } else { return flickr_suffix_set; }};
+        submodule.suffix = function (value) { if (typeof value !== 'undefined') { suffix = value; } else { return suffix; }};
+        submodule.suffix_set = function (value) { if (typeof value !== 'undefined') { suffix_set = !!(value); } else { return suffix_set; }};
+        submodule.svgSrc = svgSrc;
+        submodule.svgReplace = svgReplace;
       }
     });
 
     return submodule;
-  }(module, module.FLICKR || {}));
+  }(module, module.IMAGES || {}));
 
   return module;
 }(window.DECADE_CITY || {}));
