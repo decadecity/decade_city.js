@@ -5,7 +5,8 @@ window.DECADE_CITY = (function (module) {
    * Responsive image replacement.
    */
   module.IMAGES = (function (module, submodule) {
-    var image_replace = /^http(s)?:\/\/(.*)\.staticflickr.com\/(.*?)(_.\.jpg|\.jpg)$/, // Regex to break up a flickr image URL.
+    var image_replace,
+        aws_url,
         getInt,
         responsiveImages,
         imageSrc,
@@ -13,7 +14,11 @@ window.DECADE_CITY = (function (module) {
         svgSrc,
         init,
         suffix = '_m', // Default to suffix of smallest image.
-        suffix_set = false;  //Has the suffix been set? {Boolean}
+        suffix_set = false,  //Has the suffix been set? {Boolean}
+        s3_bucket = module.config.s3_bucket || 'decadecity';
+
+    aws_url = '//s3-eu-west-1.amazonaws.com/' + s3_bucket + '/images/';
+    image_replace = new RegExp('^' + aws_url + '([^_.]*).*\\.(.*)$'); // Regex to break up an image URL.
 
     /**
      * Sanitiser for parseInt that will cope with NaN.
@@ -37,14 +42,17 @@ window.DECADE_CITY = (function (module) {
      */
     imageSrc = function (src) {
       var match, secure;
+      src = src.replace('http:', '');
       match = image_replace.exec(src);
       if (!match) {
         return src;
       }
-      secure = match[1] || '';
-      return 'http' + secure + '://' + match[2] + '.staticflickr.com/' + match[3] + suffix + '.jpg';
+      return aws_url + match[1] + suffix + '.' + match[2];
     };
 
+    /**
+     * Sets the SVG url of an image.
+     */
     svgSrc = function(src) {
       return src.replace(/\.[^.\?]*($|\?)/, '.svg$1');
     };

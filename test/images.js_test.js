@@ -120,19 +120,35 @@
 
     window.DECADE_CITY.IMAGES.suffix('_m');
 
-    equal(window.DECADE_CITY.IMAGES.imageSrc('http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_m.jpg'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_m.jpg', 'Image image with "_m" suffix is unaltered');
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      'Image image with "_m" suffix is unaltered'
+    );
 
     window.DECADE_CITY.IMAGES.suffix('_b');
 
-    equal(window.DECADE_CITY.IMAGES.imageSrc('http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_m.jpg'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_b.jpg', 'Image image with suffix is replaced');
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_b.jpeg',
+      'Image image with suffix is replaced'
+    );
 
     window.DECADE_CITY.IMAGES.suffix('_b');
 
-    equal(window.DECADE_CITY.IMAGES.imageSrc('http://farm9.staticflickr.com/8204/8230113340_4975b71bf6.jpg'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_b.jpg', 'Image image with no suffix is replaced');
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_b.jpeg',
+      'Image image with no suffix is replaced'
+    );
 
     window.DECADE_CITY.IMAGES.suffix('');
 
-    equal(window.DECADE_CITY.IMAGES.imageSrc('http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_m.jpg'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6.jpg', 'Image image with suffix is replaced with no suffix');
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340.jpeg',
+      'Image image with suffix is replaced with no suffix'
+    );
   });
 
   /* Not convinced this is testable in phantom?
