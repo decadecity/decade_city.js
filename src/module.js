@@ -24,6 +24,9 @@ window.DECADE_CITY = (function (module) {
    * Runs all functions in the init registry.
    */
   module.init = function (config) {
+    if (is_initialised) {
+      return;
+    }
     for (var prop in config) {
       if(config.hasOwnProperty(prop)) {
         module.config[prop] = config[prop];
