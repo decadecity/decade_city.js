@@ -61,7 +61,7 @@ window.DECADE_CITY = (function (module) {
      * Replaces the source of imges with a class of .svg-replace with an SVG.
      */
     svgReplace = function () {
-      if (module.PROFILE.svg) {
+      if (module.PROFILE.profile.svg) {
         var images = document.querySelectorAll('.svg-replace');
         for (var i = 0; i < images.length; i += 1) {
           var image = images[i];
@@ -181,6 +181,7 @@ window.DECADE_CITY = (function (module) {
         suffix_set = true;
       }
       responsiveImages();
+      svgReplace();
     };
 
     module.register(init);
