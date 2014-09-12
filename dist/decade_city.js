@@ -19,7 +19,11 @@ window.DECADE_CITY = (function (module) {
     }
   };
 
-  module.config = {};
+  // Make sure we have a config object if one hasn't been defined.
+  if (typeof module.config !== 'object') {
+    module.config = {};
+  }
+
   /**
    * Runs all functions in the init registry.
    */
