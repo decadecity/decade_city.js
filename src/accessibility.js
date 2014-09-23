@@ -1,6 +1,5 @@
-window.DECADE_CITY = (function (module) {
+define(['core'], function(core) {
   "use strict";
-  module.ACCESSIBILITY = (function (module, submodule) {
     /**
      * Adds the hook for focus highlight.
      */
@@ -13,10 +12,5 @@ window.DECADE_CITY = (function (module) {
       document.addEventListener('keydown', addKeyboardHook);
     };
 
-    module.register(init);
-
-    return submodule;
-  }(module, module.ACCESSIBILITY || {}));
-
-  return module;
-}(window.DECADE_CITY || {}));
+    core.register(init);
+});

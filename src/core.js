@@ -1,6 +1,9 @@
-// Loosely based on jQuery's DOM ready.
-window.DECADE_CITY = (function (module) {
-  var resistry = [], // List of functions to be run.
+
+define(function() {
+  "use strict";
+
+  var module = {},
+      resistry = [], // List of functions to be run.
       is_initialised = false; // Are we already initialised?
   /**
    * Registers a function to be run when the module is complete.
@@ -42,12 +45,11 @@ window.DECADE_CITY = (function (module) {
     is_initialised = true;
   };
 
-
   if ( document.readyState !== 'loading' ) {
     // DOMContentLoaded has already fired.
-    init();
+    module.init();
   } else {
-    document.addEventListener('DOMContentLoaded', init, false);
+    document.addEventListener('DOMContentLoaded', module.init, false);
   }
 
   var load_registry = [], // Functions to be run on resize.
@@ -57,7 +59,7 @@ window.DECADE_CITY = (function (module) {
    *
    * @param funct {Function} Function to be run when the document is loaded.
    */
-   module.registerLoad = function (funct) {
+  module.registerLoad = function (funct) {
     if (typeof funct === 'function') {
       if (is_loaded) {
         funct.call();
@@ -67,19 +69,25 @@ window.DECADE_CITY = (function (module) {
     }
   };
 
-  /**
-   * Handles running registered functions on load.
-   */
-  if (document.readyState !== 'complete') {
-    // DOMContentLoaded has already fired.
-    init();
-  } else {
-    window.addEventListener('load', function() {
+  module.initLoad = function() {
     load_registry.forEach(function(funct) {
       funct.call();
     });
     is_loaded = true;
-  });
+  };
+
+  /**
+   * Handles running registered functions on load.
+   */
+  if (document.readyState !== 'complete') {
+    // window.onload has already fired.
+    module.initLoad();
+  } else {
+    window.addEventListener('load', function() {
+      module.initLoad();
+    });
+  };
+
 
   var resize_registry = []; // Functions to be run on resize.
   /**
@@ -117,4 +125,5 @@ window.DECADE_CITY = (function (module) {
   module.register(resizeHander);
 
   return module;
-}(window.DECADE_CITY || {}));
+
+});
