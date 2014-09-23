@@ -94,107 +94,10 @@ define(function() {
 
 });
 
-window.DECADE_CITY = (function (module) {
+define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionStorage) {
   "use strict";
-  module.SPEED_TEST = (function (module, submodule) {
 
-    var tested = false;
-
-    submodule.test = function () {
-      var load_speed_timout = 2.5, // Number of seconds above which we count it as a slow load.
-          load_speed_count =  4, // After this many loads with no fast load we assume a slow connection.
-          timer = 0, // This is the number of ms we think it took the page to load.
-          timing = !!(typeof window.performance !== 'undefined' && typeof window.performance.timing !== 'undefined'),
-          storage = !!(typeof module.POLYFILL !== 'undefined' && typeof module.POLYFILL.sessionStorage !== 'undefined'),
-          connection = navigator.connection || { 'type': 0 },
-          loads; // Number of times we have loaded.
-
-      if (tested) {
-        return;
-      }
-
-      module.load_speed = 'slow'; // Default to slow.
-
-      if (!window.t_domready) {
-        window.t_domready = new Date(); // Set the DOM timer - assume that DOM is ready if we're running this code.
-      }
-
-      if (storage) {
-        loads = parseInt(module.POLYFILL.sessionStorage.getItem('load-count'), 10);
-        if (isNaN(loads)) {
-          loads = 0;
-        }
-        module.POLYFILL.sessionStorage.setItem('load-count', loads + 1);
-      }
-      if (isNaN(loads)) {
-        loads = 0;
-      }
-
-      load_speed_timout = load_speed_timout * 1000; // Now working in ms for ease of comparison.
-
-      if (timing) {
-        // We have the performance timing API so use it.
-        timer = window.performance.timing.domInteractive - window.performance.timing.requestStart;
-      } else if (window.t_pagestart && window.t_domready) {
-        // Fall back on the in page timers.
-        timer = window.t_domready - window.t_pagestart + 500;  // Measured average overhead of a request is 500ms (see http://decadecity.net/blog/2012/09/15/how-long-does-an-http-request-take).
-      }
-      if (storage && module.POLYFILL.sessionStorage.getLength()) {
-        // If we have something in session storage then try and do this over a number of loads.
-        module.load_speed = module.POLYFILL.sessionStorage.getItem('load-speed') || 'slow';
-        if (module.load_speed !== 'fast' && loads < load_speed_count && timer < load_speed_timout) {
-          // We haven't seen a fast load up to now but this one is.
-          module.load_speed = 'fast';
-        }
-      } else if (timer < load_speed_timout) {
-        // We don't have anything in session storage so it's first load or on a page-by-page basis.
-        module.load_speed = 'fast';
-      }
-      switch (connection.type) {
-        // If we actually know the connection type then override.
-        case connection.CELL_2G:
-          module.load_speed = 'slow';
-          module.connection_type = '2g';
-          break;
-        case connection.CELL_3G:
-          module.load_speed = 'slow';
-          module.connection_type = '3g';
-          break;
-        case connection.WIFI:
-          module.connection_type = 'wifi';
-          break;
-        case connection.ETHERNET:
-          module.connection_type = 'wired';
-          break;
-        default:
-          module.connection_type = 'unknown';
-      }
-      if (module.load_speed !== 'fast') {
-        module.load_speed = 'slow';
-      }
-      document.querySelector('html').classList.add(module.load_speed); // Set a CSS hook - will be either 'slow' or 'fast'.
-      if (storage) {
-        module.POLYFILL.sessionStorage.setItem('load-speed', module.load_speed); // Store the speed for future use over multiple loads.
-      }
-      tested = true;
-    };
-
-    // If this is running as part of the framework then register it to run on DOM ready.
-    if (typeof module.register === 'function') {
-      module.register(submodule.test);
-    }
-    // If you're not running this as part of the framework then you'll need to run window.DECADE_CITY.SPEED_TEST.test() on DOM ready yourself.
-
-    return submodule;
-
-  }(module, module.SPEED_TEST || {}));
-
-  return module;
-}(window.DECADE_CITY || {}));
-
-window.DECADE_CITY = (function (module) {
-  "use strict";
-  module.TIMING = (function (module, submodule) {
+    var submodule = {};
     var vars = {},
         url,
         timing = !!(typeof window.performance !== "undefined" && typeof window.performance.timing !== "undefined");
@@ -262,7 +165,7 @@ window.DECADE_CITY = (function (module) {
       if (module.config.hasOwnProperty('beacon_url')) {
         url = module.config.beacon_url;
       }
-      if (module.config.debug) {
+      if (true) {
         // If we're in debug mode then we expose the vars for testing.
         submodule.getVars = function () {
           return vars;
@@ -270,11 +173,11 @@ window.DECADE_CITY = (function (module) {
       }
       if (!timing) {
         // Need to use storage to get the navigation start time.
-        if (typeof module.POLYFILL.sessionStorage.supported) {
-          module.POLYFILL.sessionStorage.setItem('t_navigation_start', new Date().getTime());
-        } else if (typeof module.COOKIES !== 'undefined') {
+        if (sessionStorage.supported) {
+          sessionStorage.setItem('t_navigation_start', new Date().getTime());
+        } else {
           window.addEventListener('beforeunload', function () {
-            module.COOKIES.setItem('t_navigation_start', new Date().getTime(), false, '/');
+            cookies.setItem('t_navigation_start', new Date().getTime(), false, '/');
           });
         }
       }
@@ -308,10 +211,10 @@ window.DECADE_CITY = (function (module) {
         onload = t_onload - window.t_pagestart;
       } else {
         // Pull the navigation start from storage if we have it.
-        if (typeof module.POLYFILL.sessionStorage.supported) {
-          t_navigation_start = module.POLYFILL.sessionStorage.getItem('t_navigation_start');
-        } else if (typeof module.COOKIES !== 'undefined') {
-          t_navigation_start = module.COOKIES.getItem('t_navigation_start');
+        if (typeof sessionStorage.supported) {
+          t_navigation_start = sessionStorage.getItem('t_navigation_start');
+        } else if (typeof cookies !== 'undefined') {
+          t_navigation_start = cookies.getItem('t_navigation_start');
         }
         // Collect data if available.
         if (t_navigation_start && window.t_pagestart) {
@@ -353,18 +256,17 @@ window.DECADE_CITY = (function (module) {
     });
 
     return submodule;
-  }(module, module.TIMING || {}));
 
-  return module;
-}(window.DECADE_CITY || {}));
+});
 
-window.DECADE_CITY = (function (module){
+/**
+ * Profiles the runtime environment to check support.
+ */
+define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionStorage) {
   "use strict";
 
-  /**
-   * Profiles the runtime environment to check support.
-   */
-  module.PROFILE = (function (module, submodule) {
+    var submodule = {};
+
     var image = new Image(),
         html = document.querySelector('html'),
         setProfile,
@@ -374,8 +276,8 @@ window.DECADE_CITY = (function (module){
      * Sets the serialised profile as a cookie.
      */
     setProfile = function() {
-      if (submodule.profile.json && typeof module.COOKIES !== 'undefined') {
-        module.COOKIES.setItem('profile', JSON.stringify(submodule.profile), null, '/');
+      if (submodule.profile.json) {
+        cookies.setItem('profile', JSON.stringify(submodule.profile), null, '/');
       }
     };
 
@@ -432,22 +334,20 @@ window.DECADE_CITY = (function (module){
      * @param force {Boolean} Force sending even if the profile has already been sent.
      */
     submodule.sendProfile = function (force) {
-      if (typeof module.COOKIES === 'undefined') {
-        return false;
-      }
       if (module.config.debug) {
         return false;
       }
       // TODO: remove for testing.
       function toQueryString(obj) {
-          var parts = [];
-          for (var i in obj) {
-              if (obj.hasOwnProperty(i)) {
-                  parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
-              }
+        var parts = [];
+        for (var i in obj) {
+          if (obj.hasOwnProperty(i)) {
+            parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
           }
-          return parts.join("&");
+        }
+        return parts.join("&");
       }
+
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       window.setTimeout(function () {
         // TODO: remove for testing.
@@ -460,23 +360,21 @@ window.DECADE_CITY = (function (module){
         if (typeof module.connection_type !== 'undefined') {
           submodule.profile.connection_type = module.connection_type;
         }
-        if (typeof module.POLYFILL.sessionStorage !== 'undefined') {
-          submodule.profile.session_storage = module.POLYFILL.sessionStorage.supported;
-        }
+        submodule.profile.session_storage = sessionStorage.supported;
         setProfile(); // Make sure it's been set.
         if (submodule.profile.session_storage) {
-          sent = !!(module.POLYFILL.sessionStorage.getItem('profile-sent'));
+          sent = !!(sessionStorage.getItem('profile-sent'));
         } else {
-          sent = !!(module.COOKIES.getItem('profile-sent'));
+          sent = !!(cookies.getItem('profile-sent'));
         }
         if (!sent || force) {
           var httpRequest = new XMLHttpRequest();
           httpRequest.open('GET', url + '?' + toQueryString(submodule.profile), true);
           httpRequest.send(null);
           if (submodule.profile.session_storage) {
-            module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
+            sessionStorage.setItem('profile-sent', 1);
           } else {
-            module.COOKIES.setItem('profile-sent', 1, null, '/');
+            cookies.setItem('profile-sent', 1, null, '/');
           }
         }
       }, 100);
@@ -485,19 +383,19 @@ window.DECADE_CITY = (function (module){
     module.register(submodule.sendProfile);
     module.register(setProfile);
 
-    return submodule;
-  }(module, module.PROFILE || {}));
+    return submodule.profile;
 
-  return module;
-}(window.DECADE_CITY || {}));
+});
 
-window.DECADE_CITY = (function (module) {
+/**
+ * Responsive image replacement.
+ */
+define(['core', 'speedTest', 'profile', 'cookies'], function(module, speedTest, profile, cookies) {
+
   "use strict";
 
-  /**
-   * Responsive image replacement.
-   */
-  module.IMAGES = (function (module, submodule) {
+  var submodule = {};
+
     var image_replace,
         aws_url,
         getInt,
@@ -555,7 +453,7 @@ window.DECADE_CITY = (function (module) {
      * Replaces the source of imges with a class of .svg-replace with an SVG.
      */
     svgReplace = function () {
-      if (module.PROFILE.profile.svg) {
+      if (profile.svg) {
         var images = document.querySelectorAll('.svg-replace');
         for (var i = 0; i < images.length; i += 1) {
           var image = images[i];
@@ -631,9 +529,9 @@ window.DECADE_CITY = (function (module) {
     init = function (width, height, pixel_density, speed) {
       var window_width;
 
-      module.SPEED_TEST.test();
-      if (typeof module.load_speed !== 'undefined' && typeof speed === 'undefined') {
-        speed = module.load_speed;
+      speedTest.test();
+      if (typeof profile.load_speed !== 'undefined' && typeof speed === 'undefined') {
+        speed = profile.load_speed;
       }
 
       if (!suffix_set) {
@@ -664,14 +562,11 @@ window.DECADE_CITY = (function (module) {
         } else {
           suffix = '_b';
         }
-        if (typeof module.PROFILE.profile === 'object') {
+        if (typeof profile === 'object') {
           // Store this in the profile.
-          module.PROFILE.profile.image_suffix = suffix;
+          profile.image_suffix = suffix;
         }
-        if (typeof module.COOKIES !== 'undefined') {
-          // Set a cookie so we can do some of this work on the server.
-          module.COOKIES.setItem('image_suffix', suffix, null, '/');
-        }
+        cookies.setItem('image_suffix', suffix, null, '/');
         suffix_set = true;
       }
       responsiveImages();
@@ -680,7 +575,7 @@ window.DECADE_CITY = (function (module) {
 
     module.register(init);
     module.register(function () {
-      if (module.config.debug) {
+      if (true) {
         // Open up some internal items for debugging.
         submodule.init = init;
         submodule.imageSrc = imageSrc;
@@ -693,7 +588,5 @@ window.DECADE_CITY = (function (module) {
     });
 
     return submodule;
-  }(module, module.IMAGES || {}));
 
-  return module;
-}(window.DECADE_CITY || {}));
+});

@@ -1,10 +1,12 @@
-window.DECADE_CITY = (function (module) {
+/**
+ * Responsive image replacement.
+ */
+define(['core', 'speedTest', 'profile', 'cookies'], function(module, speedTest, profile, cookies) {
+
   "use strict";
 
-  /**
-   * Responsive image replacement.
-   */
-  module.IMAGES = (function (module, submodule) {
+  var submodule = {};
+
     var image_replace,
         aws_url,
         getInt,
@@ -62,7 +64,7 @@ window.DECADE_CITY = (function (module) {
      * Replaces the source of imges with a class of .svg-replace with an SVG.
      */
     svgReplace = function () {
-      if (module.PROFILE.profile.svg) {
+      if (profile.svg) {
         var images = document.querySelectorAll('.svg-replace');
         for (var i = 0; i < images.length; i += 1) {
           var image = images[i];
@@ -138,9 +140,9 @@ window.DECADE_CITY = (function (module) {
     init = function (width, height, pixel_density, speed) {
       var window_width;
 
-      module.SPEED_TEST.test();
-      if (typeof module.load_speed !== 'undefined' && typeof speed === 'undefined') {
-        speed = module.load_speed;
+      speedTest.test();
+      if (typeof profile.load_speed !== 'undefined' && typeof speed === 'undefined') {
+        speed = profile.load_speed;
       }
 
       if (!suffix_set) {
@@ -171,14 +173,11 @@ window.DECADE_CITY = (function (module) {
         } else {
           suffix = '_b';
         }
-        if (typeof module.PROFILE.profile === 'object') {
+        if (typeof profile === 'object') {
           // Store this in the profile.
-          module.PROFILE.profile.image_suffix = suffix;
+          profile.image_suffix = suffix;
         }
-        if (typeof module.COOKIES !== 'undefined') {
-          // Set a cookie so we can do some of this work on the server.
-          module.COOKIES.setItem('image_suffix', suffix, null, '/');
-        }
+        cookies.setItem('image_suffix', suffix, null, '/');
         suffix_set = true;
       }
       responsiveImages();
@@ -187,7 +186,7 @@ window.DECADE_CITY = (function (module) {
 
     module.register(init);
     module.register(function () {
-      if (module.config.debug) {
+      if (true) {
         // Open up some internal items for debugging.
         submodule.init = init;
         submodule.imageSrc = imageSrc;
@@ -200,7 +199,5 @@ window.DECADE_CITY = (function (module) {
     });
 
     return submodule;
-  }(module, module.IMAGES || {}));
 
-  return module;
-}(window.DECADE_CITY || {}));
+});
