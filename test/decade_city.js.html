@@ -6,12 +6,16 @@
   <title>decade_city.js Test Suite</title>
   <script type="text/javascript">var t_jsstart = new Date().getTime();</script>
   <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+  <!-- jQuery is used as a short cut for some tests, not used by library. -->
   <script src="../libs/jquery-loader.js"></script>
   <!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
   <script>window.t_cssstart = new Date();</script>
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
   <script>window.t_cssend = new Date();</script>
   <script src="../libs/qunit/qunit.js"></script>
+
+  <!-- Load in require -->
+  <script data-main="../src/" src="../libs/require/require.js"></script>
   <!-- Load local lib and tests. -->
   <script src="../src/module.js"></script>
   <script src="../src/accessibility.js"></script>
