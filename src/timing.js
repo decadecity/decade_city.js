@@ -1,6 +1,7 @@
-window.DECADE_CITY = (function (module) {
+define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionStorage) {
   "use strict";
-  module.TIMING = (function (module, submodule) {
+
+    var submodule = {};
     var vars = {},
         url,
         timing = !!(typeof window.performance !== "undefined" && typeof window.performance.timing !== "undefined");
@@ -68,7 +69,7 @@ window.DECADE_CITY = (function (module) {
       if (module.config.hasOwnProperty('beacon_url')) {
         url = module.config.beacon_url;
       }
-      if (module.config.debug) {
+      if (true) {
         // If we're in debug mode then we expose the vars for testing.
         submodule.getVars = function () {
           return vars;
@@ -76,11 +77,11 @@ window.DECADE_CITY = (function (module) {
       }
       if (!timing) {
         // Need to use storage to get the navigation start time.
-        if (typeof module.POLYFILL.sessionStorage.supported) {
-          module.POLYFILL.sessionStorage.setItem('t_navigation_start', new Date().getTime());
-        } else if (typeof module.COOKIES !== 'undefined') {
+        if (sessionStorage.supported) {
+          sessionStorage.setItem('t_navigation_start', new Date().getTime());
+        } else {
           window.addEventListener('beforeunload', function () {
-            module.COOKIES.setItem('t_navigation_start', new Date().getTime(), false, '/');
+            cookies.setItem('t_navigation_start', new Date().getTime(), false, '/');
           });
         }
       }
@@ -114,10 +115,10 @@ window.DECADE_CITY = (function (module) {
         onload = t_onload - window.t_pagestart;
       } else {
         // Pull the navigation start from storage if we have it.
-        if (typeof module.POLYFILL.sessionStorage.supported) {
-          t_navigation_start = module.POLYFILL.sessionStorage.getItem('t_navigation_start');
-        } else if (typeof module.COOKIES !== 'undefined') {
-          t_navigation_start = module.COOKIES.getItem('t_navigation_start');
+        if (typeof sessionStorage.supported) {
+          t_navigation_start = sessionStorage.getItem('t_navigation_start');
+        } else if (typeof cookies !== 'undefined') {
+          t_navigation_start = cookies.getItem('t_navigation_start');
         }
         // Collect data if available.
         if (t_navigation_start && window.t_pagestart) {
@@ -159,7 +160,5 @@ window.DECADE_CITY = (function (module) {
     });
 
     return submodule;
-  }(module, module.TIMING || {}));
 
-  return module;
-}(window.DECADE_CITY || {}));
+});

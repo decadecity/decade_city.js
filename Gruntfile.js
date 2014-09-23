@@ -58,10 +58,11 @@ module.exports = function(grunt) {
         boss: true,
         eqnull: true,
         browser: true,
-        loopfunc: true
-      },
-      globals: {
-        jQuery: true
+        loopfunc: true,
+        globals: {
+          jQuery: true,
+          define: true
+        },
       },
       files: ['grunt.js', 'src/**/*.js']
     }

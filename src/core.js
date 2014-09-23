@@ -1,4 +1,6 @@
-
+/**
+ * Defines some event registries.
+ */
 define(function() {
   "use strict";
 
@@ -79,14 +81,14 @@ define(function() {
   /**
    * Handles running registered functions on load.
    */
-  if (document.readyState !== 'complete') {
+  if (document.readyState === 'complete') {
     // window.onload has already fired.
     module.initLoad();
   } else {
     window.addEventListener('load', function() {
       module.initLoad();
     });
-  };
+  }
 
 
   var resize_registry = []; // Functions to be run on resize.

@@ -1,11 +1,11 @@
-window.DECADE_CITY = (function (module) {
+/**
+ * Handler for Cookies.
+ */
+define(function() {
   "use strict";
 
-  /**
-   * Handler for Cookies.
-   */
-  // https://developer.mozilla.org/en/DOM/document.cookie
-  module.COOKIES = (function (module, submodule) {
+  var submodule = {};
+
     // Aliasing to keep JSHint happy.
     var escape = window.escape,
         unescape = window.unescape;
@@ -74,7 +74,5 @@ window.DECADE_CITY = (function (module) {
     };
 
     return submodule;
-  }(module, module.COOKIES || {}));
 
-  return module;
-}(window.DECADE_CITY || {}));
+});

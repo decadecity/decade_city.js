@@ -1,10 +1,11 @@
-window.DECADE_CITY = (function (module){
+/**
+ * Profiles the runtime environment to check support.
+ */
+define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionStorage) {
   "use strict";
 
-  /**
-   * Profiles the runtime environment to check support.
-   */
-  module.PROFILE = (function (module, submodule) {
+    var submodule = {};
+
     var image = new Image(),
         html = document.querySelector('html'),
         setProfile,
@@ -14,8 +15,8 @@ window.DECADE_CITY = (function (module){
      * Sets the serialised profile as a cookie.
      */
     setProfile = function() {
-      if (submodule.profile.json && typeof module.COOKIES !== 'undefined') {
-        module.COOKIES.setItem('profile', JSON.stringify(submodule.profile), null, '/');
+      if (submodule.profile.json) {
+        cookies.setItem('profile', JSON.stringify(submodule.profile), null, '/');
       }
     };
 
@@ -72,22 +73,20 @@ window.DECADE_CITY = (function (module){
      * @param force {Boolean} Force sending even if the profile has already been sent.
      */
     submodule.sendProfile = function (force) {
-      if (typeof module.COOKIES === 'undefined') {
-        return false;
-      }
       if (module.config.debug) {
         return false;
       }
       // TODO: remove for testing.
       function toQueryString(obj) {
-          var parts = [];
-          for (var i in obj) {
-              if (obj.hasOwnProperty(i)) {
-                  parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
-              }
+        var parts = [];
+        for (var i in obj) {
+          if (obj.hasOwnProperty(i)) {
+            parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
           }
-          return parts.join("&");
+        }
+        return parts.join("&");
       }
+
       // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
       window.setTimeout(function () {
         // TODO: remove for testing.
@@ -100,23 +99,21 @@ window.DECADE_CITY = (function (module){
         if (typeof module.connection_type !== 'undefined') {
           submodule.profile.connection_type = module.connection_type;
         }
-        if (typeof module.POLYFILL.sessionStorage !== 'undefined') {
-          submodule.profile.session_storage = module.POLYFILL.sessionStorage.supported;
-        }
+        submodule.profile.session_storage = sessionStorage.supported;
         setProfile(); // Make sure it's been set.
         if (submodule.profile.session_storage) {
-          sent = !!(module.POLYFILL.sessionStorage.getItem('profile-sent'));
+          sent = !!(sessionStorage.getItem('profile-sent'));
         } else {
-          sent = !!(module.COOKIES.getItem('profile-sent'));
+          sent = !!(cookies.getItem('profile-sent'));
         }
         if (!sent || force) {
           var httpRequest = new XMLHttpRequest();
           httpRequest.open('GET', url + '?' + toQueryString(submodule.profile), true);
           httpRequest.send(null);
           if (submodule.profile.session_storage) {
-            module.POLYFILL.sessionStorage.setItem('profile-sent', 1);
+            sessionStorage.setItem('profile-sent', 1);
           } else {
-            module.COOKIES.setItem('profile-sent', 1, null, '/');
+            cookies.setItem('profile-sent', 1, null, '/');
           }
         }
       }, 100);
@@ -125,8 +122,6 @@ window.DECADE_CITY = (function (module){
     module.register(submodule.sendProfile);
     module.register(setProfile);
 
-    return submodule;
-  }(module, module.PROFILE || {}));
+    return submodule.profile;
 
-  return module;
-}(window.DECADE_CITY || {}));
+});

@@ -1,116 +1,5 @@
-// Loosely based on jQuery's DOM ready.
-window.DECADE_CITY = (function (module) {
-  var resistry = [], // List of functions to be run.
-      is_initialised = false; // Are we already initialised?
-  /**
-   * Registers a function to be run when the module is complete.
-   *
-   * If the module is already initialised the function will run immediately.
-   *
-   * @param funct {Function} Function to be run when module is initialised.
-   */
-  module.register = function (funct) {
-    if (typeof funct === 'function') {
-      if (is_initialised) {
-        funct.call();
-      } else {
-        resistry.push(funct);
-      }
-    }
-  };
-
-  // Make sure we have a config object if one hasn't been defined.
-  if (typeof module.config !== 'object') {
-    module.config = {};
-  }
-
-  /**
-   * Runs all functions in the init registry.
-   */
-  module.init = function (config) {
-    if (is_initialised) {
-      return;
-    }
-    for (var prop in config) {
-      if(config.hasOwnProperty(prop)) {
-        module.config[prop] = config[prop];
-      }
-    }
-    resistry.forEach(function(funct) {
-      funct.call();
-    });
-    is_initialised = true;
-  };
-
-  var load_registry = [], // Functions to be run on resize.
-      is_loaded = false; // Has window.onload already run?
-  /**
-   * Registers a function to be run on load.
-   *
-   * @param funct {Function} Function to be run when the document is loaded.
-   */
-   module.registerLoad = function (funct) {
-    if (typeof funct === 'function') {
-      if (is_loaded) {
-        funct.call();
-      } else {
-        load_registry.push(funct);
-      }
-    }
-  };
-
-  /**
-   * Handles running registered functions on load.
-   */
-  window.addEventListener('load', function() {
-    load_registry.forEach(function(funct) {
-      funct.call();
-    });
-    is_loaded = true;
-  });
-
-
-  var resize_registry = []; // Functions to be run on resize.
-  /**
-   * Registers a function to be run on re-size.
-   *
-   * @param funct {Function} Function to be run when window is resized.
-   */
-   module.registerResize = function (funct) {
-    if (typeof funct === 'function') {
-      resize_registry.push(funct);
-    }
-  };
-
-
-  /**
-   * Handles running registered functions on the resize event.
-   *
-   * Adds a delay to prevent them constantly firing whilst being resized.
-   */
-  var resizeHander = function() {
-    var resize_timer; // Used to set a delay on the resize callback.
-    window.addEventListener('resize', function () {
-      var delay = 250;
-      if (resize_timer) {
-        resize_timer = window.clearTimeout(resize_timer);
-      }
-      resize_timer = window.setTimeout(function () {
-        resize_registry.forEach(function(funct) {
-          funct.call();
-        });
-      }, delay);
-    }, false);
-  };
-
-  module.register(resizeHander);
-
-  return module;
-}(window.DECADE_CITY || {}));
-
-window.DECADE_CITY = (function (module) {
+define(['core'], function(core) {
   "use strict";
-  module.ACCESSIBILITY = (function (module, submodule) {
     /**
      * Adds the hook for focus highlight.
      */
@@ -123,22 +12,17 @@ window.DECADE_CITY = (function (module) {
       document.addEventListener('keydown', addKeyboardHook);
     };
 
-    module.register(init);
+    core.register(init);
+});
 
-    return submodule;
-  }(module, module.ACCESSIBILITY || {}));
-
-  return module;
-}(window.DECADE_CITY || {}));
-
-window.DECADE_CITY = (function (module) {
+/**
+ * Handler for Cookies.
+ */
+define(function() {
   "use strict";
 
-  /**
-   * Handler for Cookies.
-   */
-  // https://developer.mozilla.org/en/DOM/document.cookie
-  module.COOKIES = (function (module, submodule) {
+  var submodule = {};
+
     // Aliasing to keep JSHint happy.
     var escape = window.escape,
         unescape = window.unescape;
@@ -207,122 +91,8 @@ window.DECADE_CITY = (function (module) {
     };
 
     return submodule;
-  }(module, module.COOKIES || {}));
 
-  return module;
-}(window.DECADE_CITY || {}));
-
-window.DECADE_CITY = (function (module) {
-  "use strict";  module.POLYFILL = (function (module, submodule) {
-
-    /**
-     * Facade for sessionStorage API.
-     *
-     * This is to allow us to use it without handling detection/errors each time.
-     * See: http://dev.w3.org/html5/webstorage/#storage
-     *
-     * @returns {Object} API for accessing local storage.
-     */
-    submodule.sessionStorage = (function () {
-      var supported = typeof window.sessionStorage !== 'undefined',
-          that = {};
-      /**
-       * Number of items in local storage.
-       *
-       * This breaks the API by being a function - not an attribute.
-       *
-       * @returns {Number} Number of items in storage.
-       */
-      // Due to lack of support for getters this is a function which breaks the full API interface wrapper. *sigh*
-      that.getLength = function() {
-        if (!supported) {
-          return 0;
-        } else {
-          return window.sessionStorage.length;
-        }
-      };
-      /**
-       * Returns an item from the storage by index.
-       *
-       * @param {Number} index Index number of item in storage
-       *
-       * @returns Item from storage or null if not present.
-       */
-      that.key = function (index) {
-        if (!supported) {
-          return null;
-        } else {
-          return window.sessionStorage.key(index);
-        }
-      };
-      /**
-       * Gets an item from storage by key.
-       *
-       * @param {String} key Key of item in storage.
-       *
-       * @return Item from storage or null if not present.
-       */
-      that.getItem = function (key) {
-        if (!supported) {
-          return null;
-        } else {
-          return window.sessionStorage.getItem(key);
-        }
-      };
-      /**
-       * Stores an item in storage.
-       *
-       * @param {String} key Key of item in storage.
-       * @param value Item to store.
-       */
-      that.setItem = function (key, value) {
-        if (!supported) {
-          return;
-        } else {
-          // Wraper for exception if setting fails - in this case we don't care.
-          try {
-            return window.sessionStorage.setItem(key, value);
-          } catch (error) {
-            if (error.name.toLowerCase() === 'quota_exceeded_err'){
-              return;
-            } else {
-              throw error;
-            }
-          }
-        }
-      };
-      /**
-       * Removes an item from storage.
-       *
-       * @param {String} key Key of item in storage.
-       */
-      that.removeItem = function (key) {
-        if (!supported) {
-          return;
-        } else {
-          return window.sessionStorage.removeItem(key);
-        }
-      };
-      /**
-       * Clears all items from storage.
-       */
-      that.clear = function () {
-        if (!supported) {
-          return;
-        } else {
-          return window.sessionStorage.clear();
-        }
-      };
-      that.supported = supported; // Publically expose support status.
-      return that;
-    }());
-
-    return submodule;
-
-  }(module, module.POLYFILL || {}));
-
-  return module;
-}(window.DECADE_CITY || {}));
+});
 
 window.DECADE_CITY = (function (module) {
   "use strict";
