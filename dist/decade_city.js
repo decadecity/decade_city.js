@@ -763,6 +763,7 @@ window.DECADE_CITY = (function (module) {
     imageSrc = function (src) {
       var match, secure;
       src = src.replace(/^http(s)?:/, '');
+      src = src.replace('file:', '');
       match = image_replace.exec(src);
       if (!match) {
         return src;

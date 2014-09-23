@@ -120,8 +120,45 @@
 
     window.DECADE_CITY.IMAGES.suffix('_m');
 
+
     equal(
       window.DECADE_CITY.IMAGES.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      'Protocol relative path not changed.'
+    );
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('http://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      'HTTP procol stripped.'
+    );
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('https://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      'HTTPS procol stripped.'
+    );
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('file://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      'File procol stripped.'
+    );
+
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      'Image image with "_m" suffix is unaltered'
+    );
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('http://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      'Image image with "_m" suffix is unaltered'
+    );
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('https://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      'Image image with "_m" suffix is unaltered'
+    );
+    equal(
+      window.DECADE_CITY.IMAGES.imageSrc('file://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
       '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
       'Image image with "_m" suffix is unaltered'
     );
