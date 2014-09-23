@@ -46,7 +46,7 @@
     // This isn't using new CustomEvent('resize') due to a webkit bug in phantom.
     // https://github.com/ariya/phantomjs/issues/11289
     if (window.CustomEvent) {
-      window.dispatchEvent(window.CustomEvent('resize'));
+      window.dispatchEvent(new window.CustomEvent('resize'));
     } else {
       var evt = document.createEvent('CustomEvent');  // MUST be 'CustomEvent'
       evt.initCustomEvent('resize', false, false, null);

@@ -75,6 +75,9 @@ window.DECADE_CITY = (function (module){
       if (typeof module.COOKIES === 'undefined') {
         return false;
       }
+      if (module.config.debug) {
+        return false;
+      }
       // TODO: remove for testing.
       function toQueryString(obj) {
           var parts = [];

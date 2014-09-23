@@ -36,7 +36,7 @@
     // https://github.com/ariya/phantomjs/issues/11289
     var event_data = { 'keyCode': 9 };
     if (window.CustomEvent) {
-      document.dispatchEvent(window.CustomEvent('keydown', event_data));
+      document.dispatchEvent(new window.CustomEvent('keydown', event_data));
     } else {
       var evt = document.createEvent('CustomEvent');  // MUST be 'CustomEvent'
       evt.initCustomEvent('keydown', false, false, event_data);
