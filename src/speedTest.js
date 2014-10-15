@@ -147,5 +147,6 @@ define(['core', 'sessionStorage', 'profile'], function(module, sessionStorage, p
   submodule._connectionTest = connectionTest;
   submodule._calculateLoadSpeed = calculateLoadSpeed;
   submodule.test = test;
+
   return submodule;
 });

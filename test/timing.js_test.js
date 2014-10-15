@@ -20,12 +20,16 @@
     raises(block, [expected], [message])
 */
 
-define(['timing'], function(timing) {
+define(['timing', 'sessionStorage'], function(timing) {
 
   return {
     runTests: function() {
 
       module('Timing');
+
+      if (!timing.timing) {
+        sessionStorage.setItem('t_navigation_start', new Date().getTime());
+      }
 
       var loadTest = function () {
         window.setTimeout(function () {
@@ -43,7 +47,7 @@ define(['timing'], function(timing) {
           ok(vars.hasOwnProperty('t_onload'), '`t_onload` set.');
           ok(vars.hasOwnProperty('u'), '`u` set.');
           start();
-        }, 500);
+        }, 1000);
       };
 
       asyncTest('Timing functionality', function () {

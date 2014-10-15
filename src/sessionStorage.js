@@ -27,6 +27,7 @@ define(function() {
       return window.sessionStorage.length;
     }
   };
+
   /**
    * Returns an item from the storage by index.
    *
@@ -41,6 +42,7 @@ define(function() {
       return window.sessionStorage.key(index);
     }
   };
+
   /**
    * Gets an item from storage by key.
    *
@@ -55,6 +57,7 @@ define(function() {
       return window.sessionStorage.getItem(key);
     }
   };
+
   /**
    * Stores an item in storage.
    *
@@ -77,6 +80,7 @@ define(function() {
       }
     }
   };
+
   /**
    * Removes an item from storage.
    *
@@ -89,6 +93,7 @@ define(function() {
       return window.sessionStorage.removeItem(key);
     }
   };
+
   /**
    * Clears all items from storage.
    */
@@ -100,6 +105,7 @@ define(function() {
     }
   };
   that.supported = supported; // Publically expose support status.
+
   return that;
 
 });

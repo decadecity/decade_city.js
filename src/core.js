@@ -24,6 +24,7 @@ define(function() {
     }
   };
 
+  //TODO - fix config.
   // Make sure we have a config object if one hasn't been defined.
   if (typeof module.config !== 'object') {
     module.config = {};
