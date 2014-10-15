@@ -140,7 +140,7 @@ define(['core', 'speedTest', 'profile', 'cookies'], function(module, speedTest, 
   init = function (width, height, pixel_density, speed) {
     var window_width;
 
-    speedTest.test();
+    speedTest.ready();
     if (typeof profile.load_speed !== 'undefined' && typeof speed === 'undefined') {
       speed = profile.load_speed;
     }
@@ -184,19 +184,14 @@ define(['core', 'speedTest', 'profile', 'cookies'], function(module, speedTest, 
     svgReplace();
   };
 
-  module.register(init);
-  module.register(function () {
-    if (true) { //TODO - fix debug
-      // Open up some internal items for debugging.
-      submodule.init = init;
-      submodule.imageSrc = imageSrc;
-      submodule.responsiveImages = responsiveImages;
-      submodule.suffix = function (value) { if (typeof value !== 'undefined') { suffix = value; } else { return suffix; }};
-      submodule.suffix_set = function (value) { if (typeof value !== 'undefined') { suffix_set = !!(value); } else { return suffix_set; }};
-      submodule.svgSrc = svgSrc;
-      submodule.svgReplace = svgReplace;
-    }
-  });
+  // Open up some internal items for debugging.
+  submodule.ready = init;
+  submodule.imageSrc = imageSrc;
+  submodule.responsiveImages = responsiveImages;
+  submodule.suffix = function (value) { if (typeof value !== 'undefined') { suffix = value; } else { return suffix; }};
+  submodule.suffix_set = function (value) { if (typeof value !== 'undefined') { suffix_set = !!(value); } else { return suffix_set; }};
+  submodule.svgSrc = svgSrc;
+  submodule.svgReplace = svgReplace;
 
   return submodule;
 

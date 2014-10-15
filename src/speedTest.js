@@ -142,11 +142,11 @@ define(['core', 'sessionStorage', 'profile'], function(module, sessionStorage, p
     tested = true;
   };
 
-  module.register(test);
-
   submodule._connectionTest = connectionTest;
   submodule._calculateLoadSpeed = calculateLoadSpeed;
-  submodule.test = test;
+  submodule.ready = function() {
+    test();
+  };
 
   return submodule;
 });

@@ -39,9 +39,15 @@ module.exports = function(grunt) {
       }
     },
     qunit: {
-      files: ['test/**/*.html']
+      files: [
+        'test/**/*.html'
+      ]
     },
     watch: {
+      options: {
+        // Turning spawn off allows us to use events.
+        spawn: false
+      },
       files: ['grunt.js', 'src/**/*.js'],
       tasks: 'default'
     },
@@ -65,6 +71,20 @@ module.exports = function(grunt) {
         },
       },
       files: ['grunt.js', 'src/**/*.js']
+    }
+  });
+
+  // For some things we want to limit the scope of the action when a file changes.
+  grunt.event.on('watch', function(action, filepath) {
+    if (filepath.lastIndexOf('src/', 0) === 0) {
+      // If it's a source file then only hint and test that file.
+      grunt.config('jshint.source.src', filepath);
+      grunt.config('qunit.files', filepath.replace(/src\/(.*)\.js$/, 'test/$1.html'));
+    }
+    if (filepath.lastIndexOf('test/', 0) === 0) {
+      // If it's a test then only hint that file and run its tests.
+      grunt.config('jshint.tests.src', filepath);
+      grunt.config('qunit.files', filepath.replace(/test\/(.*)\.js$/, 'test/$1.html'));
     }
   });
 

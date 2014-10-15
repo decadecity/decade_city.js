@@ -1,6 +1,4 @@
-/*global QUnit:false, module:false, test:false, asyncTest:false, expect:false*/
-/*global start:false, stop:false ok:false, equal:false, notEqual:false, deepEqual:false*/
-/*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
+/* jshint qunit:true */
 /*
   ======== A Handy Little QUnit Reference ========
   http://docs.jquery.com/QUnit
@@ -31,6 +29,8 @@ define(['images', 'profile'], function(images, profile) {
 
   module('Images');
 
+  images.ready();
+
   test('SVG extension replacement', function() {
     equal(images.svgSrc('test.png'), 'test.svg', 'Extension replaced');
     equal(images.svgSrc('test.png?param=value'), 'test.svg?param=value', 'Extension replaced respecting query string');
@@ -49,67 +49,67 @@ define(['images', 'profile'], function(images, profile) {
   test('Image suffix is correctly set by init()', function () {
     resetSuffix();
 
-    images.init(1, 1, 1, 'fast');
+    images.ready(1, 1, 1, 'fast');
     equal(images.suffix(), '_m', 'Image suffix is "_m" at minimum width');
 
     resetSuffix();
 
-    images.init(280, 1, 1, 'fast');
+    images.ready(280, 1, 1, 'fast');
     equal(images.suffix(), '_n', 'Image suffix is "_n" at 280px width');
 
     resetSuffix();
 
-    images.init(320, 1, 1, 'fast');
+    images.ready(320, 1, 1, 'fast');
     strictEqual(images.suffix(), '', 'Image suffix is "" at 320px width');
 
     resetSuffix();
 
-    images.init(500, 1, 1, 'fast');
+    images.ready(500, 1, 1, 'fast');
     equal(images.suffix(), '_z', 'Image suffix is "_z" at 500px width');
 
     resetSuffix();
 
-    images.init(640, 1, 1, 'fast');
+    images.ready(640, 1, 1, 'fast');
     equal(images.suffix(), '_c', 'Image suffix is "_c" at 640px width');
 
     resetSuffix();
 
-    images.init(800, 1, 1, 'fast');
+    images.ready(800, 1, 1, 'fast');
     equal(images.suffix(), '_b', 'Image suffix is "_b" at 800px width');
 
     resetSuffix();
 
-    images.init(1, 800, 1, 'fast');
+    images.ready(1, 800, 1, 'fast');
     equal(images.suffix(), '_b', 'Image suffix is "_b" at 800px height');
 
     resetSuffix();
 
-    images.init(400, 1, 2, 'fast');
+    images.ready(400, 1, 2, 'fast');
     equal(images.suffix(), '_b', 'Image suffix is "_b" with 400 width and pixel density 2');
 
     resetSuffix();
 
-    images.init(400, 1, 1, 'slow');
+    images.ready(400, 1, 1, 'slow');
     equal(images.suffix(), '_m', 'Image suffix is "_m" on slow connection');
 
     resetSuffix();
 
-    images.init('800', 1, 1, 'fast');
+    images.ready('800', 1, 1, 'fast');
     equal(images.suffix(), '_b', 'Image init copes with string width.');
 
     resetSuffix();
 
-    images.init(1, '800', 1, 'fast');
+    images.ready(1, '800', 1, 'fast');
     equal(images.suffix(), '_b', 'Image init copes with string height.');
 
     resetSuffix();
 
-    images.init(400, 1, '2', 'fast');
+    images.ready(400, 1, '2', 'fast');
     equal(images.suffix(), '_b', 'Image init copes with string pixel density.');
 
     resetSuffix();
 
-    images.init('string', 'string', 'string', 'fast');
+    images.ready('string', 'string', 'string', 'fast');
     equal(images.suffix(), '_m', 'Image init copes with garbage string inputs.');
   });
 

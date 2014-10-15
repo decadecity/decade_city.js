@@ -62,6 +62,8 @@ define(['speedTest', 'sessionStorage', 'profile'], function(speedTest, sessionSt
         equal(speedTest._calculateLoadSpeed(3000, 5, 'fast'), 'fast', 'Above threshold, above load count, `fast` stored value');
       });
 
+      speedTest.ready();
+
       test('Load speed', function () {
         ok(typeof profile.load_speed === 'string', 'load speed set.');
         ok(profile.load_speed === 'fast' || profile.load_speed === 'slow', 'load speed is an allowed value.');
@@ -75,6 +77,7 @@ define(['speedTest', 'sessionStorage', 'profile'], function(speedTest, sessionSt
       test('Connection type', function () {
         ok(typeof profile.connection_type === 'string', 'connection type set.');
       });
+
     }
   };
 });
