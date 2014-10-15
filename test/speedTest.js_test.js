@@ -1,6 +1,4 @@
-/*global QUnit:false, module:false, test:false, asyncTest:false, expect:false*/
-/*global start:false, stop:false ok:false, equal:false, notEqual:false, deepEqual:false*/
-/*global notDeepEqual:false, strictEqual:false, notStrictEqual:false, raises:false*/
+/* jshint qunit:true */
 /*
   ======== A Handy Little QUnit Reference ========
   http://docs.jquery.com/QUnit
@@ -22,10 +20,47 @@
 
 define(['speedTest', 'sessionStorage', 'profile'], function(speedTest, sessionStorage, profile) {
 
+  // The old connection API used constants to denote the type.
+  // Extend this to build the connection object for testing.
+  var connection_constants = {
+    'UNKNOWN': '0',
+    'ETHERNET': '1',
+    'WIFI': '2',
+    'CELL_2G': '3',
+    'CELL_3G': '4'
+  };
 
   return {
     runTests: function() {
       module('Speed test');
+
+      test('Connection api normaliser', function() {
+        // New network API
+        deepEqual(speedTest._connectionTest({ 'type': 'bluetooth' }), { 'connection_type': 'bluetooth' }, 'Bluetooth');
+        deepEqual(speedTest._connectionTest({ 'type': 'cellular' }), { 'load_speed': 'slow', 'connection_type': 'cellular' }, 'Cellular');
+        deepEqual(speedTest._connectionTest({ 'type': 'ethernet' }), { 'connection_type': 'ethernet' }, 'Ethernet');
+        deepEqual(speedTest._connectionTest({ 'type': 'none' }), { 'connection_type': 'none' }, 'None');
+        deepEqual(speedTest._connectionTest({ 'type': 'other' }), { 'connection_type': 'other' }, 'Other');
+        deepEqual(speedTest._connectionTest({ 'type': 'unknown' }), { 'connection_type': 'unknown' }, 'Unknown type');
+        deepEqual(speedTest._connectionTest({ 'type': 'wifi' }), { 'connection_type': 'wifi' }, 'Wifi');
+        // Old network API
+        deepEqual(speedTest._connectionTest(window._$.extend({ 'type': '0' }, connection_constants)), { 'connection_type': 'unknown' }, 'Unknown');
+        deepEqual(speedTest._connectionTest(window._$.extend({ 'type': '1' }, connection_constants)), { 'connection_type': 'ethernet' }, 'Ethernet');
+        deepEqual(speedTest._connectionTest(window._$.extend({ 'type': '2' }, connection_constants)), { 'connection_type': 'wifi' }, 'Wifi');
+        deepEqual(speedTest._connectionTest(window._$.extend({ 'type': '3' }, connection_constants)), { 'load_speed': 'slow', 'connection_type': 'cellular' }, '2G');
+        deepEqual(speedTest._connectionTest(window._$.extend({ 'type': '4' }, connection_constants)), { 'load_speed': 'slow', 'connection_type': 'cellular' }, '3G');
+      });
+
+      test('Speed test calculation', function() {
+        // Check the threshold calculation works.
+        equal(speedTest._calculateLoadSpeed(0, 0, 'slow'), 'fast', 'Below threshold, below load count, `slow` stored value');
+        equal(speedTest._calculateLoadSpeed(3000, 0, 'slow'), 'slow', 'Above threshold, below load count, `slow` stored value');
+        // Check the load count
+        equal(speedTest._calculateLoadSpeed(0, 5, 'slow'), 'slow', 'Below threshold, above load count, `slow` stored value');
+        equal(speedTest._calculateLoadSpeed(3000, 5, 'slow'), 'slow', 'Above threshold, above load count, `slow` stored value');
+        // Check the stored value
+        equal(speedTest._calculateLoadSpeed(3000, 5, 'fast'), 'fast', 'Above threshold, above load count, `fast` stored value');
+      });
 
       test('Load speed', function () {
         ok(typeof profile.load_speed === 'string', 'load speed set.');
