@@ -13,6 +13,13 @@
 
   <!-- Load in require -->
   <script data-main="../src/" src="../libs/require/require.js"></script>
+</head>
+<body>
+  <h1 id="qunit-header">decade_city.js Test Suite</h1>
+  <h2 id="qunit-banner"></h2>
+  <div id="qunit-testrunner-toolbar"></div>
+  <h2 id="qunit-userAgent"></h2>
+  <ol id="qunit-tests"></ol>
   <!-- Load local lib and tests. -->
   <script>
 QUnit.config.autostart = false;
@@ -26,12 +33,5 @@ require(['../test/speedTest.js_test'],
   <!-- Removing access to jQuery and $. But it'll still be available as _$ -->
   <script>window._$ = jQuery.noConflict(true);</script>
 
-</head>
-<body>
-  <h1 id="qunit-header">decade_city.js Test Suite</h1>
-  <h2 id="qunit-banner"></h2>
-  <div id="qunit-testrunner-toolbar"></div>
-  <h2 id="qunit-userAgent"></h2>
-  <ol id="qunit-tests"></ol>
 </body>
 </html>

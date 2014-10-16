@@ -1,9 +1,12 @@
 /**
  * Responsive image replacement.
  */
-define(['core', 'speedTest', 'profile', 'cookies'], function(module, speedTest, profile, cookies) {
-
+define(function(require) {
   "use strict";
+
+  var speedTest = require('speedTest'),
+      profile = require('profile'),
+      cookies = require('cookies');
 
   var submodule = {};
 
@@ -17,7 +20,7 @@ define(['core', 'speedTest', 'profile', 'cookies'], function(module, speedTest, 
       init,
       suffix = '_m', // Default to suffix of smallest image.
       suffix_set = false,  //Has the suffix been set? {Boolean}
-      s3_bucket = module.config.s3_bucket || 'decadecity';
+      s3_bucket = 'decadecity';
 
   aws_url = '//s3-eu-west-1.amazonaws.com/' + s3_bucket + '/images/';
   image_replace = new RegExp('^' + aws_url + '([^_.]*).*\\.(.*)$'); // Regex to break up an image URL.

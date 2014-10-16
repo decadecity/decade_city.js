@@ -18,7 +18,10 @@
     raises(block, [expected], [message])
 */
 
-define(['core'], function(core) {
+define(function(require) {
+  "use strict";
+
+  var core = require('core');
 
   return {
     runTests: function() {

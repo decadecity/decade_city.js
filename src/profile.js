@@ -1,8 +1,12 @@
 /**
  * Profiles the runtime environment to check support.
  */
-define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionStorage) {
+define(function(require) {
   "use strict";
+
+  var module = require('module'),
+      cookies = require('cookies'),
+      sessionStorage = require('sessionStorage');
 
   var submodule = {};
 
@@ -30,18 +34,18 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
   }
 
   // Transform CSS prefix.
-  module.transform_prefix = '';
+  submodule.transform_prefix = '';
   if ('webkitTransform' in image.style) {
-    module.transform_prefix = '-webkit-';
+    submodule.transform_prefix = '-webkit-';
     submodule.profile.transform = true;
   } else if ('MozTransform' in image.style) {
-    module.transform_prefix = '-moz-';
+    submodule.transform_prefix = '-moz-';
     submodule.profile.transform = true;
   } else if ('OTransform' in image.style) {
-    module.transform_prefix = '-o-';
+    submodule.transform_prefix = '-o-';
     submodule.profile.transform = true;
   } else if('transform' in image.style) {
-    module.transform_prefix = '';
+    submodule.transform_prefix = '';
     submodule.profile.transform = true;
   }
   if (submodule.profile.transform) {
@@ -119,8 +123,10 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
     }, 100);
   };
 
-  module.register(submodule.sendProfile);
-  module.register(setProfile);
+  submodule.ready = function() {
+    setProfile();
+    submodule.sendProfile();
+  };
 
   return submodule.profile;
 

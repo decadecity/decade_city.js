@@ -1,5 +1,8 @@
-define(['core', 'sessionStorage', 'profile'], function(module, sessionStorage, profile) {
+define(function(require) {
   "use strict";
+
+  var sessionStorage = require('sessionStorage'),
+      profile = require('profile');
 
       // Have we run the test yet?
   var tested = false,

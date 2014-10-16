@@ -18,7 +18,12 @@
     raises(block, [expected], [message])
 */
 
-define(['speedTest', 'sessionStorage', 'profile'], function(speedTest, sessionStorage, profile) {
+define(function(require) {
+  "use strict";
+
+  var speedTest = require('speedTest'),
+      sessionStorage = require('sessionStorage'),
+      profile = require('profile');
 
   // The old connection API used constants to denote the type.
   // Extend this to build the connection object for testing.

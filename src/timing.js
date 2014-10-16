@@ -1,5 +1,9 @@
-define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionStorage) {
+define(function(require) {
   "use strict";
+
+  var module = require('module'),
+      cookies = require('cookies'),
+      sessionStorage = require('sessionStorage');
 
   var submodule = {};
   var vars = {},
@@ -97,7 +101,6 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
       }
     }
   };
-  module.register(init);
 
   /**
    * Final timing values and send beacon.
@@ -153,13 +156,14 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
     // Finally, send the data after a delay.
     window.setTimeout(sendBeacon, 500);
   };
-  module.registerLoad(function() {
+
+  submodule.timing = timing;
+  submodule.ready = init;
+  submodule.load = function() {
     // Need onload to have had a chance to finish to get timings.
     window.t_onload = new Date();
     window.setTimeout(main, 500);
-  });
-
-  submodule.timing = timing;
+  };
 
   return submodule;
 

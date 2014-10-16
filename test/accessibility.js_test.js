@@ -18,12 +18,17 @@
     raises(block, [expected], [message])
 */
 
-define(['accessibility'], function() {
+define(function(require) {
+  "use strict";
+
+  var accessibility = require('accessibility');
 
   return {
     runTests: function() {
 
       module('Accessibility');
+
+      accessibility.ready();
 
       test('Keyboard styling hook', function () {
         var html = window._$('html');

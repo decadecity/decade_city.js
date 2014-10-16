@@ -1,4 +1,4 @@
-define(['core'], function(core) {
+define(function() {
   "use strict";
   /**
    * Adds the hook for focus highlight.
@@ -12,7 +12,10 @@ define(['core'], function(core) {
     document.addEventListener('keydown', addKeyboardHook);
   };
 
-  core.register(init);
+  return {
+    ready: init
+  };
+
 });
 
 /**
@@ -94,8 +97,12 @@ define(function() {
 
 });
 
-define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionStorage) {
+define(function(require) {
   "use strict";
+
+  var module = require('module'),
+      cookies = require('cookies'),
+      sessionStorage = require('sessionStorage');
 
   var submodule = {};
   var vars = {},
@@ -193,7 +200,6 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
       }
     }
   };
-  module.register(init);
 
   /**
    * Final timing values and send beacon.
@@ -249,13 +255,14 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
     // Finally, send the data after a delay.
     window.setTimeout(sendBeacon, 500);
   };
-  module.registerLoad(function() {
+
+  submodule.timing = timing;
+  submodule.ready = init;
+  submodule.load = function() {
     // Need onload to have had a chance to finish to get timings.
     window.t_onload = new Date();
     window.setTimeout(main, 500);
-  });
-
-  submodule.timing = timing;
+  };
 
   return submodule;
 
@@ -264,8 +271,12 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
 /**
  * Profiles the runtime environment to check support.
  */
-define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionStorage) {
+define(function(require) {
   "use strict";
+
+  var module = require('module'),
+      cookies = require('cookies'),
+      sessionStorage = require('sessionStorage');
 
   var submodule = {};
 
@@ -293,18 +304,18 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
   }
 
   // Transform CSS prefix.
-  module.transform_prefix = '';
+  submodule.transform_prefix = '';
   if ('webkitTransform' in image.style) {
-    module.transform_prefix = '-webkit-';
+    submodule.transform_prefix = '-webkit-';
     submodule.profile.transform = true;
   } else if ('MozTransform' in image.style) {
-    module.transform_prefix = '-moz-';
+    submodule.transform_prefix = '-moz-';
     submodule.profile.transform = true;
   } else if ('OTransform' in image.style) {
-    module.transform_prefix = '-o-';
+    submodule.transform_prefix = '-o-';
     submodule.profile.transform = true;
   } else if('transform' in image.style) {
-    module.transform_prefix = '';
+    submodule.transform_prefix = '';
     submodule.profile.transform = true;
   }
   if (submodule.profile.transform) {
@@ -382,8 +393,10 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
     }, 100);
   };
 
-  module.register(submodule.sendProfile);
-  module.register(setProfile);
+  submodule.ready = function() {
+    setProfile();
+    submodule.sendProfile();
+  };
 
   return submodule.profile;
 
@@ -392,9 +405,12 @@ define(['core', 'cookies', 'sessionStorage'], function(module, cookies, sessionS
 /**
  * Responsive image replacement.
  */
-define(['core', 'speedTest', 'profile', 'cookies'], function(module, speedTest, profile, cookies) {
-
+define(function(require) {
   "use strict";
+
+  var speedTest = require('speedTest'),
+      profile = require('profile'),
+      cookies = require('cookies');
 
   var submodule = {};
 
@@ -408,7 +424,7 @@ define(['core', 'speedTest', 'profile', 'cookies'], function(module, speedTest, 
       init,
       suffix = '_m', // Default to suffix of smallest image.
       suffix_set = false,  //Has the suffix been set? {Boolean}
-      s3_bucket = module.config.s3_bucket || 'decadecity';
+      s3_bucket = 'decadecity';
 
   aws_url = '//s3-eu-west-1.amazonaws.com/' + s3_bucket + '/images/';
   image_replace = new RegExp('^' + aws_url + '([^_.]*).*\\.(.*)$'); // Regex to break up an image URL.

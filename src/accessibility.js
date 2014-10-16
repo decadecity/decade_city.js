@@ -1,4 +1,4 @@
-define(['core'], function(core) {
+define(function() {
   "use strict";
   /**
    * Adds the hook for focus highlight.
@@ -12,5 +12,8 @@ define(['core'], function(core) {
     document.addEventListener('keydown', addKeyboardHook);
   };
 
-  core.register(init);
+  return {
+    ready: init
+  };
+
 });

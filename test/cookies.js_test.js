@@ -18,7 +18,10 @@
     raises(block, [expected], [message])
 */
 
-define(['cookies'], function(cookies) {
+define(function(require) {
+  "use strict";
+
+  var cookies = require('cookies');
 
   return {
     runTests: function() {

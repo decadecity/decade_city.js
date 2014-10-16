@@ -18,7 +18,10 @@
     raises(block, [expected], [message])
 */
 
-define(['sessionStorage'], function(sessionStorage) {
+define(function(require) {
+  "use strict";
+
+  var sessionStorage = require('sessionStorage');
 
   return {
     runTests: function() {

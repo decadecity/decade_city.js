@@ -18,7 +18,11 @@
     raises(block, [expected], [message])
 */
 
-define(['images', 'profile'], function(images, profile) {
+define(function(require) {
+  "use strict";
+
+  var images = require('images'),
+      profile = require('profile');
 
   return {
     runTests: function() {

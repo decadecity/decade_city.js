@@ -25,6 +25,8 @@ define(['timing', 'sessionStorage'], function(timing) {
 
       module('Timing');
 
+      timing.ready()
+
       if (!timing.timing) {
         sessionStorage.setItem('t_navigation_start', new Date().getTime());
       }
@@ -45,18 +47,12 @@ define(['timing', 'sessionStorage'], function(timing) {
           ok(vars.hasOwnProperty('t_onload'), '`t_onload` set.');
           ok(vars.hasOwnProperty('u'), '`u` set.');
           start();
-        }, 1000);
+        }, 510);
       };
 
       asyncTest('Timing functionality', function () {
-        if (document.readyState === 'complete') {
-          // window.onload has already fired.
-          loadTest();
-        } else {
-          window.addEventListener('load', function() {
-            loadTest();
-          });
-        }
+        timing.load();
+        loadTest();
       });
     }
   };
