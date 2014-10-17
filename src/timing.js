@@ -1,13 +1,14 @@
 define(function(require) {
   "use strict";
 
-  var module = require('module'),
+  var config = require('config'),
+      module = require('module'),
       cookies = require('cookies'),
       sessionStorage = require('sessionStorage');
 
   var submodule = {};
   var vars = {},
-      url,
+      url = config.beacon_url,
       timing = !!(typeof window.performance !== "undefined" && typeof window.performance.timing !== "undefined");
 
   /**
@@ -70,9 +71,6 @@ define(function(require) {
    */
   var init = function () {
     var t_done;
-    if (module.config.hasOwnProperty('beacon_url')) {
-      url = module.config.beacon_url;
-    }
     if (true) { //TODO - fix debug.
       // If we're in debug mode then we expose the vars for testing.
       submodule.getVars = function () {

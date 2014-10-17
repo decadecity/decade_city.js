@@ -38,7 +38,7 @@ module.exports = function(grunt) {
         globals: {
           jQuery: true,
           define: true
-        },
+        }
       },
       files: ['Gruntfile.js', 'src/**/*.js']
     }
