@@ -1,7 +1,7 @@
 /**
  * Responsive image replacement.
  */
-define(function(require) {
+define(function(require, exports, module) {
   "use strict";
 
   var speedTest = require('speedTest'),
@@ -20,7 +20,7 @@ define(function(require) {
       init,
       suffix = '_m', // Default to suffix of smallest image.
       suffix_set = false,  //Has the suffix been set? {Boolean}
-      s3_bucket = 'decadecity';
+      s3_bucket = module.config().bucket || 'decadecity';
 
   aws_url = '//s3-eu-west-1.amazonaws.com/' + s3_bucket + '/images/';
   image_replace = new RegExp('^' + aws_url + '([^_.]*).*\\.(.*)$'); // Regex to break up an image URL.
@@ -187,15 +187,32 @@ define(function(require) {
     svgReplace();
   };
 
-  // Open up some internal items for debugging.
-  submodule.ready = init;
-  submodule.imageSrc = imageSrc;
-  submodule.responsiveImages = responsiveImages;
-  submodule.suffix = function (value) { if (typeof value !== 'undefined') { suffix = value; } else { return suffix; }};
-  submodule.suffix_set = function (value) { if (typeof value !== 'undefined') { suffix_set = !!(value); } else { return suffix_set; }};
-  submodule.svgSrc = svgSrc;
-  submodule.svgReplace = svgReplace;
+  if (module.config().debug) {
+    // Open up some internal items for debugging.
+    submodule.imageSrc = imageSrc;
+    submodule.responsiveImages = responsiveImages;
+    submodule.svgSrc = svgSrc;
+    submodule.svgReplace = svgReplace;
+    // Allow us to manipulate the suffix.
+    submodule.suffix = function (value) {
+      if (typeof value !== 'undefined') {
+        suffix = value;
+      } else {
+        return suffix;
+      }
+    };
+    // Allow us to reset the suffix status.
+    submodule.resetSuffix = function (value) {
+      if (typeof value !== 'undefined') {
+        suffix_set = !!(value);
+      } else {
+        return suffix_set;
+      }
+    };
+  }
 
-  return submodule;
+  submodule.ready = init;
+
+  module.exports = submodule;
 
 });

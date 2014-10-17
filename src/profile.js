@@ -1,11 +1,10 @@
 /**
  * Profiles the runtime environment to check support.
  */
-define(function(require) {
+define(function(require, exports, module) {
   "use strict";
 
-  var module = require('module'),
-      cookies = require('cookies'),
+  var cookies = require('cookies'),
       sessionStorage = require('sessionStorage');
 
   var submodule = {};
@@ -128,6 +127,6 @@ define(function(require) {
     submodule.sendProfile();
   };
 
-  return submodule.profile;
+  module.exports = submodule;
 
 });

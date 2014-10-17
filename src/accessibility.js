@@ -1,4 +1,4 @@
-define(function() {
+define(function(require, exports, module) {
   "use strict";
   /**
    * Adds the hook for focus highlight.
@@ -12,7 +12,7 @@ define(function() {
     document.addEventListener('keydown', addKeyboardHook);
   };
 
-  return {
+  module.exports = {
     ready: init
   };
 

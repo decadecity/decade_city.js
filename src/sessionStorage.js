@@ -6,12 +6,12 @@
  *
  * @returns {Object} API for accessing local storage.
  */
-define(function() {
+define(function(require, exports, module) {
 
   "use strict";
 
   var supported = typeof window.sessionStorage !== 'undefined',
-      that = {};
+      submodule = {};
   /**
    * Number of items in local storage.
    *
@@ -20,7 +20,7 @@ define(function() {
    * @returns {Number} Number of items in storage.
    */
   // Due to lack of support for getters this is a function which breaks the full API interface wrapper. *sigh*
-  that.getLength = function() {
+  submodule.getLength = function() {
     if (!supported) {
       return 0;
     } else {
@@ -35,7 +35,7 @@ define(function() {
    *
    * @returns Item from storage or null if not present.
    */
-  that.key = function (index) {
+  submodule.key = function (index) {
     if (!supported) {
       return null;
     } else {
@@ -50,7 +50,7 @@ define(function() {
    *
    * @return Item from storage or null if not present.
    */
-  that.getItem = function (key) {
+  submodule.getItem = function (key) {
     if (!supported) {
       return null;
     } else {
@@ -64,7 +64,7 @@ define(function() {
    * @param {String} key Key of item in storage.
    * @param value Item to store.
    */
-  that.setItem = function (key, value) {
+  submodule.setItem = function (key, value) {
     if (!supported) {
       return;
     } else {
@@ -86,7 +86,7 @@ define(function() {
    *
    * @param {String} key Key of item in storage.
    */
-  that.removeItem = function (key) {
+  submodule.removeItem = function (key) {
     if (!supported) {
       return;
     } else {
@@ -97,15 +97,15 @@ define(function() {
   /**
    * Clears all items from storage.
    */
-  that.clear = function () {
+  submodule.clear = function () {
     if (!supported) {
       return;
     } else {
       return window.sessionStorage.clear();
     }
   };
-  that.supported = supported; // Publically expose support status.
+  submodule.supported = supported; // Publicly expose support status.
 
-  return that;
+  module.exports = submodule;
 
 });

@@ -27,7 +27,7 @@ define(function(require) {
   return {
     runTests: function() {
   var resetSuffix = function() {
-    images.suffix_set(false);
+    images.resetSuffix(false);
     images.suffix('_m');
   };
 
@@ -124,68 +124,68 @@ define(function(require) {
 
 
     equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
       'Protocol relative path not changed.'
     );
     equal(
-      images.imageSrc('http://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      images.imageSrc('http://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
       'HTTP procol stripped.'
     );
     equal(
-      images.imageSrc('https://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      images.imageSrc('https://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
       'HTTPS procol stripped.'
     );
     equal(
-      images.imageSrc('file://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      images.imageSrc('file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
       'File procol stripped.'
     );
 
     equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
       'Image image with "_m" suffix is unaltered'
     );
     equal(
-      images.imageSrc('http://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      images.imageSrc('http://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
       'Image image with "_m" suffix is unaltered'
     );
     equal(
-      images.imageSrc('https://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      images.imageSrc('https://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
       'Image image with "_m" suffix is unaltered'
     );
     equal(
-      images.imageSrc('file://s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg',
+      images.imageSrc('file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
       'Image image with "_m" suffix is unaltered'
     );
 
     images.suffix('_b');
 
     equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_b.jpeg',
+      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_b.jpeg',
       'Image image with suffix is replaced'
     );
 
     images.suffix('_b');
 
     equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_b.jpeg',
+      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_b.jpeg',
       'Image image with no suffix is replaced'
     );
 
     images.suffix('');
 
     equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/decadecity/images/8230113340.jpeg',
+      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340.jpeg',
       'Image image with suffix is replaced with no suffix'
     );
   });

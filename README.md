@@ -1,18 +1,21 @@
 # decade_city.js
 
-Module system for functionality used on [decadecity.net][1]
+AMD module system for functionality used on [decadecity.net][1]
 
 [1]: http://decadecity.net/
 
 ## Getting Started
-Download the [production version][min] or the [development version][max].
+Include these modules in your build.
 
-[min]: https://raw.github.com/decadecity/decade_city.js/master/dist/decade_city.js.min.js
-[max]: https://raw.github.com/decadecity/decade_city.js/master/dist/decade_city.js.js
+Modules may expose the following methods that should be run on the relevant browser events:
 
-In your web page:
+  * `ready()` - DOM ready.
+  * `load()` - Page Load.
+  * `defer()` - After page load.
+  * `resize()` - Browser resize.
+  * `scroll()` - Page scroll.
 
-Cutting the mustard requirements:
+# Cutting the mustard requirements
 
     'classList' in document.documentElement
     'querySelectorAll' in document
@@ -21,7 +24,3 @@ Cutting the mustard requirements:
     window.innerWidth
     window.innerHeight
 
-```html
-<script src="dist/decade_city.js.min.js"></script>
-<script>window.DECADE_CITY.init()</script><!-- Manually initialise the library. -->
-```

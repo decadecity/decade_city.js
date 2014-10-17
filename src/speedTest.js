@@ -1,8 +1,8 @@
-define(function(require) {
+define(function(require, exports, module) {
   "use strict";
 
   var sessionStorage = require('sessionStorage'),
-      profile = require('profile');
+      profile = require('profile').profile;
 
       // Have we run the test yet?
   var tested = false,
@@ -145,11 +145,13 @@ define(function(require) {
     tested = true;
   };
 
-  submodule._connectionTest = connectionTest;
-  submodule._calculateLoadSpeed = calculateLoadSpeed;
+  if (module.config().debug) {
+    submodule.connectionTest = connectionTest;
+    submodule.calculateLoadSpeed = calculateLoadSpeed;
+  }
   submodule.ready = function() {
     test();
   };
 
-  return submodule;
+  module.exports = submodule;
 });

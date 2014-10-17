@@ -1,7 +1,7 @@
 /**
  * Handler for Cookies.
  */
-define(function() {
+define(function(require, exports, module) {
   "use strict";
 
   var submodule = {};
@@ -73,6 +73,6 @@ define(function() {
     return (new RegExp("(?:^|;\\s*)" + escape(key).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
   };
 
-  return submodule;
+  module.exports = submodule;
 
 });
