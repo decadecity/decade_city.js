@@ -4,7 +4,8 @@
 define(function(require, exports, module) {
   "use strict";
 
-  var speedTest = require('speedTest'),
+  var config = require('config'),
+      speedTest = require('speedTest'),
       profile = require('profile'),
       cookies = require('cookies');
 
@@ -20,7 +21,7 @@ define(function(require, exports, module) {
       init,
       suffix = '_m', // Default to suffix of smallest image.
       suffix_set = false,  //Has the suffix been set? {Boolean}
-      s3_bucket = module.config().bucket || 'decadecity';
+      s3_bucket = config.s3_bucket || 'decadecity';
 
   aws_url = '//s3-eu-west-1.amazonaws.com/' + s3_bucket + '/images/';
   image_replace = new RegExp('^' + aws_url + '([^_.]*).*\\.(.*)$'); // Regex to break up an image URL.
@@ -187,7 +188,7 @@ define(function(require, exports, module) {
     svgReplace();
   };
 
-  if (module.config().debug) {
+  if (config.debug) {
     // Open up some internal items for debugging.
     submodule.imageSrc = imageSrc;
     submodule.responsiveImages = responsiveImages;

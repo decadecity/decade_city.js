@@ -1,6 +1,7 @@
 define(function (require, exports, module) {
   module.exports = {
+    'debug': true,
     'beacon_url': 'https://stats.decadecity.net/boomerang/beacon',
-    'stripe_url': 'https://checkout.stripe.com/checkout.js'
+    's3_bucket': 'test-bucket'
   }
 });
