@@ -5,7 +5,7 @@ define(function(require, exports, module) {
   "use strict";
 
   var config = require('config'),
-      speedTest = require('speedTest'),
+      speed_test = require('speed_test'),
       profile = require('profile'),
       cookies = require('cookies');
 
@@ -144,7 +144,7 @@ define(function(require, exports, module) {
   init = function (width, height, pixel_density, speed) {
     var window_width;
 
-    speedTest.ready();
+    speed_test.ready();
     if (typeof profile.load_speed !== 'undefined' && typeof speed === 'undefined') {
       speed = profile.load_speed;
     }

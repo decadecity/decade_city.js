@@ -21,7 +21,7 @@
 define(function(require) {
   "use strict";
 
-  var profile = require('profile');
+  var profile = require('profile').profile;
 
   return {
     runTests: function() {

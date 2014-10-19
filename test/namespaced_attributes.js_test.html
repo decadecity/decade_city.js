@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>window.t_pagestart = new Date();</script>
+  <meta charset="utf-8">
+  <title>decade_city.js profile Test Suite</title>
+  <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+  <!-- jQuery is used as a short cut for some tests, not used by library. -->
+  <script src="../libs/jquery-loader.js"></script>
+  <!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
+  <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
+  <script src="../libs/qunit/qunit.js"></script>
+
+  <!-- Load in require -->
+  <script src="../libs/require/require.js"></script>
+  <script src="../libs/require/require-config.js"></script>
+
+  <!-- Load local lib and tests. -->
+  <script>
+QUnit.config.autostart = false;
+require(['../test/namespaced_attributes.js_test'],
+  function (testModule) {
+    QUnit.start();
+    testModule.runTests();
+  }
+);
+  </script>
+  <!-- Removing access to jQuery and $. But it'll still be available as _$ -->
+  <script>window._$ = jQuery.noConflict(true);</script>
+
+</head>
+<body>
+  <h1 id="qunit-header">decade_city.js Test Suite</h1>
+  <h2 id="qunit-banner"></h2>
+  <div id="qunit-testrunner-toolbar"></div>
+  <h2 id="qunit-userAgent"></h2>
+  <ol id="qunit-tests"></ol>
+  <div id="qunit-fixture">
+    <div id="default-prefix">
+      <span data-dc-test id="test-default-prefix0"></span>
+      <span data-dc-test="test" id="test-default-prefix1"></span>
+      <span data-dc-key="value" id="test-default-key"></span>
+    </div>
+    <div id="no-prefix">
+      <span data-test id="test-no-prefix0"></span>
+      <span data-test="test" id="test-no-prefix1"></span>
+      <span data-key="value" id="test-no-key"></span>
+    </div>
+    <div id="custom-prefix">
+      <span data-other-test id="test-custom-prefix0"></span>
+      <span data-other-test="test" id="test-custom-prefix1"></span>
+      <span data-other-key="value" id="test-custom-key"></span>
+    </div>
+  </div>
+</body>
+</html>

@@ -17,7 +17,8 @@ module.exports = function(grunt) {
       files: [
         'Gruntfile.js',
         'src/**/*.js',
-        'test/**/*.js'
+        'test/**/*.js',
+        'etc/*.js'
       ],
       tasks: 'default'
     },
@@ -40,7 +41,12 @@ module.exports = function(grunt) {
           define: true
         }
       },
-      files: ['Gruntfile.js', 'src/**/*.js']
+      files: [
+        'Gruntfile.js',
+        'src/**/*.js',
+        'test/**/*.js',
+        'ect/*.js'
+      ]
     }
   });
 
@@ -63,6 +69,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task.
-  grunt.registerTask('default', ['jshint', 'qunit', 'watch']);
+  grunt.registerTask('default', ['test', 'watch']);
+  // Test task
+  grunt.registerTask('test', ['jshint', 'qunit']);
 
 };

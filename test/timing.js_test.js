@@ -25,7 +25,7 @@ define(['timing', 'sessionStorage'], function(timing) {
 
       module('Timing');
 
-      timing.ready()
+      timing.ready();
 
       if (!timing.timing) {
         sessionStorage.setItem('t_navigation_start', new Date().getTime());
