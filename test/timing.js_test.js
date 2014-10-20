@@ -52,7 +52,7 @@ define(['timing'], function(timing) {
           ok(vars.hasOwnProperty('t_onload'), '`t_onload` set.');
           ok(vars.hasOwnProperty('u'), '`u` set.');
           start();
-        }, 510);
+        }, 1000);
       };
 
       asyncTest('Timing functionality', function () {

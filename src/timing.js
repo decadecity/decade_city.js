@@ -56,12 +56,15 @@ define(function(require) {
     var params = [],
         seperator = '?',
         key, img;
+    /* istanbul ignore else */
     if (vars && url) {
+      /* istanbul ignore else */
       if (url.search(/\?/) > -1) {
         // There's already a '?' in the URL so we need to add params.
         seperator = '&';
       }
       for (key in vars) {
+        /* istanbul ignore else */
         if (vars.hasOwnProperty(key)) {
           params.push(key + '=' + encodeURIComponent(vars[key]));
         }
