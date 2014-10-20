@@ -24,3 +24,10 @@ Modules may expose the following methods that should be run on the relevant brow
     window.innerWidth
     window.innerHeight
 
+# Release history
+
+* 2014-10-20   v1.0.0   Moved to AMD modules.
+* 2014-03-11   v0.2.0   Removed jQuery dependency.
+* 2012-12-12   v0.0.0   Initial import to Git.
+
+
