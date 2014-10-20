@@ -144,11 +144,6 @@ define(function(require) {
           '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
           'HTTPS procol stripped.'
         );
-        equal(
-          images.imageSrc('file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-          'File procol stripped.'
-        );
 
         equal(
           images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
@@ -167,7 +162,7 @@ define(function(require) {
         );
         equal(
           images.imageSrc('file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
           'Image image with "_m" suffix is unaltered'
         );
 
@@ -195,15 +190,6 @@ define(function(require) {
           'Image image with suffix is replaced with no suffix'
         );
       });
-
-      /* Not convinced this is testable in phantom?
-      test('Flickr responsive images', function () {
-        images.flickr_suffix('_b');
-        images.responsiveImages();
-        //window._$('#flickr-responsive-test').trigger('load');
-        equal(window._$('#flickr-responsive-test').attr('src'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_b.jpg', 'DOM element has image src replaced');
-      });
-    */
 
     }
   };

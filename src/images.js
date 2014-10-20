@@ -49,7 +49,7 @@ define(function(require, exports, module) {
   imageSrc = function (src) {
     var match, secure;
     src = src.replace(/^http(s)?:/, '');
-    src = src.replace('file:', '');
+    //src = src.replace('file:', '');
     match = image_replace.exec(src);
     if (!match) {
       return src;
@@ -90,24 +90,15 @@ define(function(require, exports, module) {
 
       // 'Invisible' holder into which the replacement images can be loaded.
       holder = document.createElement('div');
-      /**
-       * Clears the cache image holder if it is empty.
-       */
-      clearHolder = function() {
-        if (holder.querySelectorAll('img').length === 0) {
-          if (holder.parentElement) {
-            holder.parentElement.removeChild(holder);
-          }
-        }
-      };
-
 
       // Go through each responsive image and swap it out with the appropriate image.
       Array.prototype.forEach.call(images, function(content_img) {
         var src = content_img.src,
             new_src = imageSrc(src), // URL of the replacement image.
             cache_img; // Cache image we will use to load the new image.
-        if (src === new_src) {
+
+        /* istanbul ignore next */
+        if (src === new_src && !config.debug) {
           // Nothing doing.
           return src;
         }
@@ -117,11 +108,11 @@ define(function(require, exports, module) {
         var imageLoadedHandler = function(e) {
           // Once the image has loaded in the hidden version we replace the original image as it should be in the browser cache.
           content_img.src = new_src;
+          /* istanbul ignore else */
           if (cache_img.parentElement) {
             cache_img.removeEventListener('load', imageLoadedHandler); // Not sure this is correct?
             cache_img.parentElement.removeChild(cache_img); // Don't need the cache image anymore.
           }
-          clearHolder();
         };
 
         // We need to load the image to prevent a big jump as the old src is switched out for a src that hasn't been loaded.
@@ -129,7 +120,6 @@ define(function(require, exports, module) {
         cache_img.src = new_src;
         holder.appendChild(cache_img); // Inject the new image into the DOM and get the browser to load it.
       });
-      clearHolder(); // Clean up if there were no images to insert.
     }
   };
 
