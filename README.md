@@ -34,7 +34,7 @@ Modules may expose the following methods that should be run on the relevant brow
     window.XMLHttpRequest
     window.innerWidth
     window.innerHeight
-    window.JSON
+    JSON
     Array.forEach
 
 ## Release history
