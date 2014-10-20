@@ -23,17 +23,45 @@ define(function(require) {
 
   var sessionStorage = require('sessionStorage');
 
+  // We use these for preservation.
+  var load_speed,
+      load_count,
+      profile_sent;
+
   return {
     runTests: function() {
 
-      module('sessionStorage');
+      module('sessionStorage', {
+        setup: function() {
+          // These are known to be used by the framework - we want to preserve them.
+          load_speed = sessionStorage.getItem('load-speed');
+          load_count = sessionStorage.getItem('load-count');
+          profile_sent = sessionStorage.getItem('profile-sent');
+        },
+        teardown: function() {
+          // Restore any preserved items.
+          if (load_speed) {
+            sessionStorage.setItem('load-speed', load_speed);
+          }
+          if (load_count) {
+            sessionStorage.setItem('load-count', load_count);
+          }
+          if (profile_sent) {
+            sessionStorage.setItem('profile-sent', profile_sent);
+          }
+        }
+      });
+
+      test('Interface', function() {
+        strictEqual(typeof sessionStorage.supported, 'boolean', 'supported is a boolean');
+        strictEqual(typeof sessionStorage.getItem, 'function', 'getItem is a function');
+        strictEqual(typeof sessionStorage.setItem, 'function', 'setItem is a function');
+        strictEqual(typeof sessionStorage.getLength, 'function', 'getLength is a function');
+        strictEqual(typeof sessionStorage.removeItem, 'function', 'removeItem is a function');
+      });
 
       test('sessionStorage', function () {
         if (sessionStorage.supported) {
-          // These are known to be used by the framework - we want to preserve them.
-          var load_speed = sessionStorage.getItem('load-speed');
-          var load_count = sessionStorage.getItem('load-count');
-          var profile_sent = sessionStorage.getItem('profile-sent');
           window.sessionStorage.clear();
           ok(sessionStorage.getLength() === 0, 'No items in session storage');
           sessionStorage.setItem('test', 'test');
@@ -45,16 +73,6 @@ define(function(require) {
           ok(sessionStorage.key(0) === 'test', 'Item retrieved by key');
           sessionStorage.removeItem('test');
           ok(sessionStorage.getLength() === 0, 'Item removed');
-          // Restore any preserved items.
-          if (load_speed) {
-            sessionStorage.setItem('load-speed', load_speed);
-          }
-          if (load_count) {
-            sessionStorage.setItem('load-count', load_count);
-          }
-          if (profile_sent) {
-            sessionStorage.setItem('profile-sent', profile_sent);
-          }
         } else {
           ok(sessionStorage.getLength() === 0, 'No items in session storage');
           sessionStorage.setItem('test', 'test');

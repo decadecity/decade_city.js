@@ -28,6 +28,13 @@ define(function(require) {
 
       module('Cookies');
 
+      test('Interface', function() {
+        strictEqual(typeof cookies.getItem, 'function', 'getItem is a function');
+        strictEqual(typeof cookies.setItem, 'function', 'setItem is a function');
+        strictEqual(typeof cookies.hasItem, 'function', 'hasItem is a function');
+        strictEqual(typeof cookies.removeItem, 'function', 'removeItem is a function');
+      });
+
       test('Cookie functionality', function () {
         cookies.setItem('test', true);
         ok(cookies.hasItem('test'), 'Test cookie set and present');

@@ -33,18 +33,19 @@ define(function(require, exports, module) {
   }
 
   // Transform CSS prefix.
-  submodule.transform_prefix = '';
+  submodule.profile.transform_prefix = '';
+  submodule.profile.transform = false;
   if ('webkitTransform' in image.style) {
-    submodule.transform_prefix = '-webkit-';
+    submodule.profile.transform_prefix = '-webkit-';
     submodule.profile.transform = true;
   } else if ('MozTransform' in image.style) {
-    submodule.transform_prefix = '-moz-';
+    submodule.profile.transform_prefix = '-moz-';
     submodule.profile.transform = true;
   } else if ('OTransform' in image.style) {
-    submodule.transform_prefix = '-o-';
+    submodule.profile.transform_prefix = '-o-';
     submodule.profile.transform = true;
   } else if('transform' in image.style) {
-    submodule.transform_prefix = '';
+    submodule.profile.transform_prefix = '';
     submodule.profile.transform = true;
   }
   if (submodule.profile.transform) {
@@ -52,12 +53,14 @@ define(function(require, exports, module) {
   }
 
   // Touch support.
+  submodule.profile.touch = false;
   if ('ontouchstart' in window || (typeof navigator.msMaxTouchPoints !== 'undefined' && navigator.msMaxTouchPoints > 0)) {
     submodule.profile.touch = true;
     html.classList.remove('pointer');
   }
 
   // JSON parser support.
+  submodule.profile.json = false;
   if (typeof JSON !== 'undefined') {
     submodule.profile.json = true;
   }
@@ -76,9 +79,6 @@ define(function(require, exports, module) {
    * @param force {Boolean} Force sending even if the profile has already been sent.
    */
   submodule.sendProfile = function (force) {
-    if (module.config.debug) {
-      return false;
-    }
     // TODO: remove for testing.
     function toQueryString(obj) {
       var parts = [];
