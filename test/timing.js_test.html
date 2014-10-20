@@ -7,28 +7,17 @@
   <script type="text/javascript">var t_jsstart = new Date().getTime();</script>
   <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
   <!-- jQuery is used as a short cut for some tests, not used by library. -->
-  <script src="../libs/jquery-loader.js"></script>
+  <script src="../lib/jquery/jquery-loader.js"></script>
   <!-- Load local QUnit (grunt requires v1.0.0 or newer). -->
   <script>window.t_cssstart = new Date();</script>
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
   <script>window.t_cssend = new Date();</script>
-  <script src="../libs/qunit/qunit.js"></script>
+  <script src="../lib/qunit/qunit.js"></script>
   <script type="text/javascript">var t_jsend = new Date().getTime();</script>
 
   <!-- Load in require -->
-  <script src="../libs/require/require.js"></script>
-  <script src="../libs/require/require-config.js"></script>
-
-  <!-- Load local lib and tests. -->
-  <script>
-QUnit.config.autostart = false;
-require(['../test/timing.js_test'],
-  function (testModule) {
-    QUnit.start();
-    testModule.runTests();
-  }
-);
-  </script>
+  <script src="../lib/require/require.js"></script>
+  <script src="../lib/require/require-config.js"></script>
   <!-- Removing access to jQuery and $. But it'll still be available as _$ -->
   <script>window._$ = jQuery.noConflict(true);</script>
 
@@ -42,6 +31,18 @@ require(['../test/timing.js_test'],
   <div id="qunit-testrunner-toolbar"></div>
   <h2 id="qunit-userAgent"></h2>
   <ol id="qunit-tests"></ol>
+
+  <!-- Load local lib and tests. -->
+  <script>
+QUnit.config.autostart = false;
+require(['../test/timing.js_test'],
+  function (testModule) {
+    QUnit.start();
+    testModule.runTests();
+  }
+);
+  </script>
+
   <script>var t_bodyend = new Date().getTime();</script>
 </body>
 </html>

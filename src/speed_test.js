@@ -1,3 +1,6 @@
+/**
+ * Estimates the load speed.
+ */
 define(function(require, exports, module) {
   "use strict";
 

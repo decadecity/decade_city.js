@@ -1,3 +1,6 @@
+/**
+ * RUM data collection.
+ */
 define(function(require) {
   "use strict";
 
