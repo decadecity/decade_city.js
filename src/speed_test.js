@@ -68,9 +68,9 @@ define(function(require, exports, module) {
    */
   var calculateLoadSpeed = function(timer, loads, stored) {
         // Number of ms above which we count it as a slow load.
-    var load_speed_timout = (config.load_speed_timout || 2.5) * 1000,
+    var load_speed_timout = (config.load_speed_timout /* istanbul ignore next default */ || 2.5) * 1000,
         // After this many loads with no fast load we assume a slow connection.
-        load_speed_count =  config.load_speed_count || 4;
+        load_speed_count =  config.load_speed_count /* istanbul ignore next default */ || 4;
 
     if (stored === 'fast') {
       // We have seen a fast load in the past so stay with it.
@@ -84,6 +84,14 @@ define(function(require, exports, module) {
     return 'slow';
   };
 
+  /*
+    istanbul ignore next
+    This is normalising the browser interface, all the actual logic
+    is handled in other tests.
+  */
+  /**
+   * This is the main test function.
+   */
   var test = function () {
 
         // This is the number of ms we think it took the page to get ready.
@@ -149,6 +157,7 @@ define(function(require, exports, module) {
     tested = true;
   };
 
+  /* istanbul ignore next */
   if (config.debug) {
     submodule.connectionTest = connectionTest;
     submodule.calculateLoadSpeed = calculateLoadSpeed;

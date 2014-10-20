@@ -4,7 +4,8 @@
 define(function(require, exports, module) {
   "use strict";
 
-  var cookies = require('cookies'),
+  var config = require('config'),
+      cookies = require('cookies'),
       sessionStorage = require('sessionStorage');
 
   var submodule = {};
@@ -18,6 +19,7 @@ define(function(require, exports, module) {
    * Sets the serialised profile as a cookie.
    */
   setProfile = function() {
+    /* istanbul ignore else */
     if (submodule.profile.json) {
       cookies.setItem('profile', JSON.stringify(submodule.profile), null, '/');
     }
@@ -28,6 +30,7 @@ define(function(require, exports, module) {
 
   // SVG support.
   submodule.profile.svg = false;
+  /* istanbul ignore else */
   if (!!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")) {
     submodule.profile.svg = true;
   }
@@ -35,32 +38,42 @@ define(function(require, exports, module) {
   // Transform CSS prefix.
   submodule.profile.transform_prefix = '';
   submodule.profile.transform = false;
+  /* istanbul ignore next */
   if ('webkitTransform' in image.style) {
     submodule.profile.transform_prefix = '-webkit-';
     submodule.profile.transform = true;
-  } else if ('MozTransform' in image.style) {
+  }
+  /* istanbul ignore next */
+  else if ('MozTransform' in image.style) {
     submodule.profile.transform_prefix = '-moz-';
     submodule.profile.transform = true;
-  } else if ('OTransform' in image.style) {
+  }
+  /* istanbul ignore next */
+  else if ('OTransform' in image.style) {
     submodule.profile.transform_prefix = '-o-';
     submodule.profile.transform = true;
-  } else if('transform' in image.style) {
+  }
+  /* istanbul ignore next */
+  else if('transform' in image.style) {
     submodule.profile.transform_prefix = '';
     submodule.profile.transform = true;
   }
+  /* istanbul ignore else */
   if (submodule.profile.transform) {
     html.classList.add('transform');
   }
 
   // Touch support.
   submodule.profile.touch = false;
-  if ('ontouchstart' in window || (typeof navigator.msMaxTouchPoints !== 'undefined' && navigator.msMaxTouchPoints > 0)) {
+  /* istanbul ignore else */
+  if ('ontouchstart' in window /* istanbul ignore next default */ || (typeof navigator.msMaxTouchPoints !== 'undefined' && navigator.msMaxTouchPoints > 0)) {
     submodule.profile.touch = true;
     html.classList.remove('pointer');
   }
 
   // JSON parser support.
   submodule.profile.json = false;
+  /* istanbul ignore else */
   if (typeof JSON !== 'undefined') {
     submodule.profile.json = true;
   }
@@ -71,7 +84,18 @@ define(function(require, exports, module) {
   submodule.profile.async_scripts = !!script.async;
 
   // Timing API
-  submodule.profile.timing = !!(typeof window.performance !== 'undefined' && typeof window.performance.timing !== 'undefined');
+  submodule.profile.timing = !!(typeof window.performance !== 'undefined' /* istanbul ignore next default */ && typeof window.performance.timing !== 'undefined');
+
+  function toQueryString(obj) {
+    var parts = [];
+    for (var i in obj) {
+      /* istanbul ignore else */
+      if (obj.hasOwnProperty(i)) {
+        parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
+      }
+    }
+    return parts.join("&");
+  }
 
   /**
    * Sends the profile to the server with an ajax request.
@@ -79,16 +103,8 @@ define(function(require, exports, module) {
    * @param force {Boolean} Force sending even if the profile has already been sent.
    */
   submodule.sendProfile = function (force) {
-    // TODO: remove for testing.
-    function toQueryString(obj) {
-      var parts = [];
-      for (var i in obj) {
-        if (obj.hasOwnProperty(i)) {
-          parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
-        }
-      }
-      return parts.join("&");
-    }
+
+    /* istanbul ignore next TODO fix */
 
     // Send the data to the server on first load - if we don't do this it won't get sent if there's only one page load.
     window.setTimeout(function () {
@@ -126,6 +142,12 @@ define(function(require, exports, module) {
     setProfile();
     submodule.sendProfile();
   };
+
+  /* istanbul ignore next */
+  if (config.debug) {
+    submodule.toQueryString = toQueryString;
+  }
+
 
   module.exports = submodule;
 

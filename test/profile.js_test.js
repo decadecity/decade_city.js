@@ -33,6 +33,14 @@ define(function(require) {
         strictEqual(typeof profile.ready, 'function', 'ready is a function');
       });
 
+      profile.ready();
+
+      test('Query string builder', function() {
+        strictEqual(profile.toQueryString({}), '', 'No query string');
+        strictEqual(profile.toQueryString({'key': 'value'}), 'key=value', 'Simple query string');
+        strictEqual(profile.toQueryString({'key': 'value', 'key1': 'value1'}), 'key=value&key1=value1', 'Complex query string');
+      });
+
       test('Profile items defined', function () {
         ok(typeof profile.profile === 'object', 'Profile object exists.');
         ok(typeof profile.profile.svg === 'boolean', 'SVG key exists.');
