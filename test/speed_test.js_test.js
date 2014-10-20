@@ -39,6 +39,10 @@ define(function(require) {
     runTests: function() {
       module('Speed test');
 
+      test('Interface', function() {
+        strictEqual(typeof speed_test.ready, 'function', 'ready is a function');
+      });
+
       test('Connection api normaliser', function() {
         // New network API
         deepEqual(speed_test.connectionTest({ 'type': 'bluetooth' }), { 'connection_type': 'bluetooth' }, 'Bluetooth');

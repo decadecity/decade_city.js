@@ -26,178 +26,184 @@ define(function(require) {
 
   return {
     runTests: function() {
-  var resetSuffix = function() {
-    images.resetSuffix(false);
-    images.suffix('_m');
-  };
 
-  module('Images');
+      // Reset a suffix ready for new tests.
+      var resetSuffix = function() {
+        images.resetSuffix(false);
+        images.suffix('_m');
+      };
 
-  images.ready();
+      module('Images');
 
-  test('SVG extension replacement', function() {
-    equal(images.svgSrc('test.png'), 'test.svg', 'Extension replaced');
-    equal(images.svgSrc('test.png?param=value'), 'test.svg?param=value', 'Extension replaced respecting query string');
-    equal(images.svgSrc('test.1 % png'), 'test.svg', 'Extension with special chars replaced');
-    equal(images.svgSrc('test.ext.png'), 'test.ext.svg', 'Extension replaced with multiple "."');
-    equal(images.svgSrc('TEST.PNG'), 'TEST.svg', 'Uppercase extension replaced');
-  });
+      test('Interface', function() {
+        strictEqual(typeof images.ready, 'function', 'ready is a function');
+      });
 
-  test('SVG extension replacement in the DOM', function () {
-    profile.svg = true;
-    images.svgReplace();
-    equal(window._$('#svg-replacement-test').attr('src'), window.location.origin + '/image.svg', 'Src replaced');
-    equal(window._$('#svg-replacement-test').hasClass('svg-replace'), false, 'Class removed');
-  });
+      images.ready();
 
-  test('Image suffix is correctly set by init()', function () {
-    resetSuffix();
+      test('SVG extension replacement', function() {
+        equal(images.svgSrc('test.png'), 'test.svg', 'Extension replaced');
+        equal(images.svgSrc('test.png?param=value'), 'test.svg?param=value', 'Extension replaced respecting query string');
+        equal(images.svgSrc('test.1 % png'), 'test.svg', 'Extension with special chars replaced');
+        equal(images.svgSrc('test.ext.png'), 'test.ext.svg', 'Extension replaced with multiple "."');
+        equal(images.svgSrc('TEST.PNG'), 'TEST.svg', 'Uppercase extension replaced');
+      });
 
-    images.ready(1, 1, 1, 'fast');
-    equal(images.suffix(), '_m', 'Image suffix is "_m" at minimum width');
+      test('SVG extension replacement in the DOM', function () {
+        profile.svg = true;
+        images.svgReplace();
+        equal(window._$('#svg-replacement-test').attr('src'), window.location.origin + '/image.svg', 'Src replaced');
+        equal(window._$('#svg-replacement-test').hasClass('svg-replace'), false, 'Class removed');
+      });
 
-    resetSuffix();
+      test('Image suffix is correctly set by init()', function () {
+        resetSuffix();
 
-    images.ready(280, 1, 1, 'fast');
-    equal(images.suffix(), '_n', 'Image suffix is "_n" at 280px width');
+        images.ready(1, 1, 1, 'fast');
+        equal(images.suffix(), '_m', 'Image suffix is "_m" at minimum width');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(320, 1, 1, 'fast');
-    strictEqual(images.suffix(), '', 'Image suffix is "" at 320px width');
+        images.ready(280, 1, 1, 'fast');
+        equal(images.suffix(), '_n', 'Image suffix is "_n" at 280px width');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(500, 1, 1, 'fast');
-    equal(images.suffix(), '_z', 'Image suffix is "_z" at 500px width');
+        images.ready(320, 1, 1, 'fast');
+        strictEqual(images.suffix(), '', 'Image suffix is "" at 320px width');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(640, 1, 1, 'fast');
-    equal(images.suffix(), '_c', 'Image suffix is "_c" at 640px width');
+        images.ready(500, 1, 1, 'fast');
+        equal(images.suffix(), '_z', 'Image suffix is "_z" at 500px width');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(800, 1, 1, 'fast');
-    equal(images.suffix(), '_b', 'Image suffix is "_b" at 800px width');
+        images.ready(640, 1, 1, 'fast');
+        equal(images.suffix(), '_c', 'Image suffix is "_c" at 640px width');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(1, 800, 1, 'fast');
-    equal(images.suffix(), '_b', 'Image suffix is "_b" at 800px height');
+        images.ready(800, 1, 1, 'fast');
+        equal(images.suffix(), '_b', 'Image suffix is "_b" at 800px width');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(400, 1, 2, 'fast');
-    equal(images.suffix(), '_b', 'Image suffix is "_b" with 400 width and pixel density 2');
+        images.ready(1, 800, 1, 'fast');
+        equal(images.suffix(), '_b', 'Image suffix is "_b" at 800px height');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(400, 1, 1, 'slow');
-    equal(images.suffix(), '_m', 'Image suffix is "_m" on slow connection');
+        images.ready(400, 1, 2, 'fast');
+        equal(images.suffix(), '_b', 'Image suffix is "_b" with 400 width and pixel density 2');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready('800', 1, 1, 'fast');
-    equal(images.suffix(), '_b', 'Image init copes with string width.');
+        images.ready(400, 1, 1, 'slow');
+        equal(images.suffix(), '_m', 'Image suffix is "_m" on slow connection');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(1, '800', 1, 'fast');
-    equal(images.suffix(), '_b', 'Image init copes with string height.');
+        images.ready('800', 1, 1, 'fast');
+        equal(images.suffix(), '_b', 'Image init copes with string width.');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready(400, 1, '2', 'fast');
-    equal(images.suffix(), '_b', 'Image init copes with string pixel density.');
+        images.ready(1, '800', 1, 'fast');
+        equal(images.suffix(), '_b', 'Image init copes with string height.');
 
-    resetSuffix();
+        resetSuffix();
 
-    images.ready('string', 'string', 'string', 'fast');
-    equal(images.suffix(), '_m', 'Image init copes with garbage string inputs.');
-  });
+        images.ready(400, 1, '2', 'fast');
+        equal(images.suffix(), '_b', 'Image init copes with string pixel density.');
 
-  test('Flickr image URL replacement.', function () {
-    equal(images.imageSrc('non flickr url'), 'non flickr url', 'Non Image URL was passed through unmodified');
+        resetSuffix();
 
-    images.suffix('_m');
+        images.ready('string', 'string', 'string', 'fast');
+        equal(images.suffix(), '_m', 'Image init copes with garbage string inputs.');
+      });
+
+      test('Flickr image URL replacement.', function () {
+        equal(images.imageSrc('non flickr url'), 'non flickr url', 'Non Image URL was passed through unmodified');
+
+        images.suffix('_m');
 
 
-    equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-      'Protocol relative path not changed.'
-    );
-    equal(
-      images.imageSrc('http://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-      'HTTP procol stripped.'
-    );
-    equal(
-      images.imageSrc('https://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-      'HTTPS procol stripped.'
-    );
-    equal(
-      images.imageSrc('file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-      'File procol stripped.'
-    );
+        equal(
+          images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'Protocol relative path not changed.'
+        );
+        equal(
+          images.imageSrc('http://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'HTTP procol stripped.'
+        );
+        equal(
+          images.imageSrc('https://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'HTTPS procol stripped.'
+        );
+        equal(
+          images.imageSrc('file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'File procol stripped.'
+        );
 
-    equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-      'Image image with "_m" suffix is unaltered'
-    );
-    equal(
-      images.imageSrc('http://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-      'Image image with "_m" suffix is unaltered'
-    );
-    equal(
-      images.imageSrc('https://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-      'Image image with "_m" suffix is unaltered'
-    );
-    equal(
-      images.imageSrc('file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
-      'Image image with "_m" suffix is unaltered'
-    );
+        equal(
+          images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'Image image with "_m" suffix is unaltered'
+        );
+        equal(
+          images.imageSrc('http://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'Image image with "_m" suffix is unaltered'
+        );
+        equal(
+          images.imageSrc('https://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'Image image with "_m" suffix is unaltered'
+        );
+        equal(
+          images.imageSrc('file://s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg',
+          'Image image with "_m" suffix is unaltered'
+        );
 
-    images.suffix('_b');
+        images.suffix('_b');
 
-    equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_b.jpeg',
-      'Image image with suffix is replaced'
-    );
+        equal(
+          images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_b.jpeg',
+          'Image image with suffix is replaced'
+        );
 
-    images.suffix('_b');
+        images.suffix('_b');
 
-    equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_b.jpeg',
-      'Image image with no suffix is replaced'
-    );
+        equal(
+          images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_b.jpeg',
+          'Image image with no suffix is replaced'
+        );
 
-    images.suffix('');
+        images.suffix('');
 
-    equal(
-      images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
-      '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340.jpeg',
-      'Image image with suffix is replaced with no suffix'
-    );
-  });
+        equal(
+          images.imageSrc('//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340_m.jpeg'),
+          '//s3-eu-west-1.amazonaws.com/test-bucket/images/8230113340.jpeg',
+          'Image image with suffix is replaced with no suffix'
+        );
+      });
 
-  /* Not convinced this is testable in phantom?
-  test('Flickr responsive images', function () {
-    images.flickr_suffix('_b');
-    images.responsiveImages();
-    //window._$('#flickr-responsive-test').trigger('load');
-    equal(window._$('#flickr-responsive-test').attr('src'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_b.jpg', 'DOM element has image src replaced');
-  });
-*/
+      /* Not convinced this is testable in phantom?
+      test('Flickr responsive images', function () {
+        images.flickr_suffix('_b');
+        images.responsiveImages();
+        //window._$('#flickr-responsive-test').trigger('load');
+        equal(window._$('#flickr-responsive-test').attr('src'), 'http://farm9.staticflickr.com/8204/8230113340_4975b71bf6_b.jpg', 'DOM element has image src replaced');
+      });
+    */
 
     }
   };

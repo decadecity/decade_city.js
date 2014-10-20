@@ -28,6 +28,10 @@ define(function(require) {
 
       module('Accessibility');
 
+      test('Interface', function() {
+        strictEqual(typeof accessibility.ready, 'function', 'ready is a function');
+      });
+
       accessibility.ready();
 
       test('Keyboard styling hook', function () {

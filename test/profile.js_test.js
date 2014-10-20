@@ -21,15 +21,27 @@
 define(function(require) {
   "use strict";
 
-  var profile = require('profile').profile;
+  var profile = require('profile');
 
   return {
     runTests: function() {
 
       module('Profile');
 
-      test('PROFILE submodule defined', function () {
-        ok(typeof profile === 'object', 'submodule defined.');
+      test('Interface', function() {
+        strictEqual(typeof profile.sendProfile, 'function', 'sendProfile is a function');
+        strictEqual(typeof profile.ready, 'function', 'ready is a function');
+      });
+
+      test('Profile items defined', function () {
+        ok(typeof profile.profile === 'object', 'Profile object exists.');
+        ok(typeof profile.profile.svg === 'boolean', 'SVG key exists.');
+        ok(typeof profile.profile.transform === 'boolean', 'Transform key exists.');
+        ok(typeof profile.profile.transform_prefix === 'string', 'Transform prefix key exists.');
+        ok(typeof profile.profile.touch === 'boolean', 'Touch key exists.');
+        ok(typeof profile.profile.json === 'boolean', 'JSON key exists.');
+        ok(typeof profile.profile.async_scripts === 'boolean', 'Async scripts key exists.');
+        ok(typeof profile.profile.timing === 'boolean', 'Timing key exists.');
       });
 
     }

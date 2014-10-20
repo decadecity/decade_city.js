@@ -18,12 +18,16 @@
     raises(block, [expected], [message])
 */
 
-define(['timing', 'sessionStorage'], function(timing) {
+define(['timing'], function(timing) {
 
   return {
     runTests: function() {
 
       module('Timing');
+
+      test('Interface', function() {
+        strictEqual(typeof timing.load, 'function', 'load is a function');
+      });
 
       timing.ready();
 
@@ -31,6 +35,7 @@ define(['timing', 'sessionStorage'], function(timing) {
         sessionStorage.setItem('t_navigation_start', new Date().getTime());
       }
 
+      // The load test has a delay on it so give it a change to complete.
       var loadTest = function () {
         window.setTimeout(function () {
           var vars = timing.getVars();
