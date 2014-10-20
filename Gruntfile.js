@@ -4,10 +4,18 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    // QUnit with istambul code coverage.
     qunit: {
-      files: [
-        'test/**/*.html'
-      ]
+      options: {
+        coverage: {
+          disposeCollector: true,
+          src: ['src/**/*.js'],
+          instrumentedFiles: 'tmp/',
+          htmlReport: 'report/coverage',
+          linesThresholdPct: 85
+        }
+      },
+      files: ['test/**/*.html']
     },
     watch: {
       options: {
@@ -65,8 +73,8 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-qunit-istanbul');
 
   // Default task.
   grunt.registerTask('default', ['test', 'watch']);
