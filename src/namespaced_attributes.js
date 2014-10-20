@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
   var config = require('config');
 
-  var data_prefix = config.data_attribute_prefix || 'dc';
+  var data_prefix = config.data_attribute_prefix || /* istanbul ignore next default */ 'dc';
 
   var api = {};
 
@@ -138,6 +138,7 @@ define(function(require, exports, module) {
     return parent.querySelector(selector);
   };
 
+  /* istanbul ignore next */
   if (config.debug) {
     api.setPrefix = setPrefix;
     api.getDataAttributeName = getDataAttributeName;

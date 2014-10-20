@@ -7,8 +7,9 @@
  * @returns {Object} API for accessing local storage.
  */
 define(function(require, exports, module) {
-
   "use strict";
+
+  var config = require('config');
 
   var supported = typeof window.sessionStorage !== 'undefined',
       submodule = {};
@@ -72,6 +73,7 @@ define(function(require, exports, module) {
       try {
         return window.sessionStorage.setItem(key, value);
       } catch (error) {
+        /* istanbul ignore next */
         if (error.name.toLowerCase() === 'quota_exceeded_err'){
           return;
         } else {
@@ -105,6 +107,13 @@ define(function(require, exports, module) {
     }
   };
   submodule.supported = supported; // Publicly expose support status.
+
+  /* istanbul ignore next */
+  if (config.debug) {
+    submodule.setSupported = function(value) {
+      supported = !!value;
+    };
+  }
 
   module.exports = submodule;
 

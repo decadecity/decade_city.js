@@ -21,7 +21,7 @@ define(function(require, exports, module) {
       init,
       suffix = '_m', // Default to suffix of smallest image.
       suffix_set = false,  //Has the suffix been set? {Boolean}
-      s3_bucket = config.s3_bucket || 'decadecity';
+      s3_bucket = config.s3_bucket || /* istanbul ignore next default */ 'decadecity';
 
   aws_url = '//s3-eu-west-1.amazonaws.com/' + s3_bucket + '/images/';
   image_replace = new RegExp('^' + aws_url + '([^_.]*).*\\.(.*)$'); // Regex to break up an image URL.
@@ -84,6 +84,7 @@ define(function(require, exports, module) {
   responsiveImages = function () {
     var images = document.querySelectorAll('img.responsive');
 
+    /* istanbul ignore else */
     if (images.length) {
       var holder, clearHolder;
 
@@ -146,16 +147,18 @@ define(function(require, exports, module) {
     var window_width;
 
     speed_test.ready();
+    /* istanbul ignore next default */
     if (typeof profile.load_speed !== 'undefined' && typeof speed === 'undefined') {
       speed = profile.load_speed;
     }
 
+    /* istanbul ignore else */
     if (!suffix_set) {
       // This has already been run so don't do it again.
 
       width = width || window.document.documentElement['clientWidth'];
       height = height || window.document.documentElement['clientHeight'];
-      pixel_density = pixel_density || getInt(window.devicePixelRatio) || 1;
+      pixel_density = pixel_density || getInt(window.devicePixelRatio) || /* istanbul ignore next default */ 1;
 
       window_width = Math.max(width, height); // Take max to allow for orientation change.
       window_width = window_width * pixel_density; // Take account of a better screen resolution.
@@ -178,10 +181,7 @@ define(function(require, exports, module) {
       } else {
         suffix = '_b';
       }
-      if (typeof profile === 'object') {
-        // Store this in the profile.
-        profile.image_suffix = suffix;
-      }
+      profile.image_suffix = suffix;
       cookies.setItem('image_suffix', suffix, null, '/');
       suffix_set = true;
     }
@@ -189,6 +189,7 @@ define(function(require, exports, module) {
     svgReplace();
   };
 
+  /* istanbul ignore next */
   if (config.debug) {
     // Open up some internal items for debugging.
     submodule.imageSrc = imageSrc;

@@ -60,31 +60,31 @@ define(function(require) {
         strictEqual(typeof sessionStorage.removeItem, 'function', 'removeItem is a function');
       });
 
-      test('sessionStorage', function () {
-        if (sessionStorage.supported) {
-          window.sessionStorage.clear();
-          ok(sessionStorage.getLength() === 0, 'No items in session storage');
-          sessionStorage.setItem('test', 'test');
-          ok(sessionStorage.getLength() === 1, 'Length of session storage correct');
-          sessionStorage.clear();
-          ok(sessionStorage.getLength() === 0, 'Storage cleared');
-          sessionStorage.setItem('test', 'test');
-          ok(sessionStorage.getItem('test') === 'test', 'Item retrieved');
-          ok(sessionStorage.key(0) === 'test', 'Item retrieved by key');
-          sessionStorage.removeItem('test');
-          ok(sessionStorage.getLength() === 0, 'Item removed');
-        } else {
-          ok(sessionStorage.getLength() === 0, 'No items in session storage');
-          sessionStorage.setItem('test', 'test');
-          ok(sessionStorage.getLength() === 0, 'Length of session storage correct');
-          sessionStorage.clear();
-          ok(sessionStorage.getLength() === 0, 'Storage cleared');
-          sessionStorage.setItem('test', 'test');
-          ok(typeof sessionStorage.getItem('test') === 'undefined', 'Item retrieved does not error');
-          ok(typeof sessionStorage.key(0) === 'undefined', 'Item retrieved by key does not error');
-          sessionStorage.removeItem('test');
-          ok(sessionStorage.getLength() === 0, 'Item removed does not error');
-        }
+      test('sessionStorage supported', function () {
+        window.sessionStorage.clear();
+        ok(sessionStorage.getLength() === 0, 'No items in session storage');
+        sessionStorage.setItem('test', 'test');
+        ok(sessionStorage.getLength() === 1, 'Length of session storage correct');
+        sessionStorage.clear();
+        ok(sessionStorage.getLength() === 0, 'Storage cleared');
+        sessionStorage.setItem('test', 'test');
+        ok(sessionStorage.getItem('test') === 'test', 'Item retrieved');
+        ok(sessionStorage.key(0) === 'test', 'Item retrieved by key');
+        sessionStorage.removeItem('test');
+        ok(sessionStorage.getLength() === 0, 'Item removed');
+      });
+      test('sessionStorage unsupported', function () {
+        sessionStorage.setSupported(false);
+        ok(sessionStorage.getLength() === 0, 'No items in session storage');
+        sessionStorage.setItem('test', 'test');
+        ok(sessionStorage.getLength() === 0, 'Length of session storage correct');
+        sessionStorage.clear();
+        ok(sessionStorage.getLength() === 0, 'Storage cleared');
+        sessionStorage.setItem('test', 'test');
+        strictEqual(sessionStorage.getItem('test'), null, 'Item retrieved does not error');
+        strictEqual(sessionStorage.key(0), null, 'Item retrieved by key does not error');
+        sessionStorage.removeItem('test');
+        ok(sessionStorage.getLength() === 0, 'Item removed does not error');
       });
 
     }

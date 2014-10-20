@@ -47,6 +47,7 @@ define(function(require, exports, module) {
           expires = "; expires=" + end;
           break;
         case "object":
+          /* istanbul ignore else  */
           if (typeof end.toUTCString === 'function') {
             expires = ";expires=" + end.toUTCString();
           }

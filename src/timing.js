@@ -12,7 +12,7 @@ define(function(require) {
   var submodule = {};
   var vars = {},
       url = config.beacon_url,
-      timing = !!(typeof window.performance !== "undefined" && typeof window.performance.timing !== "undefined");
+      timing = !!(typeof window.performance !== "undefined" /* istanbul ignore next default */ && typeof window.performance.timing !== "undefined");
 
   /**
    * Turns a time in seconds into milliseconds.
@@ -35,10 +35,12 @@ define(function(require) {
     if (typeof name === "string") {
       vars[name] = value;
     }
+    /* istanbul ignore else */
     else if (typeof name === "object") {
       var data = name,
           key;
       for (key in data) {
+        /* istanbul ignore else */
         if (data.hasOwnProperty(key)) {
           vars[key] = data[key];
         }
@@ -83,15 +85,14 @@ define(function(require) {
   /**
    * Initialise submodule and set vars known at DOMReady.
    */
+  /* istanbul ignore next Browser API normalisation. */
   var init = function () {
     var t_done;
-    if (true) { //TODO - fix debug.
-      // If we're in debug mode then we expose the vars for testing.
-      submodule.getVars = function () {
-        return vars;
-      };
-    }
-    if (!timing) {
+
+    if (timing) {
+      // Override any in-page timer.
+      window.t_pagestart = window.performance.timing.responseEnd;
+    } else {
       // Need to use storage to get the navigation start time.
       window.addEventListener('beforeunload', function () {
         if (sessionStorage.supported) {
@@ -100,10 +101,6 @@ define(function(require) {
           cookies.setItem('t_navigation_start', new Date().getTime(), false, '/');
         }
       });
-    }
-    if (timing) {
-      // Override any in-page timer.
-      window.t_pagestart = window.performance.timing.responseEnd;
     }
     if (!window.t_domready) {
       if (timing) {
@@ -118,13 +115,14 @@ define(function(require) {
    * Final timing values and send beacon.
    */
   var main = function() {
-    var t_onload = window.t_onload || new Date().getTime(), // Should have been set but if not then hit and hope.
+    var t_onload = window.t_onload /* istanbul ignore next default */ || new Date().getTime(), // Should have been set but if not then hit and hope.
         t_navigation_start,
         t_done,
         t_firstpaint = null,
         onload;
 
     // Collect the remaining timing data.
+    /* istanbul ignore next Browser API normalisation. */
     if (timing) {
       t_onload = window.performance.timing.loadEventStart;
       t_done = window.performance.timing.responseEnd - window.performance.timing.navigationStart;
@@ -151,24 +149,31 @@ define(function(require) {
     }
 
     // Now we have the data we set the variables.
+    /* istanbul ignore else */
     if (window.t_pagestart && window.t_domready) {
       submodule.addVar('t_domready', window.t_domready - window.t_pagestart);
+      /* istanbul ignore else */
       if (window.t_headend) {
         submodule.addVar('t_head', window.t_headend - window.t_pagestart);
+        /* istanbul ignore else */
         if (window.t_bodyend) {
           submodule.addVar('t_body', window.t_bodyend - window.t_headend);
         }
       }
     }
+    /* istanbul ignore else */
     if (t_done) {
       submodule.addVar('t_done', t_done);
     }
+    /* istanbul ignore else */
     if (onload) {
       submodule.addVar('t_onload', onload);
     }
+    /* istanbul ignore else */
     if (window.t_jsstart && window.t_jsend) {
       submodule.addVar('t_js', window.t_jsend - window.t_jsstart);
     }
+    /* istanbul ignore else */
     if (window.t_cssstart && window.t_cssend) {
       submodule.addVar('t_css', window.t_cssend - window.t_cssstart);
     }
@@ -185,6 +190,14 @@ define(function(require) {
     window.t_onload = new Date();
     window.setTimeout(main, 500);
   };
+
+  /* istanbul ignore next */
+  if (config.debug) {
+    // If we're in debug mode then we expose the vars for testing.
+    submodule.getVars = function () {
+      return vars;
+    };
+  }
 
   return submodule;
 
