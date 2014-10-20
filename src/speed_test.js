@@ -67,16 +67,16 @@ define(function(require, exports, module) {
    * @returns {String} Load speed - either `fast` or `slow`.
    */
   var calculateLoadSpeed = function(timer, loads, stored) {
-        // Number of seconds above which we count it as a slow load.
-    var load_speed_timout = 2.5,
+        // Number of ms above which we count it as a slow load.
+    var load_speed_timout = (config.load_speed_timout || 2.5) * 1000,
         // After this many loads with no fast load we assume a slow connection.
-        load_speed_count =  4;
+        load_speed_count =  config.load_speed_count || 4;
 
     if (stored === 'fast') {
       // We have seen a fast load in the past so stay with it.
       return 'fast';
     }
-    if (loads <= load_speed_count && timer < load_speed_timout * 1000) {
+    if (loads <= load_speed_count && timer < load_speed_timout) {
       // We are still within the load count and it's within our threshold.
       return 'fast';
     }

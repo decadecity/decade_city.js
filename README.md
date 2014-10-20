@@ -15,19 +15,35 @@ Modules may expose the following methods that should be run on the relevant brow
   * `resize()` - Browser resize.
   * `scroll()` - Page scroll.
 
-# Cutting the mustard requirements
+## Modules
 
-    'classList' in document.documentElement
+ * `accessibility` - Enhancements hooks for keyboard navigation.
+ * `cookies` - Library for dealing with cookies.
+ * `images` - Conditional loading of images based on screen size.
+ * `namespaced_attributes` - Library for working with namespaced data attributes.
+ * `profile` - Browser capability profiling.
+ * `sessionStorage` - Facade for session storage API.
+ * `speed_test` - Estimate connection speed.
+ * `timing` - RUM data collection.
+
+## Cutting the mustard requirements
+
+    'classList' and 'dataset' in document.documentElement
     'querySelectorAll' in document
     'addEventListner' and 'removeEventListner' in window
     window.XMLHttpRequest
     window.innerWidth
     window.innerHeight
+    window.JSON
+    Array.forEach
 
-# Release history
+## Release history
 
 * 2014-10-20   v1.0.0   Moved to AMD modules.
-* 2014-03-11   v0.2.0   Removed jQuery dependency.
+* 2014-03-11   v0.2.0   Removed jQuery dependency (also: messed up versioning).
+* 2013-06-02   v0.2.0   Built against jQuery v2.
+* 2012-12-13   v0.1.1   Removed initialisation from library.
+* 2012-12-13   v0.1.0   Versioned.
 * 2012-12-12   v0.0.0   Initial import to Git.
 
 

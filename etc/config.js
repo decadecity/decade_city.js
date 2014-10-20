@@ -6,6 +6,10 @@ define(function (require, exports, module) {
     'data_attribute_prefix': 'dc',
     // Open up private methods for testing.
     'debug': true,
+    // Number of loads over which we look for a fast load.
+    'load_speed_count': 4,
+    // Number of seconds above which we count a slow load.
+    'load_speed_timout': 2.5,
     // URL to send the profile information.
     'profiler_url': '/profile',
     // Bucket for images.
