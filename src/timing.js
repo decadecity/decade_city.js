@@ -9,7 +9,8 @@ define(function(require) {
       cookies = require('cookies'),
       sessionStorage = require('sessionStorage');
 
-  var submodule = {};
+  module.exports = {};
+
   var vars = {},
       url = config.beacon_url,
       timing = !!(typeof window.performance !== "undefined" /* istanbul ignore next default */ && typeof window.performance.timing !== "undefined");
@@ -20,7 +21,7 @@ define(function(require) {
    * @param name {String} Name of variable to add.
    * @param value {String} Value of variable.
    */
-  submodule.addVar = function (name, value) {
+  module.exports.addVar = function (name, value) {
     if (typeof name === "string") {
       vars[name] = value;
     }
@@ -38,13 +39,13 @@ define(function(require) {
   };
 
   // Add some information we know at this stage.
-  submodule.addVar({
+  module.exports.addVar({
     'noscript': 0,
     'r': document.referrer,
     'u': window.location.href
   });
 
-  submodule.addVar({
+  module.exports.addVar({
     'b_height': window.document.documentElement['clientHeight'],
     'b_width': window.document.documentElement['clientWidth']
   });
@@ -75,7 +76,7 @@ define(function(require) {
   };
 
   /**
-   * Initialise submodule and set vars known at DOMReady.
+   * Initialise module.exports and set vars known at DOMReady.
    */
   /* istanbul ignore next Browser API normalisation. */
   var init = function () {
@@ -135,40 +136,40 @@ define(function(require) {
     // Now we have the data we set the variables.
     /* istanbul ignore else */
     if (window.t_pagestart && window.t_domready) {
-      submodule.addVar('t_domready', window.t_domready - window.t_pagestart);
+      module.exports.addVar('t_domready', window.t_domready - window.t_pagestart);
       /* istanbul ignore else */
       if (window.t_headend) {
-        submodule.addVar('t_head', window.t_headend - window.t_pagestart);
+        module.exports.addVar('t_head', window.t_headend - window.t_pagestart);
         /* istanbul ignore else */
         if (window.t_bodyend) {
-          submodule.addVar('t_body', window.t_bodyend - window.t_headend);
+          module.exports.addVar('t_body', window.t_bodyend - window.t_headend);
         }
       }
     }
     /* istanbul ignore else */
     if (t_done) {
-      submodule.addVar('t_done', t_done);
+      module.exports.addVar('t_done', t_done);
     }
     /* istanbul ignore else */
     if (onload) {
-      submodule.addVar('t_onload', onload);
+      module.exports.addVar('t_onload', onload);
     }
     /* istanbul ignore else */
     if (window.t_jsstart && window.t_jsend) {
-      submodule.addVar('t_js', window.t_jsend - window.t_jsstart);
+      module.exports.addVar('t_js', window.t_jsend - window.t_jsstart);
     }
     /* istanbul ignore else */
     if (window.t_cssstart && window.t_cssend) {
-      submodule.addVar('t_css', window.t_cssend - window.t_cssstart);
+      module.exports.addVar('t_css', window.t_cssend - window.t_cssstart);
     }
 
     // Finally, send the data after a delay.
     window.setTimeout(sendBeacon, 500);
   };
 
-  submodule.timing = timing;
-  submodule.ready = init;
-  submodule.load = function() {
+  module.exports.timing = timing;
+  module.exports.ready = init;
+  module.exports.load = function() {
     // Need onload to have had a chance to finish to get timings.
     window.t_onload = new Date();
     window.setTimeout(main, 500);
@@ -177,11 +178,9 @@ define(function(require) {
   /* istanbul ignore next */
   if (config.debug) {
     // If we're in debug mode then we expose the vars for testing.
-    submodule.getVars = function () {
+    module.exports.getVars = function () {
       return vars;
     };
   }
-
-  return submodule;
 
 });
