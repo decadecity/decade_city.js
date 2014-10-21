@@ -9,7 +9,7 @@ define(function(require, exports, module) {
       profile = require('profile').profile,
       cookies = require('cookies');
 
-  var submodule = {};
+  module.exports = {};
 
   var image_replace,
       aws_url,
@@ -182,12 +182,12 @@ define(function(require, exports, module) {
   /* istanbul ignore next */
   if (config.debug) {
     // Open up some internal items for debugging.
-    submodule.imageSrc = imageSrc;
-    submodule.responsiveImages = responsiveImages;
-    submodule.svgSrc = svgSrc;
-    submodule.svgReplace = svgReplace;
+    module.exports.imageSrc = imageSrc;
+    module.exports.responsiveImages = responsiveImages;
+    module.exports.svgSrc = svgSrc;
+    module.exports.svgReplace = svgReplace;
     // Allow us to manipulate the suffix.
-    submodule.suffix = function (value) {
+    module.exports.suffix = function (value) {
       if (typeof value !== 'undefined') {
         suffix = value;
       } else {
@@ -195,7 +195,7 @@ define(function(require, exports, module) {
       }
     };
     // Allow us to reset the suffix status.
-    submodule.resetSuffix = function (value) {
+    module.exports.resetSuffix = function (value) {
       if (typeof value !== 'undefined') {
         suffix_set = !!(value);
       } else {
@@ -204,8 +204,6 @@ define(function(require, exports, module) {
     };
   }
 
-  submodule.ready = init;
-
-  module.exports = submodule;
+  module.exports.ready = init;
 
 });

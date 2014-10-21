@@ -11,8 +11,10 @@ define(function(require, exports, module) {
 
   var config = require('config');
 
-  var supported = typeof window.sessionStorage !== 'undefined',
-      submodule = {};
+  var supported = typeof window.sessionStorage !== 'undefined';
+
+  module.exports = {};
+
   /**
    * Number of items in local storage.
    *
@@ -21,7 +23,7 @@ define(function(require, exports, module) {
    * @returns {Number} Number of items in storage.
    */
   // Due to lack of support for getters this is a function which breaks the full API interface wrapper. *sigh*
-  submodule.getLength = function() {
+  module.exports.getLength = function() {
     if (!supported) {
       return 0;
     } else {
@@ -36,7 +38,7 @@ define(function(require, exports, module) {
    *
    * @returns Item from storage or null if not present.
    */
-  submodule.key = function (index) {
+  module.exports.key = function (index) {
     if (!supported) {
       return null;
     } else {
@@ -51,7 +53,7 @@ define(function(require, exports, module) {
    *
    * @return Item from storage or null if not present.
    */
-  submodule.getItem = function (key) {
+  module.exports.getItem = function (key) {
     if (!supported) {
       return null;
     } else {
@@ -65,7 +67,7 @@ define(function(require, exports, module) {
    * @param {String} key Key of item in storage.
    * @param value Item to store.
    */
-  submodule.setItem = function (key, value) {
+  module.exports.setItem = function (key, value) {
     if (!supported) {
       return;
     } else {
@@ -88,7 +90,7 @@ define(function(require, exports, module) {
    *
    * @param {String} key Key of item in storage.
    */
-  submodule.removeItem = function (key) {
+  module.exports.removeItem = function (key) {
     if (!supported) {
       return;
     } else {
@@ -99,22 +101,20 @@ define(function(require, exports, module) {
   /**
    * Clears all items from storage.
    */
-  submodule.clear = function () {
+  module.exports.clear = function () {
     if (!supported) {
       return;
     } else {
       return window.sessionStorage.clear();
     }
   };
-  submodule.supported = supported; // Publicly expose support status.
+  module.exports.supported = supported; // Publicly expose support status.
 
   /* istanbul ignore next */
   if (config.debug) {
-    submodule.setSupported = function(value) {
+    module.exports.setSupported = function(value) {
       supported = !!value;
     };
   }
-
-  module.exports = submodule;
 
 });

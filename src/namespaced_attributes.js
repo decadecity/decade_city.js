@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 
   var data_prefix = config.data_attribute_prefix || /* istanbul ignore next default */ 'dc';
 
-  var api = {};
+  module.exports = {};
 
   /**
    * Sets the data prefix.
@@ -63,7 +63,7 @@ define(function(require, exports, module) {
    * @param attribute {string} Attribute name you wish to use.
    * @param value {string} Optional value to qualify selector.
    */
-  api.attributeString = function(attribute, value) {
+  module.exports.attributeString = function(attribute, value) {
     var selector = 'data';
     if (data_prefix.length) {
       selector += '-' + data_prefix;
@@ -81,8 +81,8 @@ define(function(require, exports, module) {
    * @param attribute {string} Attribute name you wish to use.
    * @param value {string} Optional value to qualify selector.
    */
-  api.cssSelector = function(attribute, value) {
-    return '[' + api.attributeString(attribute, value) + ']';
+  module.exports.cssSelector = function(attribute, value) {
+    return '[' + module.exports.attributeString(attribute, value) + ']';
   };
 
   /**
@@ -93,7 +93,7 @@ define(function(require, exports, module) {
    *
    * @returns {mixed} Value of data attribute.
    */
-  api.get = function(element, attribute) {
+  module.exports.get = function(element, attribute) {
     return element.dataset[getDataAttributeName(attribute)];
   };
 
@@ -104,7 +104,7 @@ define(function(require, exports, module) {
    * @param attribute {element} Name of attribute to set.
    * @param value {mixed} Data to set on attribute.
    */
-  api.set = function(element, attribute, value) {
+  module.exports.set = function(element, attribute, value) {
     element.dataset[getDataAttributeName(attribute)] = value;
   };
 
@@ -117,9 +117,9 @@ define(function(require, exports, module) {
    *
    * @returns {NodeList} Elements that match the selector.
    */
-  api.selectorAll = function(attribute, value, parent) {
+  module.exports.selectorAll = function(attribute, value, parent) {
     parent = parent || document;
-    var selector = api.cssSelector(attribute, value);
+    var selector = module.exports.cssSelector(attribute, value);
     return parent.querySelectorAll(selector);
   };
 
@@ -132,17 +132,17 @@ define(function(require, exports, module) {
    *
    * @returns {Node} Element that matches the selector.
    */
-  api.selector = function(attribute, value, parent) {
+  module.exports.selector = function(attribute, value, parent) {
     parent = parent || document;
-    var selector = api.cssSelector(attribute, value);
+    var selector = module.exports.cssSelector(attribute, value);
     return parent.querySelector(selector);
   };
 
   /* istanbul ignore next */
   if (config.debug) {
-    api.setPrefix = setPrefix;
-    api.getDataAttributeName = getDataAttributeName;
+    module.exports.setPrefix = setPrefix;
+    module.exports.getDataAttributeName = getDataAttributeName;
   }
 
-  module.exports = api;
+  module.exports = module.exports;
 });

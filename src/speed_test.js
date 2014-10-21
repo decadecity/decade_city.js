@@ -9,9 +9,9 @@ define(function(require, exports, module) {
       profile = require('profile').profile;
 
       // Have we run the test yet?
-  var tested = false,
-      // Object to return
-      submodule = {};
+  var tested = false;
+
+  module.exports = {};
 
   profile.load_speed = 'slow';
   profile.connection_type ='unknown';
@@ -159,12 +159,11 @@ define(function(require, exports, module) {
 
   /* istanbul ignore next */
   if (config.debug) {
-    submodule.connectionTest = connectionTest;
-    submodule.calculateLoadSpeed = calculateLoadSpeed;
+    module.exports.connectionTest = connectionTest;
+    module.exports.calculateLoadSpeed = calculateLoadSpeed;
   }
-  submodule.ready = function() {
+  module.exports.ready = function() {
     test();
   };
 
-  module.exports = submodule;
 });

@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
   var config = require('config');
 
-  var submodule = {};
+  module.exports = {};
 
   // Aliasing to keep JSHint happy.
   var escape = window.escape,
@@ -16,7 +16,7 @@ define(function(require, exports, module) {
    *
    * @param key {String} Key of item to get.
    */
-  submodule.getItem = function(key) {
+  module.exports.getItem = function(key) {
     if (!key || !this.hasItem(key)) {
       return null;
     }
@@ -33,7 +33,7 @@ define(function(require, exports, module) {
    * @param domain {String} Domain for cookie scope.
    * @param secure {Boolean} Is this a secure cookie.
    */
-  submodule.setItem = function(key, value, end, path, domain, secure) {
+  module.exports.setItem = function(key, value, end, path, domain, secure) {
     if (!key || /^(?:expires|max\-age|path|domain|secure)$/.test(key)) {
       return;
     }
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
    *
    * @param key {String} Key of item to remove.
    */
-  submodule.removeItem = function(key) {
+  module.exports.removeItem = function(key) {
     if (!key || !this.hasItem(key)) { return; }
     document.cookie = escape(key) + "=;expires=Thu, 01-Jan-1970 00:00:01 GMT;";
   };
@@ -74,10 +74,8 @@ define(function(require, exports, module) {
    *
    * @param key {String} Key to look for.
    */
-  submodule.hasItem = function(key) {
+  module.exports.hasItem = function(key) {
     return (new RegExp("(?:^|;\\s*)" + escape(key).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
   };
-
-  module.exports = submodule;
 
 });

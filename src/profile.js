@@ -8,7 +8,7 @@ define(function(require, exports, module) {
       cookies = require('cookies'),
       sessionStorage = require('sessionStorage');
 
-  var submodule = {};
+  module.exports = {};
 
   var image = new Image(),
       html = document.querySelector('html'),
@@ -20,71 +20,71 @@ define(function(require, exports, module) {
    */
   setProfile = function() {
     /* istanbul ignore else */
-    if (submodule.profile.json) {
-      cookies.setItem('profile', JSON.stringify(submodule.profile), null, '/');
+    if (module.exports.profile.json) {
+      cookies.setItem('profile', JSON.stringify(module.exports.profile), null, '/');
     }
   };
 
-  submodule.profile = submodule.profile || {};
-  submodule.profile.profile = true; // We are profiling this environment.
+  module.exports.profile = {};
+  module.exports.profile.profile = true; // We are profiling this environment.
 
   // SVG support.
-  submodule.profile.svg = false;
+  module.exports.profile.svg = false;
   /* istanbul ignore else */
   if (!!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1")) {
-    submodule.profile.svg = true;
+    module.exports.profile.svg = true;
   }
 
   // Transform CSS prefix.
-  submodule.profile.transform_prefix = '';
-  submodule.profile.transform = false;
+  module.exports.profile.transform_prefix = '';
+  module.exports.profile.transform = false;
   /* istanbul ignore next */
   if ('webkitTransform' in image.style) {
-    submodule.profile.transform_prefix = '-webkit-';
-    submodule.profile.transform = true;
+    module.exports.profile.transform_prefix = '-webkit-';
+    module.exports.profile.transform = true;
   }
   /* istanbul ignore next */
   else if ('MozTransform' in image.style) {
-    submodule.profile.transform_prefix = '-moz-';
-    submodule.profile.transform = true;
+    module.exports.profile.transform_prefix = '-moz-';
+    module.exports.profile.transform = true;
   }
   /* istanbul ignore next */
   else if ('OTransform' in image.style) {
-    submodule.profile.transform_prefix = '-o-';
-    submodule.profile.transform = true;
+    module.exports.profile.transform_prefix = '-o-';
+    module.exports.profile.transform = true;
   }
   /* istanbul ignore next */
   else if('transform' in image.style) {
-    submodule.profile.transform_prefix = '';
-    submodule.profile.transform = true;
+    module.exports.profile.transform_prefix = '';
+    module.exports.profile.transform = true;
   }
   /* istanbul ignore else */
-  if (submodule.profile.transform) {
+  if (module.exports.profile.transform) {
     html.classList.add('transform');
   }
 
   // Touch support.
-  submodule.profile.touch = false;
+  module.exports.profile.touch = false;
   /* istanbul ignore else */
   if ('ontouchstart' in window /* istanbul ignore next default */ || (typeof navigator.msMaxTouchPoints !== 'undefined' && navigator.msMaxTouchPoints > 0)) {
-    submodule.profile.touch = true;
+    module.exports.profile.touch = true;
     html.classList.remove('pointer');
   }
 
   // JSON parser support.
-  submodule.profile.json = false;
+  module.exports.profile.json = false;
   /* istanbul ignore else */
   if (typeof JSON !== 'undefined') {
-    submodule.profile.json = true;
+    module.exports.profile.json = true;
   }
 
   // Asynchronous script support.
   script = document.createElement('script');
   script.setAttribute('async', true);
-  submodule.profile.async_scripts = !!script.async;
+  module.exports.profile.async_scripts = !!script.async;
 
   // Timing API
-  submodule.profile.timing = !!(typeof window.performance !== 'undefined' /* istanbul ignore next default */ && typeof window.performance.timing !== 'undefined');
+  module.exports.profile.timing = !!(typeof window.performance !== 'undefined' /* istanbul ignore next default */ && typeof window.performance.timing !== 'undefined');
 
   function toQueryString(obj) {
     var parts = [];
@@ -102,7 +102,7 @@ define(function(require, exports, module) {
    *
    * @param force {Boolean} Force sending even if the profile has already been sent.
    */
-  submodule.sendProfile = function (force) {
+  module.exports.sendProfile = function (force) {
 
     /* istanbul ignore next TODO fix */
 
@@ -113,23 +113,23 @@ define(function(require, exports, module) {
           url = module.config.profiler_url || '/profile';
       // Connection information
       if (typeof module.load_speed !== 'undefined') {
-        submodule.profile.load_speed = module.load_speed;
+        module.exports.profile.load_speed = module.load_speed;
       }
       if (typeof module.connection_type !== 'undefined') {
-        submodule.profile.connection_type = module.connection_type;
+        module.exports.profile.connection_type = module.connection_type;
       }
-      submodule.profile.session_storage = sessionStorage.supported;
+      module.exports.profile.session_storage = sessionStorage.supported;
       setProfile(); // Make sure it's been set.
-      if (submodule.profile.session_storage) {
+      if (module.exports.profile.session_storage) {
         sent = !!(sessionStorage.getItem('profile-sent'));
       } else {
         sent = !!(cookies.getItem('profile-sent'));
       }
       if (!sent || force) {
         var httpRequest = new XMLHttpRequest();
-        httpRequest.open('GET', url + '?' + toQueryString(submodule.profile), true);
+        httpRequest.open('GET', url + '?' + toQueryString(module.exports.profile), true);
         httpRequest.send(null);
-        if (submodule.profile.session_storage) {
+        if (module.exports.profile.session_storage) {
           sessionStorage.setItem('profile-sent', 1);
         } else {
           cookies.setItem('profile-sent', 1, null, '/');
@@ -138,17 +138,15 @@ define(function(require, exports, module) {
     }, 100);
   };
 
-  submodule.ready = function() {
+  module.exports.ready = function() {
     setProfile();
-    submodule.sendProfile();
+    module.exports.sendProfile();
   };
 
   /* istanbul ignore next */
+  // Open up items for debugging.
   if (config.debug) {
-    submodule.toQueryString = toQueryString;
+    module.exports.toQueryString = toQueryString;
   }
-
-
-  module.exports = submodule;
 
 });
