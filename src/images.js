@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
   var config = require('config'),
       speed_test = require('speed_test'),
-      profile = require('profile'),
+      profile = require('profile').profile,
       cookies = require('cookies');
 
   var submodule = {};
@@ -110,6 +110,7 @@ define(function(require, exports, module) {
           // Nothing doing.
           return src;
         }
+
         cache_img = document.createElement('img');
 
         var imageLoadedHandler = function(e) {
