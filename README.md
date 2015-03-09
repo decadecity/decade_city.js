@@ -39,6 +39,7 @@ Modules may expose the following methods that should be run on the relevant brow
 
 ## Release history
 
+* 2015-03-09   v1.1.0   Added first paint to timing.
 * 2014-10-30   v1.0.1   Images bugfix.
 * 2014-10-20   v1.0.0   Moved to AMD modules.
 * 2014-03-11   v0.2.0   Removed jQuery dependency (also: messed up versioning).
