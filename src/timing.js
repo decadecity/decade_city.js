@@ -1,11 +1,10 @@
 /**
  * RUM data collection.
  */
-define(function(require) {
+define(function(require, exports, module) {
   "use strict";
 
   var config = require('config'),
-      module = require('module'),
       cookies = require('cookies'),
       sessionStorage = require('sessionStorage');
 

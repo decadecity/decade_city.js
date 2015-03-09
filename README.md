@@ -39,7 +39,7 @@ Modules may expose the following methods that should be run on the relevant brow
 
 ## Release history
 
-* 2015-03-09   v1.1.1   Added test coverage and cleaned up internal syntax.
+* 2015-03-09   v1.1.2   Added test coverage and cleaned up internal syntax.
 * 2015-03-09   v1.1.0   Added first paint to timing.
 * 2014-10-30   v1.0.1   Images bugfix.
 * 2014-10-20   v1.0.0   Moved to AMD modules.
