@@ -25,6 +25,13 @@ define(['timing', 'sessionStorage'], function(timing) {
 
       module('Timing');
 
+      test('Seconds to milliseconds', function () {
+        strictEqual(timing.s2ms(1), 1000, 'Integer');
+        strictEqual(timing.s2ms(1.234), 1234, 'Float');
+        strictEqual(timing.s2ms(1.2345), 1235, 'Rounded float');
+        strictEqual(timing.s2ms('1.234'), 1234, 'String');
+      });
+
       timing.ready();
 
       if (!timing.timing) {
@@ -36,6 +43,7 @@ define(['timing', 'sessionStorage'], function(timing) {
           var vars = timing.getVars();
           ok(vars.hasOwnProperty('b_height'), '`b_height` set.');
           ok(vars.hasOwnProperty('b_width'), '`b_width` set.');
+          ok(vars.hasOwnProperty('t_firstpaint'), '`t_firstpaint` set.');
           ok(vars.hasOwnProperty('noscript'), '`noscript` set.');
           ok(vars.hasOwnProperty('r'), '`r` set.');
           ok(vars.hasOwnProperty('t_body'), '`t_body` set.');

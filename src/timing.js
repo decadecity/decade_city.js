@@ -15,6 +15,17 @@ define(function(require) {
       timing = !!(typeof window.performance !== "undefined" && typeof window.performance.timing !== "undefined");
 
   /**
+   * Turns a time in seconds into milliseconds.
+   *
+   * @prarm value {Float} Time in seconds.
+   *
+   * @returns {Integer} Time in milliseconds.
+   */
+  submodule.s2ms = function (seconds) {
+    return Math.round(seconds * 1000);
+  };
+
+  /**
    * Adds a variable to the internal register.
    *
    * @param name {String} Name of variable to add.
@@ -110,6 +121,7 @@ define(function(require) {
     var t_onload = window.t_onload || new Date().getTime(), // Should have been set but if not then hit and hope.
         t_navigation_start,
         t_done,
+        t_firstpaint = null,
         onload;
 
     // Collect the remaining timing data.
@@ -129,6 +141,13 @@ define(function(require) {
         t_done = window.t_pagestart - t_navigation_start;
         onload = t_onload - window.t_pagestart;
       }
+    }
+
+    // Figure out first paint
+    if (timing && timing.msFirstPaint && window.t_pagestart) {
+      t_firstpaint = timing.msFirstPaint - window.t_pagestart;
+    } else if (window.chrome && typeof window.chrome.loadTimes === 'function') {
+      t_firstpaint = submodule.s2ms(window.chrome.loadTimes().firstPaintTime - window.chrome.loadTimes().startLoadTime);
     }
 
     // Now we have the data we set the variables.
@@ -153,6 +172,7 @@ define(function(require) {
     if (window.t_cssstart && window.t_cssend) {
       submodule.addVar('t_css', window.t_cssend - window.t_cssstart);
     }
+    submodule.addVar('t_firstpaint', t_firstpaint);
 
     // Finally, send the data after a delay.
     window.setTimeout(sendBeacon, 500);
