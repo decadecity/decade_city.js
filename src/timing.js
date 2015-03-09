@@ -22,7 +22,7 @@ define(function(require) {
    *
    * @returns {Integer} Time in milliseconds.
    */
-  submodule.s2ms = function (seconds) {
+  var s2ms = function (seconds) {
     return Math.round(seconds * 1000);
   };
 
@@ -146,10 +146,11 @@ define(function(require) {
     }
 
     // Figure out first paint
+    /* istanbul ignore next Browser normalisation. */
     if (timing && timing.msFirstPaint && window.t_pagestart) {
       t_firstpaint = timing.msFirstPaint - window.t_pagestart;
     } else if (window.chrome && typeof window.chrome.loadTimes === 'function') {
-      t_firstpaint = submodule.s2ms(window.chrome.loadTimes().firstPaintTime - window.chrome.loadTimes().startLoadTime);
+      t_firstpaint = s2ms(window.chrome.loadTimes().firstPaintTime - window.chrome.loadTimes().startLoadTime);
     }
 
     // Now we have the data we set the variables.
@@ -181,7 +182,7 @@ define(function(require) {
     if (window.t_cssstart && window.t_cssend) {
       module.exports.addVar('t_css', window.t_cssend - window.t_cssstart);
     }
-    submodule.addVar('t_firstpaint', t_firstpaint);
+    module.exports.addVar('t_firstpaint', t_firstpaint);
 
     // Finally, send the data after a delay.
     window.setTimeout(sendBeacon, 500);
@@ -201,6 +202,7 @@ define(function(require) {
     module.exports.getVars = function () {
       return vars;
     };
+    module.exports.s2ms = s2ms;
   }
 
 });

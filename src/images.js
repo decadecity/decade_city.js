@@ -68,6 +68,7 @@ define(function(require, exports, module) {
    * Replaces the source of imges with a class of .svg-replace with an SVG.
    */
   svgReplace = function () {
+    /* istanbul ignore else */
     if (profile.svg) {
       var images = document.querySelectorAll('.svg-replace');
       for (var i = 0; i < images.length; i += 1) {
