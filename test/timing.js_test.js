@@ -25,13 +25,6 @@ define(['timing'], function(timing) {
 
       module('Timing');
 
-      test('Seconds to milliseconds', function () {
-        strictEqual(timing.s2ms(1), 1000, 'Integer');
-        strictEqual(timing.s2ms(1.234), 1234, 'Float');
-        strictEqual(timing.s2ms(1.2345), 1235, 'Rounded float');
-        strictEqual(timing.s2ms('1.234'), 1234, 'String');
-      });
-
       test('Interface', function() {
         strictEqual(typeof timing.load, 'function', 'load is a function');
       });

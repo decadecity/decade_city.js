@@ -15,17 +15,6 @@ define(function(require, exports, module) {
       timing = !!(typeof window.performance !== "undefined" /* istanbul ignore next default */ && typeof window.performance.timing !== "undefined");
 
   /**
-   * Turns a time in seconds into milliseconds.
-   *
-   * @prarm value {Float} Time in seconds.
-   *
-   * @returns {Integer} Time in milliseconds.
-   */
-  var s2ms = function (seconds) {
-    return Math.round(seconds * 1000);
-  };
-
-  /**
    * Adds a variable to the internal register.
    *
    * @param name {String} Name of variable to add.
@@ -149,7 +138,7 @@ define(function(require, exports, module) {
     if (timing && timing.msFirstPaint && window.t_pagestart) {
       t_firstpaint = timing.msFirstPaint - window.t_pagestart;
     } else if (window.chrome && typeof window.chrome.loadTimes === 'function') {
-      t_firstpaint = s2ms(window.chrome.loadTimes().firstPaintTime - window.chrome.loadTimes().startLoadTime);
+      t_firstpaint = Math.round((window.chrome.loadTimes().firstPaintTime - window.chrome.loadTimes().startLoadTime) * 1000);
     }
 
     // Now we have the data we set the variables.
@@ -201,7 +190,6 @@ define(function(require, exports, module) {
     module.exports.getVars = function () {
       return vars;
     };
-    module.exports.s2ms = s2ms;
   }
 
 });
